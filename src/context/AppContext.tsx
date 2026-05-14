@@ -39,14 +39,23 @@ const initialState: AppState = {
   categories:    [],
   budgets:       { weekly: null, monthly: null, alertThresholdPct: 75 },
   shortcuts:     [],
-  settings:      { weekStartDay: 'monday', installBannerDismissed: false, darkMode: false },
+  settings:      { weekStartDay: 'monday', installBannerDismissed: false, darkMode: 'system' },
   pendingDelete: null,
 }
 
 function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
-    case 'LOAD_STATE':
-      return { ...state, ...action.payload, pendingDelete: null }
+    case 'LOAD_STATE': {
+      const loaded = action.payload
+      // Migrate legacy boolean darkMode saved in localStorage
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rawMode = loaded.settings?.darkMode as any
+      const darkMode: Settings['darkMode'] =
+        rawMode === true  ? 'dark'   :
+        rawMode === false ? 'system' :
+        (['light','dark','system'].includes(rawMode) ? rawMode : 'system')
+      return { ...state, ...loaded, settings: { ...loaded.settings, darkMode }, pendingDelete: null }
+    }
 
     case 'ADD_EXPENSE':
       return { ...state, expenses: [action.payload, ...state.expenses] }

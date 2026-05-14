@@ -14,7 +14,10 @@
     <script>
       try {
         const s = JSON.parse(localStorage.getItem('kaluna_settings') || '{}')
-        if (s.darkMode) document.documentElement.classList.add('dark')
+        const m = s.darkMode
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const isDark = m === 'dark' || m === true || (m !== 'light' && m !== false && prefersDark)
+        if (isDark) document.documentElement.classList.add('dark')
       } catch (e) {}
     </script>
   </head>

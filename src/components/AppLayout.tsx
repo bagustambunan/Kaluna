@@ -1,6 +1,6 @@
 import { useState, useCallback, createContext, useContext, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, History, BarChart2, Settings, Plus, Share, Moon, Sun } from 'lucide-react'
+import { Home, History, BarChart2, Settings, Plus, Share } from 'lucide-react'
 import { useAppState, useAppDispatch } from '../context/AppContext'
 import { ExpenseForm } from './shared/ExpenseForm'
 import { Snackbar } from './ui/Snackbar'
@@ -46,7 +46,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const { checkBudget } = useNotification()
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', !!state.settings.darkMode)
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const apply = () => {
+      const mode = state.settings.darkMode
+      const isDark = mode === 'dark' || (mode === 'system' && mq.matches)
+      document.documentElement.classList.toggle('dark', isDark)
+    }
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
   }, [state.settings.darkMode])
 
   const showSnack = useCallback((text: string, undoFn?: () => void) => {
@@ -92,10 +100,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     showSnack('Deleted', () => dispatch({ type: 'UNDO_DELETE' }))
   }, [dispatch, showSnack])
 
-  const toggleDark = useCallback(() => {
-    dispatch({ type: 'UPDATE_SETTINGS', payload: { darkMode: !state.settings.darkMode } })
-  }, [dispatch, state.settings.darkMode])
-
   const showBanner = (!state.settings.installBannerDismissed) && (canInstall || isIOS)
 
   const addFormInitial = editingExpense
@@ -106,15 +110,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex md:flex-row">
       {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col w-52 shrink-0 bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 fixed top-0 left-0 h-full">
-        <div className="px-4 py-5 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between">
+        <div className="px-4 py-5 border-b border-stone-100 dark:border-stone-800">
           <span className="text-lg font-bold text-stone-900 dark:text-stone-100">Kaluna</span>
-          <button
-            onClick={toggleDark}
-            className="p-1.5 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {state.settings.darkMode ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1">
           {navItems.map(({ to, icon: Icon, label }) => (
@@ -149,15 +146,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className="flex-1 md:ml-52 pb-20 md:pb-6">
         {/* Mobile header */}
-        <header className="md:hidden flex items-center justify-between px-4 h-12 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 sticky top-0 z-20">
+        <header className="md:hidden flex items-center px-4 h-12 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 sticky top-0 z-20">
           <span className="text-base font-bold text-stone-900 dark:text-stone-100">Kaluna</span>
-          <button
-            onClick={toggleDark}
-            className="p-2 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {state.settings.darkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
         </header>
 
         {inAppAlert && (

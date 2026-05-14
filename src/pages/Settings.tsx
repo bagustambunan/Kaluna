@@ -118,6 +118,28 @@ export function Settings() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
+              <p className="text-sm font-medium text-stone-700 dark:text-stone-300">Theme</p>
+              <p className="text-xs text-stone-400 dark:text-stone-500">Matches device by default</p>
+            </div>
+            <div className="flex rounded-lg border border-stone-200 dark:border-stone-700 overflow-hidden">
+              {(['system', 'light', 'dark'] as const).map(v => (
+                <button
+                  key={v}
+                  onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { darkMode: v } })}
+                  className={`px-3 py-1.5 text-sm capitalize transition-colors ${
+                    state.settings.darkMode === v
+                      ? 'bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900'
+                      : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800'
+                  }`}
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
               <p className="text-sm font-medium text-stone-700 dark:text-stone-300">Start of week</p>
               <p className="text-xs text-stone-400 dark:text-stone-500">Affects weekly summaries and budget calculations</p>
             </div>

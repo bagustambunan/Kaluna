@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAppState } from '../context/AppContext'
 import { useAppHandlers } from '../components/AppLayout'
@@ -27,12 +27,24 @@ export function Home() {
     return () => setFormDefaultDate(today)
   }, [setFormDefaultDate, today])
 
+  const dateInputRef = useRef<HTMLInputElement>(null)
+
   const goBack    = useCallback(() => setSelectedDate(d => shiftDays(d, -1)), [])
   const goForward = useCallback(() => setSelectedDate(d => {
     const next = shiftDays(d, 1)
     return next <= today ? next : d
   }), [today])
   const goToday   = useCallback(() => setSelectedDate(today), [today])
+
+  const openDatePicker = useCallback(() => {
+    const input = dateInputRef.current
+    if (!input) return
+    try {
+      input.showPicker()
+    } catch {
+      input.click()
+    }
+  }, [])
 
   const now = new Date()
   const weekRange  = useMemo(() => getWeekRange(now, state.settings.weekStartDay), [state.settings.weekStartDay])
@@ -66,15 +78,34 @@ export function Home() {
           <ChevronLeft size={20} />
         </button>
         <div className="flex-1 text-center">
-          <p data-testid="day-label" className="font-semibold text-stone-900 dark:text-stone-100">{dayLabel}</p>
+          <button
+            data-testid="day-label"
+            onClick={openDatePicker}
+            aria-label="Pick date"
+            className="font-semibold text-stone-900 dark:text-stone-100 hover:text-stone-500 dark:hover:text-stone-400 transition-colors"
+          >
+            {dayLabel}
+          </button>
+          <input
+            ref={dateInputRef}
+            type="date"
+            value={selectedDate}
+            max={today}
+            onChange={e => { if (e.target.value) setSelectedDate(e.target.value) }}
+            className="absolute opacity-0 pointer-events-none w-0 h-0"
+            tabIndex={-1}
+            aria-hidden="true"
+          />
           {!isToday && (
-            <button
-              onClick={goToday}
-              aria-label="Back to today"
-              className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 mt-0.5"
-            >
-              Back to today
-            </button>
+            <div>
+              <button
+                onClick={goToday}
+                aria-label="Back to today"
+                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 mt-0.5"
+              >
+                Back to today
+              </button>
+            </div>
           )}
         </div>
         <button
