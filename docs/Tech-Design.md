@@ -2,6 +2,8 @@
 
 Dokumen ini adalah panduan teknis implementasi untuk Claude Code. Baca bersamaan dengan `Project-Description.md`. Semua keputusan di sini bersifat preskriptif — ikuti kecuali ada alasan kuat untuk menyimpang.
 
+**Bahasa UI**: Seluruh teks antarmuka (label, pesan, placeholder, tombol, navigasi) harus menggunakan **bahasa Inggris**. Ini berlaku untuk semua string yang tampil ke pengguna, termasuk teks default, pesan error, dan notifikasi.
+
 ---
 
 ## 1. Dependensi
@@ -43,10 +45,10 @@ src/
 │   ├── ui/              # Primitif: Button, Input, Snackbar, ProgressBar, Badge
 │   └── shared/          # Komponen domain: ExpenseItem, CategoryBadge, BudgetCard
 ├── pages/               # Komponen level route
-│   ├── Beranda.tsx
-│   ├── Riwayat.tsx
-│   ├── Rekap.tsx
-│   └── Pengaturan.tsx
+│   ├── Home.tsx
+│   ├── History.tsx
+│   ├── Summary.tsx
+│   └── Settings.tsx
 ├── hooks/               # Custom React hooks
 │   ├── useExpenses.ts
 │   ├── useBudget.ts
@@ -135,7 +137,7 @@ export interface BudgetStatus {
 }
 
 // Untuk filter interaktif di rekap — state lokal, tidak masuk AppContext
-export interface RekapFilterState {
+export interface SummaryFilterState {
   excludedCategoryIds: Set<string>
   excludedExpenseIds: Set<string>
 }
@@ -242,10 +244,10 @@ type AppAction =
 File: `src/main.tsx` dan `src/App.tsx`
 
 ```
-/             → <Beranda />
-/riwayat      → <Riwayat />
-/rekap        → <Rekap />
-/pengaturan   → <Pengaturan />
+/           → <Home />
+/history    → <History />
+/summary    → <Summary />
+/settings   → <Settings />
 ```
 
 Semua route dibungkus dalam `<AppLayout>` yang merender bottom navigation (mobile) atau sidebar (desktop) + area konten.
@@ -380,25 +382,34 @@ function pruneOldNotifKeys(): void
 
 Notifikasi dikirim **hanya satu kali per threshold per periode**. Jika budget berubah, reset riwayat periode yang sedang berjalan.
 
+### Teks Notifikasi (English)
+
+```ts
+// Warning (75%): "You've used 75% of your weekly budget"
+// Limit (100%): "Weekly budget reached"
+// Over (>100%): "You're over your weekly budget"
+// Same pattern untuk monthly budget
+```
+
 ### In-App Alert
 
-Jika `Notification.permission !== 'granted'` atau browser tidak support, tampilkan banner di bagian atas halaman manapun (bukan hanya Rekap/Pengaturan). Banner ini muncul di atas bottom nav, bisa di-dismiss.
+Jika `Notification.permission !== 'granted'` atau browser tidak support, tampilkan banner di bagian atas halaman manapun. Banner muncul di atas bottom nav, bisa di-dismiss.
 
 ---
 
-## 10. Filter Interaktif Rekap
+## 10. Filter Interaktif Summary
 
-State filter bersifat **lokal** (tidak masuk AppContext). Letakkan di komponen `<Rekap>` menggunakan `useState`.
+State filter bersifat **lokal** (tidak masuk AppContext). Letakkan di komponen `<Summary>` menggunakan `useState`.
 
 ```ts
-const [filterState, setFilterState] = useState<RekapFilterState>({
+const [filterState, setFilterState] = useState<SummaryFilterState>({
   excludedCategoryIds: new Set(),
   excludedExpenseIds: new Set(),
 })
 ```
 
 Reset `filterState` ke default setiap kali:
-- Tab rekap berganti (Mingguan/Bulanan/Kategori/Custom)
+- Tab berganti (Weekly/Monthly/By Category/Custom)
 - Pengguna navigasi ke periode berbeda (minggu/bulan sebelumnya)
 
 ### Logika Penghitungan Total dengan Filter
@@ -406,7 +417,7 @@ Reset `filterState` ke default setiap kali:
 ```ts
 function getFilteredTotal(
   expenses: Expense[],
-  filter: RekapFilterState
+  filter: SummaryFilterState
 ): number {
   return expenses
     .filter(e => !filter.excludedCategoryIds.has(e.categoryId))
@@ -422,19 +433,19 @@ function getFilteredTotal(
 - Setiap item dalam expand view juga punya checkbox
 - Jika semua item dalam kategori di-uncheck, kategori otomatis tampil sebagai unchecked
 - Jika salah satu item di-uncheck tapi tidak semua, kategori tampil sebagai "indeterminate" (garis, bukan centang penuh)
-- Total di header halaman rekap terupdate real-time mengikuti pilihan filter
+- Total di header terupdate real-time mengikuti pilihan filter
 - Tombol "Reset" muncul hanya jika ada item yang sedang di-uncheck
 
 ---
 
-## 11. Undo Hapus
+## 11. Undo Delete
 
 Alur undo delete menggunakan `pendingDelete` di AppState:
 
-1. User tap hapus → dispatch `SOFT_DELETE_EXPENSE`
+1. User tap delete → dispatch `SOFT_DELETE_EXPENSE`
 2. Reducer: simpan expense di `pendingDelete`, **jangan** hapus dari `expenses[]` dulu, set `timeoutId`
-3. Snackbar muncul: "Dihapus · **Batalkan**" dengan countdown visual 5 detik
-4. Jika user tap Batalkan → dispatch `UNDO_DELETE` → `pendingDelete` dibersihkan, expense tetap
+3. Snackbar muncul: "Deleted · **Undo**" dengan countdown visual 5 detik
+4. Jika user tap Undo → dispatch `UNDO_DELETE` → `pendingDelete` dibersihkan, expense tetap
 5. Jika timeout → dispatch `CONFIRM_DELETE` → expense dihapus dari `expenses[]`, `pendingDelete` dibersihkan
 
 Snackbar harus dirender di luar scroll area agar selalu terlihat. Letakkan di `<AppLayout>` di atas bottom navigation.
@@ -448,7 +459,7 @@ Implementasi **tanpa library**. Gunakan event `touchstart`, `touchmove`, `touche
 ```
 touchstart  → catat posisi X awal
 touchmove   → hitung deltaX; jika > 0 (geser kanan) abaikan; jika < 0 apply transform translateX
-touchend    → jika |deltaX| > 60px: tampilkan action buttons (Edit, Hapus)
+touchend    → jika |deltaX| > 60px: tampilkan action buttons (Edit, Delete)
               jika < 60px: snap kembali ke posisi 0
 ```
 
@@ -456,7 +467,7 @@ Action buttons muncul dari kanan dengan lebar ~120px total. Di balik item yang b
 
 Hanya satu item yang bisa terbuka sekaligus. Jika item lain dibuka, item sebelumnya snap kembali.
 
-Di desktop, tidak ada swipe — tampilkan tombol Edit dan Hapus yang muncul saat hover.
+Di desktop, tidak ada swipe — tampilkan tombol Edit dan Delete yang muncul saat hover.
 
 ---
 
@@ -523,7 +534,7 @@ VitePWA({
   manifest: {
     name: 'Kaluna',
     short_name: 'Kaluna',
-    description: 'Pencatat pengeluaran harian',
+    description: 'Daily expense tracker',
     theme_color: '#ffffff',
     background_color: '#ffffff',
     display: 'standalone',
@@ -552,9 +563,11 @@ File: `src/hooks/useInstallPrompt.ts`
 // Kembalikan: { canInstall: boolean, triggerInstall: () => void }
 ```
 
-Banner ditampilkan di `<AppLayout>` sebagai strip tipis di bawah konten, di atas bottom nav. Bisa di-dismiss → panggil `UPDATE_SETTINGS({ installBannerDismissed: true })`.
+Banner ditampilkan di `<AppLayout>` sebagai strip tipis di bawah konten, di atas bottom nav.
 
-Untuk iOS: banner menampilkan panduan teks + ikon Share, karena `beforeinstallprompt` tidak tersedia di Safari.
+Teks banner Android: **"Add to home screen for quick access"** — bisa di-dismiss → panggil `UPDATE_SETTINGS({ installBannerDismissed: true })`.
+
+Teks banner iOS: **"Tap Share then 'Add to Home Screen'"** — tampilkan ikon Share agar lebih jelas.
 
 Deteksi iOS: `navigator.userAgent` mengandung `'iPhone' | 'iPad'` dan tidak ada `beforeinstallprompt`.
 
@@ -589,14 +602,15 @@ function exportData(state: AppState): void {
 Sebelum import, validasi file JSON untuk memastikan struktur sesuai:
 - Ada field `expenses` berupa array
 - Setiap expense punya `id`, `amount` (number), `categoryId`, `date`
-- Jika validasi gagal: tampilkan pesan error spesifik, jangan lanjut import
+- Jika validasi gagal: tampilkan pesan error spesifik dalam bahasa Inggris, jangan lanjut import
+  - Contoh: "Invalid file format", "Missing required fields in expense data"
 
 ### Import — Preview
 
 Sebelum konfirmasi, tampilkan:
-- Jumlah transaksi dalam file
-- Rentang tanggal (transaksi paling lama s.d. paling baru)
-- Total nominal keseluruhan
+- Number of expenses in file
+- Date range (oldest to newest)
+- Total amount
 
 ### Import — Mode Gabungkan
 
@@ -628,13 +642,13 @@ File: `src/constants/defaults.ts`
 
 ```ts
 export const DEFAULT_CATEGORIES: Omit<Category, 'order'>[] = [
-  { id: 'cat-default-1', name: 'Makan',        emoji: '🍽️', color: '#F97316', budgetMonthly: null, isDefault: true },
-  { id: 'cat-default-2', name: 'Transportasi', emoji: '🚗', color: '#3B82F6', budgetMonthly: null, isDefault: true },
-  { id: 'cat-default-3', name: 'Belanja',      emoji: '🛍️', color: '#A855F7', budgetMonthly: null, isDefault: true },
-  { id: 'cat-default-4', name: 'Hiburan',      emoji: '🎬', color: '#EC4899', budgetMonthly: null, isDefault: true },
-  { id: 'cat-default-5', name: 'Kesehatan',    emoji: '💊', color: '#10B981', budgetMonthly: null, isDefault: true },
-  { id: 'cat-default-6', name: 'Tagihan',      emoji: '📄', color: '#6B7280', budgetMonthly: null, isDefault: true },
-  { id: 'cat-default-7', name: 'Lainnya',      emoji: '📦', color: '#78716C', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-1', name: 'Food',          emoji: '🍽️', color: '#F97316', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-2', name: 'Transport',     emoji: '🚗', color: '#3B82F6', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-3', name: 'Shopping',      emoji: '🛍️', color: '#A855F7', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-4', name: 'Entertainment', emoji: '🎬', color: '#EC4899', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-5', name: 'Health',        emoji: '💊', color: '#10B981', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-6', name: 'Bills',         emoji: '📄', color: '#6B7280', budgetMonthly: null, isDefault: true },
+  { id: 'cat-default-7', name: 'Other',         emoji: '📦', color: '#78716C', budgetMonthly: null, isDefault: true },
 ]
 
 export const DEFAULT_BUDGETS: Budgets = {
@@ -663,20 +677,25 @@ export const COLOR_OPTIONS = [
 
 ### `<ExpenseForm>`
 
-Bottom sheet yang dipakai baik untuk **tambah** maupun **edit** pengeluaran. Terima prop `initialValues` — jika ada, mode edit; jika tidak, mode tambah.
+Bottom sheet yang dipakai baik untuk **add** maupun **edit** pengeluaran. Terima prop `initialValues` — jika ada, mode edit; jika tidak, mode tambah.
 
 Field:
-1. Input nominal (autofocus, keyboard numerik di mobile — gunakan `inputMode="numeric"`)
-2. Grid pilih kategori (ikon + nama, scroll horizontal)
-3. Input catatan (opsional)
+1. Amount input (autofocus, keyboard numerik di mobile — gunakan `inputMode="numeric"`)
+2. Category grid (emoji + name, scroll horizontal)
+3. Note input (optional)
 4. Date picker — `<input type="date">` native, default hari ini
-5. Tombol Simpan
+5. Tombol **Save**
 
-Bagian pintasan tampil sebagai scroll horizontal chips di atas field nominal. Tap chip → isi semua field otomatis (nominal, kategori, catatan), pengguna bisa langsung simpan atau ubah.
+Bagian shortcuts tampil sebagai scroll horizontal chips di atas field amount. Tap chip → isi semua field otomatis (amount, category, note), pengguna bisa langsung save atau ubah.
+
+Placeholder teks:
+- Amount: "0" atau kosong
+- Note: "Add a note (optional)"
+- Shortcut section label: "Shortcuts" (hanya tampil jika ada shortcut)
 
 ### `<ExpenseItem>`
 
-List item untuk menampilkan satu transaksi. Dipakai di Beranda, Riwayat, dan expand view Rekap.
+List item untuk menampilkan satu transaksi. Dipakai di Home, History, dan expand view Summary.
 
 Props: `expense`, `category`, `onEdit`, `onDelete`
 
@@ -688,12 +707,35 @@ Layout dua baris:
 
 Props: `status: BudgetStatus`, `label: string`
 
-Tampilkan: label (misal "Budget Mingguan"), nominal terpakai/total, persentase, dan progress bar.
-Warna bar otomatis sesuai status: `safe` → batu/stone, `warning` → oranye, `over` → merah.
+Label menggunakan bahasa Inggris: "Weekly Budget", "Monthly Budget".
+
+Tampilkan: label, nominal `spent / budget`, persentase, dan progress bar.
+Warna bar otomatis sesuai status: `safe` → stone, `warning` → orange, `over` → red.
+
+Sub-label teks:
+- safe: "{pct}% used · {remaining} left"
+- warning: "{pct}% used · {remaining} left" (warna oranye)
+- over: "Over by {overage}" (warna merah)
 
 ### `<Snackbar>`
 
-Global snackbar untuk feedback aksi (Tersimpan, Dihapus + Batalkan). Render di `<AppLayout>`, posisi fixed bottom di atas bottom nav. Auto-dismiss setelah 2 detik (untuk snackbar biasa) atau 5 detik (untuk undo delete).
+Global snackbar untuk feedback aksi. Render di `<AppLayout>`, posisi fixed bottom di atas bottom nav.
+
+Teks snackbar (semua dalam bahasa Inggris):
+- Simpan berhasil: "Saved"
+- Hapus dengan undo: "Deleted · **Undo**"
+- Import berhasil: "Data imported"
+- Import gagal: "Import failed: {reason}"
+
+Auto-dismiss: 2 detik (snackbar biasa), 5 detik (undo delete).
+
+### Empty States
+
+Semua teks empty state dalam bahasa Inggris:
+- Home tanpa data: "Tap + to record your first expense"
+- History tanpa hasil search: "No expenses match your search"
+- History tanpa data sama sekali: "No expenses yet"
+- Summary tanpa data: "No expenses in this period"
 
 ---
 
@@ -713,7 +755,7 @@ Jangan membuat dua versi komponen terpisah — satu komponen dengan conditional 
 ## 19. Performa
 
 - **Virtual list**: tidak diperlukan untuk v1. `localStorage` memiliki batas ~5MB; asumsi rata-rata expense 100 bytes, itu ~50.000 entri. Scroll reguler di browser modern mampu menangani ini.
-- **Memoization**: gunakan `useMemo` untuk kalkulasi rekap yang berat (group by category, sum per period) agar tidak dihitung ulang setiap render. Jangan over-optimize — hanya di tempat yang nyata-nyata mahal.
+- **Memoization**: gunakan `useMemo` untuk kalkulasi summary yang berat (group by category, sum per period) agar tidak dihitung ulang setiap render. Jangan over-optimize — hanya di tempat yang nyata-nyata mahal.
 - **Bundle size**: target `< 200KB` gzip. Dengan React (~40KB), date-fns tree-shaken (~15KB), lucide-react tree-shaken, dan Tailwind CSS — ini tercapai. Jangan tambahkan dependency besar tanpa pertimbangan.
 - **First paint**: tidak ada API call, tidak ada loading state. App harus tampil dalam < 1 detik di koneksi 4G biasa.
 
@@ -727,3 +769,4 @@ Jangan membuat dua versi komponen terpisah — satu komponen dengan conditional 
 - **Jangan buat abstraksi sebelum diperlukan** — tiga komponen yang mirip tidak perlu di-generalisasi kecuali ada kebutuhan nyata.
 - **Jangan tambahkan animasi CSS** kecuali: slide-up bottom sheet, snackbar fade in/out, dan swipe gesture. Sisanya static.
 - **Jangan polyfill hal yang sudah native** — `crypto.randomUUID`, `Intl.NumberFormat`, `fetch`, `localStorage` semua tersedia di target browser.
+- **Jangan gunakan teks Indonesia** di dalam UI — semua string yang tampil ke pengguna harus bahasa Inggris tanpa pengecualian.

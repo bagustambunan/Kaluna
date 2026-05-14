@@ -22,6 +22,7 @@ Membantu pengguna mencatat pengeluaran harian, memantau rekapitulasi, dan menjag
 | Offline | Harus berfungsi penuh tanpa internet (PWA) |
 | Platform | Web, mobile-first; kompatibel iOS Safari, Android Chrome, dan semua browser modern |
 | Deploy | Vercel / Netlify (static hosting) |
+| **Bahasa UI** | **English** — seluruh teks antarmuka, label, pesan, dan navigasi menggunakan bahasa Inggris |
 
 ---
 
@@ -44,20 +45,20 @@ Membantu pengguna mencatat pengeluaran harian, memantau rekapitulasi, dan menjag
 
 - Form input: nominal, kategori, catatan (opsional), tanggal (default hari ini)
 - Input nominal angka saja — titik pemisah ribuan muncul otomatis saat mengetik
-- Bisa edit dan hapus setiap entri dari mana saja (Beranda, Riwayat, Rekap)
-- Konfirmasi hapus: inline confirm (bukan dialog modal), diikuti snackbar **Batalkan** selama 5 detik
-- Data tersimpan ke `localStorage` secara instan saat Simpan ditekan
+- Bisa edit dan hapus setiap entri dari mana saja (Home, History, Summary)
+- Konfirmasi hapus: inline confirm (bukan dialog modal), diikuti snackbar **Undo** selama 5 detik
+- Data tersimpan ke `localStorage` secara instan saat Save ditekan
 
 ### 2. Kategori Pengeluaran
 
-- Kategori default saat pertama buka: Makan, Transportasi, Belanja, Hiburan, Kesehatan, Tagihan, Lainnya
+- Kategori default saat pertama buka: Food, Transport, Shopping, Entertainment, Health, Bills, Other
 - Pengguna bisa tambah, ubah nama, dan hapus kategori custom
 - Setiap kategori memiliki emoji dan warna yang bisa dipilih
 - Kategori yang sudah dipakai di minimal satu transaksi tidak bisa dihapus — tampilkan info singkat kenapa
 
 ### 3. Rekap Mingguan
 
-- Rentang default: Senin s.d. Minggu (bisa diubah via pengaturan **Awal Minggu**)
+- Rentang default: Monday s.d. Sunday (bisa diubah via pengaturan **Start of Week**)
 - Total pengeluaran minggu berjalan
 - Bar chart sederhana per hari
 - Navigasi mundur/maju antar minggu (tombol `‹ ›` atau swipe horizontal)
@@ -72,27 +73,27 @@ Membantu pengguna mencatat pengeluaran harian, memantau rekapitulasi, dan menjag
 
 ### 5. Rekap per Kategori
 
-- Rentang waktu: minggu ini / bulan ini / custom
+- Rentang waktu: this week / this month / custom
 - Total per kategori, diurutkan dari terbesar
 - Persentase masing-masing terhadap total keseluruhan
 - Tap kategori → expand daftar transaksi dalam kategori tersebut
 
 ### 6. Rekap Rentang Tanggal Custom
 
-- Tersedia di semua tampilan Rekap (Mingguan, Bulanan, Kategori) via tombol filter
-- Date picker pilih **tanggal mulai** dan **tanggal selesai**
-- Preset cepat: 7 hari terakhir, 30 hari terakhir, bulan lalu, tahun ini
+- Tersedia di semua tampilan Summary (Weekly, Monthly, By Category) via tombol filter
+- Date picker pilih **start date** dan **end date**
+- Preset cepat: Last 7 days, Last 30 days, Last month, This year
 - Hasil menampilkan: total, rata-rata harian, breakdown per kategori, dan daftar transaksi
 - Range yang dipilih bersifat sementara (per sesi, tidak disimpan ke localStorage)
 
-### 7. Filter Interaktif di Halaman Rekap
+### 7. Filter Interaktif di Halaman Summary
 
 Pengguna dapat melakukan analisis "what-if" langsung di tampilan rekap tanpa mengubah data asli:
 
 - **Check/uncheck kategori** — centang atau hapus centang satu atau beberapa kategori; total rekap otomatis terhitung ulang hanya dari kategori yang aktif
 - **Check/uncheck item transaksi** — tap kategori untuk expand daftar transaksinya; setiap item bisa di-centang/hapus-centang secara individual
 - Total di bagian atas selalu mencerminkan hanya item yang sedang dicentang
-- Tombol **Reset pilihan** untuk kembali ke kondisi semua dicentang
+- Tombol **Reset** untuk kembali ke kondisi semua dicentang
 - Pilihan ini bersifat sementara — tidak disimpan, reset saat pindah tab atau ganti periode
 
 *Contoh penggunaan: pengguna ingin melihat total mingguan tanpa menghitung pengeluaran tidak rutin seperti servis motor atau beli baju.*
@@ -100,51 +101,51 @@ Pengguna dapat melakukan analisis "what-if" langsung di tampilan rekap tanpa men
 ### 8. Riwayat & Cari Transaksi
 
 - Daftar semua transaksi, diurutkan terbaru di atas
-- **Cari** berdasarkan teks catatan
+- **Search** berdasarkan teks catatan
 - **Filter** berdasarkan: kategori (multi-select), rentang nominal, rentang tanggal
-- **Urutkan**: terbaru, terlama, nominal terbesar, nominal terkecil
+- **Sort**: newest, oldest, highest amount, lowest amount
 - Scroll tanpa pagination (virtual list jika data besar)
-- Swipe kiri pada item untuk aksi cepat: Edit | Hapus
+- Swipe kiri pada item untuk aksi cepat: Edit | Delete
 
-### 9. Quick Entry (Pintasan)
+### 9. Quick Entry (Shortcuts)
 
-- Pengguna bisa simpan transaksi yang sering diulang sebagai pintasan
-- Contoh: "Makan siang kantor — Rp 25.000 — Makan"
-- Di form tambah pengeluaran, bagian pintasan tampil di atas keyboard — tap untuk isi form otomatis
-- Pintasan bisa dibuat dari transaksi yang sudah ada (tap transaksi → "Simpan sebagai pintasan")
-- Maksimal 10 pintasan; bisa diurutkan ulang (drag) di halaman Pengaturan
+- Pengguna bisa simpan transaksi yang sering diulang sebagai shortcut
+- Contoh: "Office lunch — Rp 25,000 — Food"
+- Di form tambah pengeluaran, bagian shortcuts tampil di atas keyboard — tap untuk isi form otomatis
+- Shortcuts bisa dibuat dari transaksi yang sudah ada (tap transaksi → "Save as shortcut")
+- Maksimal 10 shortcuts; bisa diurutkan ulang (drag) di halaman Settings
 
 ### 10. Statistik Ringkas
 
-Tersedia di halaman Rekap sebagai baris ringkasan di bagian atas, dihitung dari data lokal:
+Tersedia di halaman Summary sebagai baris ringkasan di bagian atas, dihitung dari data lokal:
 
-- Rata-rata pengeluaran harian bulan ini
-- Hari dengan pengeluaran tertinggi minggu ini
-- Kategori terboros bulan ini
-- Selisih total vs bulan lalu (naik/turun berapa persen)
+- Average daily spending this month
+- Highest spending day this week
+- Top category this month
+- Difference vs last month (up/down by percentage)
 
 ### 11. Budget Mingguan & Bulanan
 
-- Set budget mingguan dan/atau bulanan — keduanya opsional dan independen
+- Set weekly dan/atau monthly budget — keduanya opsional dan independen
 - Progress bar: hijau → kuning (>75%) → merah (>100%)
 - Sisa budget dan persentase terpakai ditampilkan secara eksplisit (bukan hanya bar)
-- Budget bisa diubah kapan saja dari halaman Pengaturan
+- Budget bisa diubah kapan saja dari halaman Settings
 
 ### 12. Budget per Kategori *(opsional, bisa diaktifkan per kategori)*
 
-- Setiap kategori bisa diberi batas bulanan sendiri
+- Setiap kategori bisa diberi monthly limit sendiri
 - Ditampilkan sebagai indikator kecil di samping nama kategori saat rekap
 - Kategori tanpa budget tidak menampilkan indikator apa pun
 
 ### 13. Alert Mendekati / Melewati Budget
 
-Notifikasi dikirim ketika pengeluaran (mingguan atau bulanan) mencapai threshold:
+Notifikasi dikirim ketika pengeluaran (weekly atau monthly) mencapai threshold:
 
 | Threshold | Tindakan |
 |---|---|
-| 75% budget | Notifikasi peringatan |
-| 100% budget | Notifikasi tepat batas |
-| > 100% budget | Notifikasi over-budget |
+| 75% budget | Warning notification |
+| 100% budget | Limit reached notification |
+| > 100% budget | Over budget notification |
 
 - Menggunakan **Notification API** browser — tidak ada server, dipicu lokal saat transaksi disimpan
 - Izin notifikasi diminta saat pengguna pertama kali mengaktifkan budget
@@ -153,58 +154,58 @@ Notifikasi dikirim ketika pengeluaran (mingguan atau bulanan) mencapai threshold
 
 ### 14. Export / Import Data
 
-- **Export**: unduh seluruh data (transaksi + kategori + budget + pintasan + pengaturan) sebagai file `.json`
+- **Export**: unduh seluruh data (transaksi + kategori + budget + shortcuts + settings) sebagai file `.json`
 - **Import**: unggah file `.json` untuk restore data
 - Sebelum import, tampilkan preview: jumlah transaksi, rentang tanggal, total nominal
 - Dua mode import:
-  - **Timpa semua** — data lama diganti seluruhnya
-  - **Gabungkan** — data digabung, transaksi duplikat diabaikan (berdasarkan ID)
+  - **Replace all** — data lama diganti seluruhnya
+  - **Merge** — data digabung, transaksi duplikat diabaikan (berdasarkan ID)
 
 ### 15. Instalasi ke Home Screen (PWA)
 
 - Web App Manifest dengan `display: standalone`
 - Service worker cache aset utama agar app bisa dibuka offline
-- In-app banner "Tambahkan ke Home Screen" untuk Android (menggunakan `beforeinstallprompt`)
-- Panduan langkah manual untuk iOS: Share → Tambahkan ke Layar Utama
+- In-app banner "Add to Home Screen" untuk Android (menggunakan `beforeinstallprompt`)
+- Panduan langkah manual untuk iOS: Share → Add to Home Screen
 - Ikon: 192×192, 512×512, maskable
 - Splash screen mengikuti warna tema aplikasi
 
 ---
 
-## Halaman Pengaturan
+## Halaman Settings
 
-Pengaturan dikelompokkan dalam satu halaman, dibagi per bagian:
+Settings dikelompokkan dalam satu halaman, dibagi per bagian:
 
-### Preferensi
-- **Awal minggu** — pilih Senin atau Minggu; memengaruhi semua tampilan rekap mingguan dan perhitungan budget mingguan
+### Preferences
+- **Start of week** — pilih Monday atau Sunday; memengaruhi semua tampilan weekly summary dan perhitungan weekly budget
 
-### Anggaran
-- Set budget mingguan dan bulanan
+### Budget
+- Set weekly dan monthly budget
 - Set budget per kategori (opsional)
-- Pengaturan threshold notifikasi (default 75%, bisa diubah ke 50% atau 90%)
+- Alert threshold (default 75%, bisa diubah ke 50% atau 90%)
 
-### Kategori
+### Categories
 - Daftar semua kategori (default + custom)
-- Tambah, ubah, hapus, ubah urutan tampilan
+- Add, rename, delete, reorder
 
-### Pintasan
-- Daftar pintasan Quick Entry
-- Tambah, hapus, ubah urutan (drag)
+### Shortcuts
+- Daftar shortcuts Quick Entry
+- Add, delete, reorder (drag)
 
-### Notifikasi
-- Toggle aktif/nonaktif notifikasi budget
-- Tombol "Minta izin notifikasi" jika belum diberikan
-- Info status izin saat ini (diberikan / ditolak / belum diminta)
+### Notifications
+- Toggle on/off budget notifications
+- Tombol "Request permission" jika belum diberikan
+- Status izin saat ini (granted / denied / not asked)
 
 ### Data
 - **Export data** — unduh `.json`
 - **Import data** — unggah `.json` dengan preview sebelum konfirmasi
-- **Hapus semua data** — reset ke kondisi awal; memerlukan konfirmasi teks (ketik "HAPUS" untuk lanjut)
+- **Delete all data** — reset ke kondisi awal; konfirmasi dengan mengetik "DELETE"
 
-### Tentang Aplikasi
-- Nama dan versi aplikasi
-- Kalimat singkat deskripsi aplikasi
-- Informasi privasi: "Semua data tersimpan di perangkat kamu. Tidak ada yang dikirim ke server."
+### About
+- App name dan versi
+- Deskripsi singkat aplikasi
+- Privacy info: "All data is stored on your device. Nothing is sent to any server."
 - Lisensi (jika open source)
 
 ---
@@ -213,11 +214,11 @@ Pengaturan dikelompokkan dalam satu halaman, dibagi per bagian:
 
 ```
 Bottom Navigation (mobile) / Sidebar kiri (desktop)
-├── Beranda        → Ringkasan hari ini, progress budget, pintasan cepat
-├── Riwayat        → Semua transaksi + cari, filter, urutkan
+├── Home           → Ringkasan hari ini, progress budget, pintasan cepat
+├── History        → Semua transaksi + search, filter, sort
 ├── [ + ]          → FAB — buka form tambah pengeluaran
-├── Rekap          → Tab: Mingguan | Bulanan | Kategori | Custom
-└── Pengaturan     → Preferensi, anggaran, kategori, pintasan, data, tentang
+├── Summary        → Tab: Weekly | Monthly | By Category | Custom
+└── Settings       → Preferences, budget, categories, shortcuts, data, about
 ```
 
 ---
@@ -228,24 +229,24 @@ Bottom Navigation (mobile) / Sidebar kiri (desktop)
 
 1. Pengguna buka URL di browser
 2. Aplikasi load instan — tidak ada splash screen atau loading yang menghalangi konten
-3. Beranda tampil kosong dengan satu baris teks: "Tap + untuk catat pengeluaran pertama"
-4. Banner tipis di bawah: "Tambahkan ke home screen untuk akses lebih cepat" — bisa di-dismiss permanen
+3. Home tampil kosong dengan satu baris teks: "Tap + to record your first expense"
+4. Banner tipis di bawah: "Add to home screen for quick access" — bisa di-dismiss permanen
 
 ### Mencatat Pengeluaran
 
 1. Tap FAB `+`
-2. Masukkan nominal → pilih kategori → isi catatan (opsional) → tap Simpan
-3. Snackbar "Tersimpan" muncul 2 detik; Beranda langsung terupdate
+2. Masukkan nominal → pilih kategori → isi catatan (opsional) → tap **Save**
+3. Snackbar "Saved" muncul 2 detik; Home langsung terupdate
 
 ### Pakai Quick Entry
 
 1. Tap FAB `+`
-2. Tap salah satu pintasan yang muncul di atas form
-3. Form terisi otomatis — ubah nominal jika perlu → Simpan
+2. Tap salah satu shortcut yang muncul di atas form
+3. Form terisi otomatis — ubah nominal jika perlu → **Save**
 
-### Analisis dengan Filter Rekap
+### Analisis dengan Filter Summary
 
-1. Buka tab Rekap → pilih periode
+1. Buka tab Summary → pilih periode
 2. Tap ikon filter di pojok kanan
 3. Uncheck kategori atau item tertentu untuk mengecualikannya dari total
 4. Total di header berubah real-time
@@ -253,16 +254,16 @@ Bottom Navigation (mobile) / Sidebar kiri (desktop)
 
 ### Melihat Rekap Custom
 
-1. Buka tab Rekap → tap "Custom"
-2. Pilih tanggal mulai dan selesai (atau gunakan preset)
+1. Buka tab Summary → tap "Custom"
+2. Pilih start date dan end date (atau gunakan preset)
 3. Data tampil langsung
 
 ### Mengatur Budget
 
-1. Buka Pengaturan → Anggaran
-2. Isi nominal budget mingguan dan/atau bulanan → Simpan
+1. Buka Settings → Budget
+2. Isi nominal weekly dan/atau monthly budget → **Save**
 3. Izin notifikasi diminta jika belum diberikan
-4. Progress bar di Beranda langsung aktif
+4. Progress bar di Home langsung aktif
 
 ---
 
@@ -273,7 +274,7 @@ Bottom Navigation (mobile) / Sidebar kiri (desktop)
 - **Kecepatan**: aksi paling sering (tambah pengeluaran) selesai dalam ≤ 3 tap
 - **Clarity over cleverness**: label teks selalu ada, tidak ada ikon ambigu tanpa label
 - **Satu tangan**: semua aksi utama bisa dilakukan tanpa menggeser pegangan
-- **Feedback instan**: setiap aksi (simpan, hapus, import) memberikan respons visual langsung
+- **Feedback instan**: setiap aksi (save, delete, import) memberikan respons visual langsung
 - **Zero dead ends**: setiap halaman kosong punya teks panduan dan satu CTA yang jelas
 
 ### Layout
@@ -287,7 +288,7 @@ Bottom Navigation (mobile) / Sidebar kiri (desktop)
 
 - Mode terang sebagai default, warna netral mendominasi
 - Satu warna aksen utama, bukan gradien
-- Merah hanya untuk over-budget dan aksi destruktif (hapus)
+- Merah hanya untuk over-budget dan aksi destruktif (delete)
 - Kuning/oranye untuk peringatan mendekati budget
 - Hijau untuk konfirmasi dan status aman
 
@@ -313,10 +314,10 @@ UI **tidak boleh** terlihat seperti hasil generate AI. UI yang terasa generik me
 - **Emoji di judul halaman, tombol, atau label form** sebagai dekorasi
 - **Lebih dari 2 warna aksen** dalam satu layar
 - **Variasi ukuran font terlalu banyak** — maksimal 2 ukuran yang berbeda per halaman
-- **Tombol dengan teks panjang + ikon** seperti `✨ Tambah Pengeluaran Baru`
+- **Tombol dengan teks panjang + ikon** seperti `✨ Add New Expense`
 - **Section header + subtitle panjang** di bawahnya — pola ini terlalu umum di output AI
 - **Progress bar atau counter yang animasi sendiri** saat halaman dibuka tanpa trigger dari pengguna
-- **Placeholder teks yang terlalu ramah**: "Hei! Belum ada pengeluaran nih 😊" — cukup tulis "Belum ada pengeluaran"
+- **Placeholder teks yang terlalu ramah**: "Hey! You don't have any expenses yet 😊" — cukup tulis "No expenses yet"
 
 ### Yang HARUS DILAKUKAN
 
@@ -325,8 +326,8 @@ UI **tidak boleh** terlihat seperti hasil generate AI. UI yang terasa generik me
 - **Tipografi konsisten** — satu font, satu skala, tebal hanya untuk angka/nominal yang penting
 - **Tombol terlihat seperti tombol**, input terlihat seperti input — hindari tombol ghost di mana-mana
 - **State kosong fungsional** — teks singkat + satu CTA, tanpa ilustrasi besar
-- **Icon yang familier** — pensil untuk edit, tempat sampah untuk hapus, corong untuk filter
-- **Pesan langsung ke poin** — "Budget mingguan terlewati" bukan "Wah, sepertinya kamu sudah melewati batas budget minggu ini!"
+- **Icon yang familier** — pencil untuk edit, trash untuk delete, funnel untuk filter
+- **Pesan langsung ke poin** — "Weekly budget exceeded" bukan "Looks like you've gone over your weekly budget!"
 
 ---
 
@@ -339,7 +340,7 @@ UI **tidak boleh** terlihat seperti hasil generate AI. UI yang terasa generik me
     id: "uuid-v4",
     amount: 25000,           // Rupiah, integer
     categoryId: "cat-001",
-    note: "Makan siang",
+    note: "Office lunch",
     date: "2025-05-14"       // ISO date YYYY-MM-DD
   }
 ]
@@ -348,7 +349,7 @@ UI **tidak boleh** terlihat seperti hasil generate AI. UI yang terasa generik me
 [
   {
     id: "cat-001",
-    name: "Makan",
+    name: "Food",
     emoji: "🍽️",
     color: "#F97316",
     budgetMonthly: 500000    // null jika tidak diset
@@ -366,10 +367,10 @@ UI **tidak boleh** terlihat seperti hasil generate AI. UI yang terasa generik me
 [
   {
     id: "sc-001",
-    label: "Makan siang kantor",
+    label: "Office lunch",
     amount: 25000,
     categoryId: "cat-001",
-    note: "Makan siang",
+    note: "Office lunch",
     order: 0
   }
 ]
