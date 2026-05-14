@@ -1,4 +1,4 @@
-import { useState, useCallback, createContext, useContext, useEffect } from 'react'
+﻿import { useState, useCallback, createContext, useContext, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Home, History, BarChart2, Settings, Plus, Share } from 'lucide-react'
 import { useAppState, useAppDispatch } from '../context/AppContext'
@@ -107,11 +107,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     : { amount: 0, categoryId: '', note: '', date: formDefaultDate }
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex md:flex-row">
+    <div className="min-h-screen bg-stone-50 dark:bg-neutral-950 flex md:flex-row">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-52 shrink-0 bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 fixed top-0 left-0 h-full">
-        <div className="px-4 py-5 border-b border-stone-100 dark:border-stone-800">
-          <span className="text-lg font-bold text-stone-900 dark:text-stone-100">Kaluna</span>
+      <aside className="hidden md:flex flex-col w-52 shrink-0 bg-white dark:bg-neutral-900 border-r border-stone-200 dark:border-neutral-800 fixed top-0 left-0 h-full">
+        <div className="px-4 py-5 border-b border-stone-100 dark:border-neutral-800 flex items-center gap-2">
+          <img src="/favicon.svg" alt="" aria-hidden="true" className="w-6 h-6 rounded-md" />
+          <span className="text-lg font-bold text-stone-900 dark:text-neutral-100">Kaluna</span>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1">
           {navItems.map(({ to, icon: Icon, label }) => (
@@ -122,8 +123,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900'
-                    : 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                    ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
+                    : 'text-stone-600 dark:text-neutral-400 hover:bg-stone-100 dark:hover:bg-neutral-800'
                 }`
               }
             >
@@ -132,10 +133,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </NavLink>
           ))}
         </nav>
-        <div className="px-3 py-4 border-t border-stone-100 dark:border-stone-800">
+        <div className="px-3 py-4 border-t border-stone-100 dark:border-neutral-800">
           <button
             onClick={openAdd}
-            className="w-full flex items-center justify-center gap-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 text-sm font-medium py-2.5 rounded-lg hover:bg-stone-700 dark:hover:bg-stone-200"
+            className="w-full flex items-center justify-center gap-2 bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-sm font-medium py-2.5 rounded-lg hover:bg-stone-700 dark:hover:bg-neutral-200"
           >
             <Plus size={16} />
             Add Expense
@@ -146,8 +147,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className="flex-1 md:ml-52 pb-20 md:pb-6">
         {/* Mobile header */}
-        <header className="md:hidden flex items-center px-4 h-12 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 sticky top-0 z-20">
-          <span className="text-base font-bold text-stone-900 dark:text-stone-100">Kaluna</span>
+        <header className="md:hidden flex items-center gap-2 px-4 h-12 bg-white dark:bg-neutral-900 border-b border-stone-200 dark:border-neutral-800 sticky top-0 z-20">
+          <img src="/favicon.svg" alt="" aria-hidden="true" className="w-6 h-6 rounded-md" />
+          <span className="text-base font-bold text-stone-900 dark:text-neutral-100">Kaluna</span>
         </header>
 
         {inAppAlert && (
@@ -158,17 +160,17 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         )}
 
         {showBanner && (
-          <div className="bg-stone-100 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700 px-4 py-2.5 flex items-center justify-between text-sm text-stone-700 dark:text-stone-300">
+          <div className="bg-stone-100 dark:bg-neutral-800 border-b border-stone-200 dark:border-neutral-700 px-4 py-2.5 flex items-center justify-between text-sm text-stone-700 dark:text-neutral-300">
             <span className="flex items-center gap-2">
               {isIOS ? <><Share size={14} /> Tap Share then "Add to Home Screen"</> : 'Add to home screen for quick access'}
             </span>
             <div className="flex items-center gap-3">
               {canInstall && (
-                <button onClick={triggerInstall} className="font-medium text-stone-900 dark:text-stone-100 hover:underline">Add</button>
+                <button onClick={triggerInstall} className="font-medium text-stone-900 dark:text-neutral-100 hover:underline">Add</button>
               )}
               <button
                 onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { installBannerDismissed: true } })}
-                className="text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200"
+                className="text-stone-500 dark:text-neutral-400 hover:text-stone-700 dark:hover:text-neutral-200"
               >
                 Dismiss
               </button>
@@ -192,14 +194,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 z-30">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-stone-200 dark:border-neutral-800 z-30">
         <div className="flex items-center justify-around h-16 px-2">
           {navItems.slice(0, 2).map(({ to, icon: Icon, label }) => (
             <NavItem key={to} to={to} icon={Icon} label={label} exact={to === '/'} />
           ))}
           <button
             onClick={openAdd}
-            className="w-14 h-14 -mt-6 bg-stone-900 dark:bg-stone-100 rounded-full flex items-center justify-center text-white dark:text-stone-900 shadow-lg hover:bg-stone-700 dark:hover:bg-stone-200 active:bg-stone-800"
+            className="w-14 h-14 -mt-6 bg-stone-900 dark:bg-neutral-100 rounded-full flex items-center justify-center text-white dark:text-neutral-900 shadow-lg hover:bg-stone-700 dark:hover:bg-neutral-200 active:bg-stone-800"
             aria-label="Add expense"
           >
             <Plus size={24} />
@@ -231,7 +233,7 @@ function NavItem({ to, icon: Icon, label, exact }: { to: string; icon: React.Ele
       end={exact}
       className={({ isActive }) =>
         `flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-          isActive ? 'text-stone-900 dark:text-stone-100' : 'text-stone-400 dark:text-stone-500'
+          isActive ? 'text-stone-900 dark:text-neutral-100' : 'text-stone-400 dark:text-neutral-500'
         }`
       }
     >

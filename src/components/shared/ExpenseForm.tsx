@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import type { Expense, Shortcut } from '../../types'
 import { useAppState } from '../../context/AppContext'
@@ -46,13 +46,13 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
   return (
     <div className="fixed inset-0 z-40 flex items-end md:items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full md:max-w-md bg-white dark:bg-stone-900 rounded-t-2xl md:rounded-2xl md:mx-4 shadow-xl max-h-[90vh] flex flex-col">
+      <div className="relative w-full md:max-w-md bg-white dark:bg-neutral-900 rounded-t-2xl md:rounded-2xl md:mx-4 shadow-xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-stone-100 dark:border-stone-800">
-          <h2 className="font-semibold text-stone-900 dark:text-stone-100">
+        <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-stone-100 dark:border-neutral-800">
+          <h2 className="font-semibold text-stone-900 dark:text-neutral-100">
             {isEditing ? 'Edit Expense' : 'Add Expense'}
           </h2>
-          <button onClick={onClose} className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800">
+          <button onClick={onClose} className="p-1.5 text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300 rounded-lg hover:bg-stone-100 dark:hover:bg-neutral-800">
             <X size={18} />
           </button>
         </div>
@@ -62,7 +62,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
             {/* Shortcuts */}
             {shortcuts.length > 0 && (
               <div>
-                <p className="text-xs font-medium text-stone-500 dark:text-stone-400 mb-2">Shortcuts</p>
+                <p className="text-xs font-medium text-stone-500 dark:text-neutral-400 mb-2">Shortcuts</p>
                 <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
                   {shortcuts
                     .slice()
@@ -72,7 +72,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                         key={sc.id}
                         type="button"
                         onClick={() => applyShortcut(sc)}
-                        className="shrink-0 px-3 py-1.5 text-sm bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 rounded-lg whitespace-nowrap"
+                        className="shrink-0 px-3 py-1.5 text-sm bg-stone-100 dark:bg-neutral-800 hover:bg-stone-200 dark:hover:bg-neutral-700 text-stone-700 dark:text-neutral-300 rounded-lg whitespace-nowrap"
                       >
                         {sc.label}
                       </button>
@@ -83,9 +83,9 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Amount */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">Amount</label>
+              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Amount</label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-stone-400 text-sm">Rp</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
                 <input
                   ref={amountRef}
                   type="text"
@@ -93,14 +93,14 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                   value={amountDisplay}
                   onChange={handleAmountChange}
                   placeholder="0"
-                  className="w-full pl-10 pr-3 py-3 text-lg font-semibold text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-stone-100"
+                  className="w-full pl-10 pr-3 py-3 text-lg font-semibold text-stone-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
                 />
               </div>
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">Category</label>
+              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-2">Category</label>
               <div className="grid grid-cols-4 gap-2">
                 {categories.map(cat => (
                   <button
@@ -109,12 +109,12 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                     onClick={() => setCategoryId(cat.id)}
                     className={`flex flex-col items-center gap-1 p-2 rounded-lg border text-xs transition-colors ${
                       categoryId === cat.id
-                        ? 'border-stone-900 dark:border-stone-100 bg-stone-50 dark:bg-stone-800'
-                        : 'border-stone-200 dark:border-stone-700 hover:border-stone-400 dark:hover:border-stone-500'
+                        ? 'border-stone-900 dark:border-neutral-100 bg-stone-50 dark:bg-neutral-800'
+                        : 'border-stone-200 dark:border-neutral-700 hover:border-stone-400 dark:hover:border-neutral-500'
                     }`}
                   >
                     <span className="text-xl">{cat.emoji}</span>
-                    <span className="text-stone-700 dark:text-stone-300 truncate w-full text-center">{cat.name}</span>
+                    <span className="text-stone-700 dark:text-neutral-300 truncate w-full text-center">{cat.name}</span>
                   </button>
                 ))}
               </div>
@@ -122,25 +122,25 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Note */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">Note</label>
+              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Note</label>
               <input
                 type="text"
                 value={note}
                 onChange={e => setNote(e.target.value)}
                 placeholder="Add a note (optional)"
-                className="w-full px-3 py-2 text-sm text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-stone-100"
+                className="w-full px-3 py-2 text-sm text-stone-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
               />
             </div>
 
             {/* Date */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">Date</label>
+              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={e => setDate(e.target.value)}
                 max={today}
-                className="w-full px-3 py-2 text-sm text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-stone-100"
+                className="w-full px-3 py-2 text-sm text-stone-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
               />
             </div>
 
