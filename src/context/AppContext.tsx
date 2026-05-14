@@ -39,7 +39,7 @@ const initialState: AppState = {
   categories:    [],
   budgets:       { weekly: null, monthly: null, alertThresholdPct: 75 },
   shortcuts:     [],
-  settings:      { weekStartDay: 'monday', installBannerDismissed: false },
+  settings:      { weekStartDay: 'monday', installBannerDismissed: false, darkMode: false },
   pendingDelete: null,
 }
 

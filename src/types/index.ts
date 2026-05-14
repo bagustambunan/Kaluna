@@ -34,6 +34,7 @@ export interface Shortcut {
 export interface Settings {
   weekStartDay: 'monday' | 'sunday'
   installBannerDismissed: boolean
+  darkMode: boolean
 }
 
 export interface AppData {

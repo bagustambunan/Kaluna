@@ -7,6 +7,7 @@ import {
   parseISO,
   isWithinInterval,
   eachDayOfInterval,
+  addDays,
 } from 'date-fns'
 import type { DateRange, Expense, WeekStartDay } from '../types'
 
@@ -96,4 +97,14 @@ export function getWeekNumber(date: Date): string {
 
 export function getMonthKey(date: Date): string {
   return format(date, 'yyyy-MM')
+}
+
+export function shiftDays(dateStr: string, delta: number): string {
+  return formatDateStr(addDays(parseDate(dateStr), delta))
+}
+
+export function formatDayDisplay(dateStr: string, todayStr: string): string {
+  if (dateStr === todayStr) return 'Today'
+  if (dateStr === shiftDays(todayStr, -1)) return 'Yesterday'
+  return format(parseDate(dateStr), 'EEE, MMM d')
 }

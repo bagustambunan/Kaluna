@@ -19,6 +19,7 @@ export const DEFAULT_BUDGETS: Budgets = {
 export const DEFAULT_SETTINGS: Settings = {
   weekStartDay: 'monday',
   installBannerDismissed: false,
+  darkMode: false,
 }
 
 export const EMOJI_OPTIONS = ['🍽️','🚗','🛍️','🎬','💊','📄','📦','☕','✈️','🏠','🎓','💪','🎮','📱','👗','🐾','🌿']

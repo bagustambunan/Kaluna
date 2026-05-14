@@ -22,14 +22,14 @@ const PRESETS = [
 ]
 
 export function Summary() {
-  const [tab, setTab] = useState<Tab>('weekly')
-  const [weekOffset, setWeekOffset] = useState(0)
-  const [monthOffset, setMonthOffset] = useState(0)
-  const [customRange, setCustomRange] = useState<DateRange>({ start: '', end: '' })
-  const [filterOpen, setFilterOpen] = useState(false)
-  const [filter, setFilter] = useState<SummaryFilterState>({
+  const [tab,          setTab]          = useState<Tab>('weekly')
+  const [weekOffset,   setWeekOffset]   = useState(0)
+  const [monthOffset,  setMonthOffset]  = useState(0)
+  const [customRange,  setCustomRange]  = useState<DateRange>({ start: '', end: '' })
+  const [filterOpen,   setFilterOpen]   = useState(false)
+  const [filter,       setFilter]       = useState<SummaryFilterState>({
     excludedCategoryIds: new Set(),
-    excludedExpenseIds: new Set(),
+    excludedExpenseIds:  new Set(),
   })
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set())
 
@@ -37,7 +37,6 @@ export function Summary() {
   const { openEdit, handleDelete } = useAppHandlers()
 
   const categoryMap = useMemo(() => new Map(state.categories.map(c => [c.id, c])), [state.categories])
-
   const now = new Date()
 
   const weekRange = useMemo(() => {
@@ -70,7 +69,6 @@ export function Summary() {
   }, [periodExpenses, filter])
 
   const total = useMemo(() => sumExpenses(filteredExpenses), [filteredExpenses])
-
   const hasFilter = filter.excludedCategoryIds.size > 0 || filter.excludedExpenseIds.size > 0
 
   const resetFilter = () => {
@@ -104,13 +102,12 @@ export function Summary() {
 
   const pendingId = state.pendingDelete?.expense.id
 
-  // Category breakdown
   const catBreakdown = useMemo(() => {
-    const grouped = groupByCategory(periodExpenses.filter(e => e.id !== pendingId))
+    const grouped    = groupByCategory(periodExpenses.filter(e => e.id !== pendingId))
     const grandTotal = sumExpenses(periodExpenses.filter(e => e.id !== pendingId))
     return state.categories
       .map(cat => {
-        const items = grouped[cat.id] ?? []
+        const items    = grouped[cat.id] ?? []
         const catTotal = sumExpenses(items)
         return { cat, items, total: catTotal, pct: grandTotal > 0 ? (catTotal / grandTotal) * 100 : 0 }
       })
@@ -118,7 +115,6 @@ export function Summary() {
       .sort((a, b) => b.total - a.total)
   }, [periodExpenses, pendingId, state.categories])
 
-  // Weekly bar chart
   const dailyData = useMemo(() => {
     if (tab !== 'weekly') return []
     const grouped = groupByDay(periodExpenses, weekRange)
@@ -132,10 +128,10 @@ export function Summary() {
   const maxDaily = useMemo(() => Math.max(...dailyData.map(d => d.total), 1), [dailyData])
 
   const tabs: { key: Tab; label: string }[] = [
-    { key: 'weekly',   label: 'Weekly' },
-    { key: 'monthly',  label: 'Monthly' },
+    { key: 'weekly',   label: 'Weekly'      },
+    { key: 'monthly',  label: 'Monthly'     },
     { key: 'category', label: 'By Category' },
-    { key: 'custom',   label: 'Custom' },
+    { key: 'custom',   label: 'Custom'      },
   ]
 
   const weeklyStatus = useMemo(
@@ -150,12 +146,16 @@ export function Summary() {
   return (
     <div className="px-4 pt-5 pb-4 space-y-4">
       {/* Tabs */}
-      <div className="flex gap-1 bg-stone-100 p-1 rounded-xl">
+      <div className="flex gap-1 bg-stone-100 dark:bg-stone-800 p-1 rounded-xl">
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => { setTab(t.key); setFilter({ excludedCategoryIds: new Set(), excludedExpenseIds: new Set() }) }}
-            className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${tab === t.key ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-700'}`}
+            className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+              tab === t.key
+                ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-sm'
+                : 'text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300'
+            }`}
           >
             {t.label}
           </button>
@@ -167,16 +167,16 @@ export function Summary() {
         <div className="flex items-center justify-between">
           <button
             onClick={() => tab === 'weekly' ? setWeekOffset(v => v - 1) : setMonthOffset(v => v - 1)}
-            className="p-1.5 rounded-lg hover:bg-stone-200 text-stone-600"
+            className="p-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-400"
           >
             <ChevronLeft size={18} />
           </button>
-          <p className="text-sm font-medium text-stone-700">
+          <p className="text-sm font-medium text-stone-700 dark:text-stone-300">
             {tab === 'weekly' ? formatWeekRange(weekRange) : formatMonthYear(subMonths(now, -monthOffset))}
           </p>
           <button
             onClick={() => tab === 'weekly' ? setWeekOffset(v => v + 1) : setMonthOffset(v => v + 1)}
-            className="p-1.5 rounded-lg hover:bg-stone-200 text-stone-600"
+            className="p-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-400"
           >
             <ChevronRight size={18} />
           </button>
@@ -188,14 +188,18 @@ export function Summary() {
         <div className="space-y-3">
           <div className="flex gap-2">
             <div className="flex-1">
-              <label className="block text-xs font-medium text-stone-500 mb-1">Start</label>
-              <input type="date" value={customRange.start} onChange={e => setCustomRange(v => ({ ...v, start: e.target.value }))}
-                className="w-full px-2.5 py-1.5 text-sm border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900" />
+              <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">Start</label>
+              <input type="date" value={customRange.start}
+                onChange={e => setCustomRange(v => ({ ...v, start: e.target.value }))}
+                className="w-full px-2.5 py-1.5 text-sm border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-stone-100"
+              />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-medium text-stone-500 mb-1">End</label>
-              <input type="date" value={customRange.end} onChange={e => setCustomRange(v => ({ ...v, end: e.target.value }))}
-                className="w-full px-2.5 py-1.5 text-sm border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900" />
+              <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1">End</label>
+              <input type="date" value={customRange.end}
+                onChange={e => setCustomRange(v => ({ ...v, end: e.target.value }))}
+                className="w-full px-2.5 py-1.5 text-sm border border-stone-300 dark:border-stone-600 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-stone-100"
+              />
             </div>
           </div>
           <div className="flex gap-2">
@@ -207,7 +211,7 @@ export function Summary() {
                   const start = new Date(); start.setDate(start.getDate() - p.days + 1)
                   setCustomRange({ start: formatDateStr(start), end: formatDateStr(end) })
                 }}
-                className="px-3 py-1.5 text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg"
+                className="px-3 py-1.5 text-xs bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 rounded-lg"
               >
                 {p.label}
               </button>
@@ -219,18 +223,22 @@ export function Summary() {
       {/* Total header */}
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-stone-500 uppercase tracking-wide font-medium">Total</p>
-          <p className="text-3xl font-bold text-stone-900">{formatRupiah(total)}</p>
+          <p className="text-xs text-stone-500 dark:text-stone-400 uppercase tracking-wide font-medium">Total</p>
+          <p className="text-3xl font-bold text-stone-900 dark:text-stone-50">{formatRupiah(total)}</p>
         </div>
         <div className="flex items-center gap-2">
           {hasFilter && (
-            <button onClick={resetFilter} className="flex items-center gap-1 text-xs text-stone-500 hover:text-stone-800 px-2 py-1.5 rounded-lg hover:bg-stone-100">
+            <button onClick={resetFilter} className="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 px-2 py-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800">
               <RotateCcw size={12} /> Reset
             </button>
           )}
           <button
             onClick={() => setFilterOpen(v => !v)}
-            className={`p-2 rounded-lg border transition-colors ${filterOpen || hasFilter ? 'bg-stone-900 text-white border-stone-900' : 'border-stone-200 text-stone-600 hover:bg-stone-100'}`}
+            className={`p-2 rounded-lg border transition-colors ${
+              filterOpen || hasFilter
+                ? 'bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 border-stone-900 dark:border-stone-100'
+                : 'border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+            }`}
           >
             <Filter size={15} />
           </button>
@@ -239,12 +247,12 @@ export function Summary() {
 
       {/* Filter panel */}
       {filterOpen && (
-        <div className="bg-white border border-stone-200 rounded-xl p-3 space-y-3">
-          <p className="text-xs font-medium text-stone-500">Filter categories</p>
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl p-3 space-y-3">
+          <p className="text-xs font-medium text-stone-500 dark:text-stone-400">Filter categories</p>
           {catBreakdown.map(({ cat, items }) => {
-            const allExcluded = filter.excludedCategoryIds.has(cat.id)
+            const allExcluded  = filter.excludedCategoryIds.has(cat.id)
             const someExcluded = !allExcluded && items.some(e => filter.excludedExpenseIds.has(e.id))
-            const isExpanded = expandedCats.has(cat.id)
+            const isExpanded   = expandedCats.has(cat.id)
 
             return (
               <div key={cat.id}>
@@ -256,10 +264,10 @@ export function Summary() {
                     onChange={() => toggleCatFilter(cat.id)}
                     className="rounded"
                   />
-                  <button onClick={() => toggleExpandCat(cat.id)} className="flex-1 flex items-center gap-1.5 text-sm text-left text-stone-700">
+                  <button onClick={() => toggleExpandCat(cat.id)} className="flex-1 flex items-center gap-1.5 text-sm text-left text-stone-700 dark:text-stone-300">
                     <span>{cat.emoji}</span>
                     <span>{cat.name}</span>
-                    <ChevronRight size={12} className={`ml-auto text-stone-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                    <ChevronRight size={12} className={`ml-auto text-stone-400 dark:text-stone-500 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                   </button>
                 </div>
                 {isExpanded && (
@@ -272,8 +280,8 @@ export function Summary() {
                           onChange={() => toggleExpenseFilter(exp.id)}
                           className="rounded"
                         />
-                        <span className="text-xs text-stone-600 flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
-                        <span className="text-xs text-stone-500 shrink-0">{formatRupiah(exp.amount)}</span>
+                        <span className="text-xs text-stone-600 dark:text-stone-400 flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
+                        <span className="text-xs text-stone-500 dark:text-stone-400 shrink-0">{formatRupiah(exp.amount)}</span>
                       </div>
                     ))}
                   </div>
@@ -285,49 +293,50 @@ export function Summary() {
       )}
 
       {periodExpenses.length === 0 ? (
-        <p className="text-sm text-stone-400 text-center py-10">No expenses in this period</p>
+        <p className="text-sm text-stone-400 dark:text-stone-500 text-center py-10">No expenses in this period</p>
       ) : (
         <>
           {/* Weekly bar chart */}
           {tab === 'weekly' && dailyData.length > 0 && (
-            <div className="bg-white rounded-xl border border-stone-200 p-4">
-              <p className="text-xs font-medium text-stone-500 mb-3">Daily breakdown</p>
+            <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-700 p-4">
+              <p className="text-xs font-medium text-stone-500 dark:text-stone-400 mb-3">Daily breakdown</p>
               <div className="flex items-end gap-1.5 h-24">
                 {dailyData.map(d => (
                   <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
                     <div
-                      className="w-full bg-stone-800 rounded-t-sm min-h-[2px]"
+                      className="w-full bg-stone-800 dark:bg-stone-300 rounded-t-sm min-h-[2px]"
                       style={{ height: `${(d.total / maxDaily) * 80}px` }}
                     />
-                    <span className="text-xs text-stone-400">{d.label}</span>
+                    <span className="text-xs text-stone-400 dark:text-stone-500">{d.label}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Budget progress on weekly/monthly */}
-          {tab === 'weekly' && weeklyStatus && (
-            <div className="bg-white rounded-xl border border-stone-200 p-4">
+          {tab === 'weekly'  && weeklyStatus  && (
+            <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-700 p-4">
               <ProgressBar status={weeklyStatus} label="Weekly Budget" />
             </div>
           )}
           {tab === 'monthly' && monthlyStatus && (
-            <div className="bg-white rounded-xl border border-stone-200 p-4">
+            <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-700 p-4">
               <ProgressBar status={monthlyStatus} label="Monthly Budget" />
             </div>
           )}
 
           {/* Category breakdown */}
-          <div className="bg-white rounded-xl border border-stone-200 p-4 space-y-3">
-            <p className="text-xs font-medium text-stone-500">By category</p>
+          <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-700 p-4 space-y-3">
+            <p className="text-xs font-medium text-stone-500 dark:text-stone-400">By category</p>
             {catBreakdown.map(({ cat, total: catTotal, pct }) => (
               <div key={cat.id}>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-stone-700">{cat.emoji} {cat.name}</span>
-                  <span className="font-medium text-stone-900">{formatRupiah(catTotal)} <span className="text-stone-400 text-xs">{formatPct(pct)}</span></span>
+                  <span className="text-stone-700 dark:text-stone-300">{cat.emoji} {cat.name}</span>
+                  <span className="font-medium text-stone-900 dark:text-stone-100">
+                    {formatRupiah(catTotal)} <span className="text-stone-400 dark:text-stone-500 text-xs">{formatPct(pct)}</span>
+                  </span>
                 </div>
-                <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-stone-100 dark:bg-stone-700 rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: cat.color }} />
                 </div>
               </div>
@@ -335,7 +344,7 @@ export function Summary() {
           </div>
 
           {/* Expense list */}
-          <div className="bg-white rounded-xl border border-stone-200 divide-y divide-stone-100 overflow-hidden">
+          <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-700 divide-y divide-stone-100 dark:divide-stone-800 overflow-hidden">
             {periodExpenses
               .filter(e => e.id !== pendingId)
               .sort((a, b) => b.date.localeCompare(a.date))
