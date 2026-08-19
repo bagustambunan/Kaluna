@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --paper: #E7E9E4;
+  --sheet: #F5F6F3;
+  --ink: #1B211E;
+  --mute: #66736C;
+  --pen: #4A90C8;
+  --stamp: #C1392B;
+  --warn: #C4852A;
+}
+
+html.dark {
+  --paper: #131614;
+  --sheet: #1A1F1C;
+  --ink: #E8EBE6;
+  --mute: #8B9891;
+  --pen: #7EB7E3;
+  --stamp: #E07068;
+  --warn: #D4A04A;
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -14,6 +34,8 @@ body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
   overscroll-behavior: none;
+  background-color: var(--paper);
+  color: var(--ink);
 }
 
 .scrollbar-none {

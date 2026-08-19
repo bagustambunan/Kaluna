@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -12,8 +13,8 @@ export default defineConfig({
         name: 'Kaluna',
         short_name: 'Kaluna',
         description: 'Daily expense tracker',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        theme_color: '#E7E9E4',
+        background_color: '#E7E9E4',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
@@ -29,4 +30,9 @@ export default defineConfig({
       },
     }),
   ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    globals: true,
+  },
 })
