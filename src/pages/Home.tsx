@@ -17,7 +17,7 @@ export function Home() {
   const state = useAppState()
   const {
     openEdit, handleDelete, setFormDefaultDate, handleSave, cancelEdit,
-    editingExpense, composeFocused, setComposeFocused,
+    editingExpense, setComposeFocused,
   } = useAppHandlers()
 
   const today = useMemo(() => formatDateStr(new Date()), [])

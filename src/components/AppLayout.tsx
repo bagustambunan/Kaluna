@@ -110,7 +110,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   }, [dispatch, showSnack])
 
   const showBanner = (!state.settings.installBannerDismissed) && (canInstall || isIOS)
-  const snackOffset = location.pathname === '/' && !composeFocused ? '9.5rem' : '5.5rem'
+  const isToday = location.pathname === '/'
+  const snackOffset = isToday && !composeFocused ? '9.5rem' : '5.5rem'
 
   return (
     <div
@@ -186,7 +187,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           />
         )}
 
-        <div className="max-w-2xl mx-auto w-full flex-1 min-h-0 flex flex-col">
+        <div className={`max-w-2xl mx-auto w-full flex-1 min-h-0 flex flex-col ${isToday ? '' : 'overflow-y-auto'}`}>
           <AppHandlersContext.Provider value={{
             openEdit,
             handleDelete,
