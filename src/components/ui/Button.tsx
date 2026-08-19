@@ -6,10 +6,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants = {
-  primary:   'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:bg-stone-700 dark:hover:bg-neutral-200 active:bg-stone-800',
-  secondary: 'bg-stone-100 dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 hover:bg-stone-200 dark:hover:bg-neutral-700 active:bg-stone-300',
-  ghost:     'text-stone-600 dark:text-neutral-400 hover:bg-stone-100 dark:hover:bg-neutral-800 active:bg-stone-200',
-  danger:    'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
+  primary:   'bg-pen text-sheet hover:opacity-90 active:opacity-80',
+  secondary: 'bg-sheet text-ink border border-ink/10 hover:bg-paper',
+  ghost:     'text-mute hover:bg-sheet hover:text-ink',
+  danger:    'bg-stamp text-white hover:opacity-90 active:opacity-80',
 }
 
 const sizes = {
@@ -21,7 +21,7 @@ export function Button({ variant = 'primary', size = 'md', className = '', child
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center gap-1.5 font-medium rounded-lg transition-colors disabled:opacity-40 disabled:pointer-events-none ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 font-medium rounded-md transition-colors disabled:opacity-40 disabled:pointer-events-none ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {children}
     </button>

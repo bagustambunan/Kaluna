@@ -7,15 +7,15 @@ interface ProgressBarProps {
 }
 
 const barColors = {
-  safe:    'bg-stone-800 dark:bg-neutral-300',
-  warning: 'bg-orange-500',
-  over:    'bg-red-600',
+  safe:    'bg-ink',
+  warning: 'bg-warn',
+  over:    'bg-stamp',
 }
 
 const textColors = {
-  safe:    'text-stone-600 dark:text-neutral-400',
-  warning: 'text-orange-600 dark:text-orange-400',
-  over:    'text-red-600 dark:text-red-400',
+  safe:    'text-ink',
+  warning: 'text-warn',
+  over:    'text-stamp',
 }
 
 export function ProgressBar({ status, label }: ProgressBarProps) {
@@ -26,10 +26,10 @@ export function ProgressBar({ status, label }: ProgressBarProps) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-sm">
-        <span className="font-medium text-stone-700 dark:text-neutral-300">{label}</span>
-        <span className="text-stone-500 dark:text-neutral-400">{formatRupiah(status.spent)} / {formatRupiah(status.budget)}</span>
+        <span className="font-medium text-ink">{label}</span>
+        <span className="text-mute">{formatRupiah(status.spent)} / {formatRupiah(status.budget)}</span>
       </div>
-      <div className="h-2 bg-stone-100 dark:bg-neutral-700 rounded-full overflow-hidden">
+      <div className="h-2 bg-ink/10 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${barColors[status.status]}`}
           style={{ width: `${barWidth}%` }}
