@@ -17,7 +17,7 @@ export function Home() {
   const state = useAppState()
   const {
     openEdit, handleDelete, setFormDefaultDate, handleSave, cancelEdit,
-    editingExpense, setComposeFocused,
+    editingExpense, composeFocused, setComposeFocused,
   } = useAppHandlers()
 
   const today = useMemo(() => formatDateStr(new Date()), [])
@@ -143,7 +143,7 @@ export function Home() {
           </div>
         )}
       </div>
-      <div className="md:order-1 shrink-0 -mx-4 md:mx-0">
+      <div className={`md:order-1 -mx-4 md:mx-0 ${composeFocused ? 'min-h-0 flex-1 overflow-y-auto max-h-[min(50dvh,22rem)]' : 'shrink-0'}`}>
         <ComposeWell
           categories={state.categories}
           shortcuts={state.shortcuts}

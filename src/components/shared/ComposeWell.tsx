@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import type { Category, Expense, Shortcut } from '../../types'
 import { Button } from '../ui/Button'
 import { formatRupiahInput, parseRupiahInput } from '../../lib/format'
+import { formatDateStr } from '../../lib/date'
 
 export interface ComposeWellProps {
   categories: Category[]
@@ -30,7 +31,9 @@ export function ComposeWell({
   const [categoryId, setCategoryId] = useState(editingExpense?.categoryId ?? '')
   const [note, setNote] = useState(editingExpense?.note ?? '')
   const [date, setDate] = useState(editingExpense?.date ?? selectedDate)
+  const [focused, setFocused] = useState(false)
   const amountRef = useRef<HTMLInputElement>(null)
+  const today = formatDateStr(new Date())
 
   useEffect(() => {
     if (autoFocusAmount) amountRef.current?.focus()
@@ -67,7 +70,7 @@ export function ComposeWell({
       amount,
       categoryId,
       note,
-      date: editingExpense ? date : selectedDate,
+      date: editingExpense ? (date || editingExpense.date || selectedDate) : selectedDate,
     })
     if (!editingExpense) resetAddFields()
   }
@@ -85,11 +88,21 @@ export function ComposeWell({
   return (
     <form
       data-testid="expense-form"
-      className="bg-sheet border-t border-ink/10 px-4 pt-3 pb-3 md:border md:rounded-md md:mt-0"
+      className={`bg-sheet border-t border-ink/10 px-4 pt-3 pb-3 md:border md:rounded-md md:mt-0 ${
+        focused ? 'overflow-y-auto max-h-[min(50dvh,22rem)]' : ''
+      }`}
       onSubmit={handleSubmit}
-      onFocusCapture={() => onComposeFocusChange(true)}
+      onFocusCapture={() => {
+        setFocused(true)
+        onComposeFocusChange(true)
+      }}
       onBlurCapture={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) onComposeFocusChange(false)
+        const next = e.relatedTarget
+        if (!(next instanceof Node)) return
+        if (!e.currentTarget.contains(next)) {
+          setFocused(false)
+          onComposeFocusChange(false)
+        }
       }}
     >
       {editingExpense && (
@@ -165,6 +178,7 @@ export function ComposeWell({
             id="compose-date"
             type="date"
             value={date}
+            max={today}
             onChange={(e) => setDate(e.target.value)}
             className="w-full px-3 py-2 text-sm text-ink bg-sheet border border-ink/15 rounded-md focus:outline-none focus:ring-2 focus:ring-pen"
           />

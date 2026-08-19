@@ -111,11 +111,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   const showBanner = (!state.settings.installBannerDismissed) && (canInstall || isIOS)
   const isToday = location.pathname === '/'
-  const snackOffset = isToday && !composeFocused ? '9.5rem' : '5.5rem'
+  const snackOffset = isToday ? 'min(50vh, 22rem)' : '5.5rem'
 
   return (
     <div
-      className="h-screen min-h-screen bg-paper text-ink flex md:flex-row font-sans"
+      className="min-h-screen h-screen h-dvh bg-paper text-ink flex md:flex-row font-sans"
       style={{ '--snack-offset': snackOffset } as React.CSSProperties}
     >
       {/* Desktop sidebar */}

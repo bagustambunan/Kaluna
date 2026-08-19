@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ComposeWell } from './ComposeWell'
 import type { ComposeWellProps } from './ComposeWell'
 import { DEFAULT_CATEGORIES } from '../../constants/defaults'
+import { formatDateStr } from '../../lib/date'
 
 const categories = DEFAULT_CATEGORIES.map((c, i) => ({ ...c, order: i }))
 const shortcuts = [{
@@ -131,4 +132,42 @@ it('reports amount focus', async () => {
   const { onComposeFocusChange } = setup()
   await user.click(screen.getByPlaceholderText('0'))
   expect(onComposeFocusChange).toHaveBeenCalledWith(true)
+})
+
+it('caps the edit date input at today', () => {
+  setup({
+    editingExpense: {
+      id: 'e1', amount: 1000, categoryId: 'cat-default-1',
+      note: 'x', date: '2026-08-01',
+    },
+  })
+  expect(screen.getByLabelText('Date')).toHaveAttribute('max', formatDateStr(new Date()))
+})
+
+it('falls back to the expense date when the edit date is cleared', async () => {
+  const user = userEvent.setup()
+  const { onSave } = setup({
+    editingExpense: {
+      id: 'e1', amount: 1000, categoryId: 'cat-default-1',
+      note: 'x', date: '2026-08-01',
+    },
+  })
+  await user.clear(screen.getByLabelText('Date'))
+  await user.click(screen.getByRole('button', { name: 'Save' }))
+  expect(onSave).toHaveBeenCalledWith({
+    amount: 1000,
+    categoryId: 'cat-default-1',
+    note: 'x',
+    date: '2026-08-01',
+  })
+})
+
+it('does not unfocus when blur relatedTarget is null', () => {
+  const { onComposeFocusChange } = setup()
+  const amount = screen.getByPlaceholderText('0')
+  fireEvent.focus(amount)
+  expect(onComposeFocusChange).toHaveBeenCalledWith(true)
+  onComposeFocusChange.mockClear()
+  fireEvent.blur(amount, { relatedTarget: null })
+  expect(onComposeFocusChange).not.toHaveBeenCalled()
 })
