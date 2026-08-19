@@ -107,29 +107,29 @@ export function Settings() {
     }})
   }
 
-  const inputCls = 'w-full px-3 py-2 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100'
+  const inputCls = 'w-full px-3 py-2 text-sm border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-2 focus:ring-pen'
 
   return (
-    <div className="px-4 pt-5 pb-4 space-y-2">
-      <h1 className="text-xl font-bold text-stone-900 dark:text-neutral-100 mb-4">Settings</h1>
+    <div className="px-4 pt-5 pb-4">
+      <h1 className="text-xl font-bold text-ink mb-4">Settings</h1>
 
       {/* Preferences */}
       <SectionCard title="Preferences" open={openSection === 'preferences'} onToggle={() => toggle('preferences')}>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-stone-700 dark:text-neutral-300">Theme</p>
-              <p className="text-xs text-stone-400 dark:text-neutral-500">Matches device by default</p>
+              <p className="text-sm font-medium text-ink">Theme</p>
+              <p className="text-xs text-mute">Matches device by default</p>
             </div>
-            <div className="flex rounded-lg border border-stone-200 dark:border-neutral-700 overflow-hidden">
+            <div className="flex rounded-lg border border-ink/10 overflow-hidden">
               {(['system', 'light', 'dark'] as const).map(v => (
                 <button
                   key={v}
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { darkMode: v } })}
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.darkMode === v
-                      ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
-                      : 'text-stone-600 dark:text-neutral-400 hover:bg-stone-50 dark:hover:bg-neutral-800'
+                      ? 'bg-pen text-sheet border-pen'
+                      : 'text-mute hover:bg-sheet'
                   }`}
                 >
                   {v}
@@ -140,18 +140,18 @@ export function Settings() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-stone-700 dark:text-neutral-300">Start of week</p>
-              <p className="text-xs text-stone-400 dark:text-neutral-500">Affects weekly summaries and budget calculations</p>
+              <p className="text-sm font-medium text-ink">Start of week</p>
+              <p className="text-xs text-mute">Affects weekly summaries and budget calculations</p>
             </div>
-            <div className="flex rounded-lg border border-stone-200 dark:border-neutral-700 overflow-hidden">
+            <div className="flex rounded-lg border border-ink/10 overflow-hidden">
               {(['monday','sunday'] as const).map(v => (
                 <button
                   key={v}
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { weekStartDay: v } })}
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.weekStartDay === v
-                      ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
-                      : 'text-stone-600 dark:text-neutral-400 hover:bg-stone-50 dark:hover:bg-neutral-800'
+                      ? 'bg-pen text-sheet border-pen'
+                      : 'text-mute hover:bg-sheet'
                   }`}
                 >
                   {v}
@@ -166,9 +166,9 @@ export function Settings() {
       <SectionCard title="Budget" open={openSection === 'budget'} onToggle={() => toggle('budget')}>
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Weekly budget</label>
+            <label className="block text-sm font-medium text-ink mb-1">Weekly budget</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-mute text-sm">Rp</span>
               <input type="text" inputMode="numeric" value={weeklyBudget}
                 onChange={e => setWeeklyBudget(formatRupiahInput(e.target.value))}
                 placeholder="Not set"
@@ -177,9 +177,9 @@ export function Settings() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Monthly budget</label>
+            <label className="block text-sm font-medium text-ink mb-1">Monthly budget</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-mute text-sm">Rp</span>
               <input type="text" inputMode="numeric" value={monthlyBudget}
                 onChange={e => setMonthlyBudget(formatRupiahInput(e.target.value))}
                 placeholder="Not set"
@@ -188,15 +188,15 @@ export function Settings() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Alert threshold</label>
+            <label className="block text-sm font-medium text-ink mb-1">Alert threshold</label>
             <div className="flex gap-2">
               {[50, 75, 90].map(v => (
                 <button key={v}
                   onClick={() => dispatch({ type: 'UPDATE_BUDGETS', payload: { alertThresholdPct: v } })}
                   className={`flex-1 py-1.5 text-sm rounded-lg border transition-colors ${
                     state.budgets.alertThresholdPct === v
-                      ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 border-stone-900 dark:border-neutral-100'
-                      : 'border-stone-200 dark:border-neutral-700 text-stone-600 dark:text-neutral-400 hover:bg-stone-50 dark:hover:bg-neutral-800'
+                      ? 'bg-pen text-sheet border-pen'
+                      : 'border-ink/10 text-mute hover:bg-sheet'
                   }`}
                 >
                   {v}%
@@ -229,21 +229,21 @@ export function Settings() {
                     }
                   }}
                   autoFocus
-                  className="flex-1 px-2 py-1 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 rounded focus:outline-none focus:ring-1 focus:ring-stone-900 dark:focus:ring-neutral-100"
+                  className="flex-1 px-2 py-1 text-sm border border-ink/15 bg-sheet text-ink rounded focus:outline-none focus:ring-1 focus:ring-pen"
                 />
               ) : (
-                <button onClick={() => setEditingCat(cat)} className="flex-1 text-left text-sm text-stone-700 dark:text-neutral-300 hover:text-stone-900 dark:hover:text-neutral-100">
+                <button onClick={() => setEditingCat(cat)} className="flex-1 text-left text-sm text-ink hover:text-ink">
                   {cat.name}
                 </button>
               )}
               {cat.isDefault ? (
-                <span className="text-xs text-stone-400 dark:text-neutral-500">Default</span>
+                <span className="text-xs text-mute">Default</span>
               ) : usedCategoryIds.has(cat.id) ? (
-                <span className="text-xs text-stone-400 dark:text-neutral-500">In use</span>
+                <span className="text-xs text-mute">In use</span>
               ) : (
                 <button
                   onClick={() => dispatch({ type: 'DELETE_CATEGORY', payload: cat.id })}
-                  className="p-1 text-stone-400 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 rounded"
+                  className="p-1 text-mute hover:text-stamp hover:bg-stamp/10 rounded"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -251,8 +251,8 @@ export function Settings() {
             </div>
           ))}
 
-          <div className="border-t border-stone-100 dark:border-neutral-800 pt-3 space-y-2">
-            <p className="text-xs font-medium text-stone-500 dark:text-neutral-400">Add category</p>
+          <div className="border-t border-ink/10 pt-3 space-y-2">
+            <p className="text-xs font-medium text-mute">Add category</p>
             <input
               value={newCatName}
               onChange={e => setNewCatName(e.target.value)}
@@ -260,22 +260,22 @@ export function Settings() {
               className={inputCls}
             />
             <div>
-              <p className="text-xs text-stone-500 dark:text-neutral-400 mb-1">Emoji</p>
+              <p className="text-xs text-mute mb-1">Emoji</p>
               <div className="flex flex-wrap gap-1.5">
                 {EMOJI_OPTIONS.map(e => (
                   <button key={e} onClick={() => setNewCatEmoji(e)}
-                    className={`text-lg p-1 rounded ${newCatEmoji === e ? 'ring-2 ring-stone-900 dark:ring-neutral-100' : ''}`}>
+                    className={`text-lg p-1 rounded ${newCatEmoji === e ? 'ring-2 ring-pen' : ''}`}>
                     {e}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-xs text-stone-500 dark:text-neutral-400 mb-1">Color</p>
+              <p className="text-xs text-mute mb-1">Color</p>
               <div className="flex flex-wrap gap-1.5">
                 {COLOR_OPTIONS.map(c => (
                   <button key={c} onClick={() => setNewCatColor(c)}
-                    className={`w-6 h-6 rounded-full border-2 ${newCatColor === c ? 'border-stone-900 dark:border-neutral-100' : 'border-transparent'}`}
+                    className={`w-6 h-6 rounded-full border-2 ${newCatColor === c ? 'border-ink' : 'border-transparent'}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
@@ -291,7 +291,7 @@ export function Settings() {
       {/* Shortcuts */}
       <SectionCard title="Shortcuts" open={openSection === 'shortcuts'} onToggle={() => toggle('shortcuts')}>
         {state.shortcuts.length === 0 ? (
-          <p className="text-sm text-stone-400 dark:text-neutral-500">No shortcuts yet. Save a transaction as a shortcut from the expense form.</p>
+          <p className="text-sm text-mute">No shortcuts yet. Save a transaction as a shortcut from the expense form.</p>
         ) : (
           <div className="space-y-2">
             {state.shortcuts
@@ -301,14 +301,14 @@ export function Settings() {
                 const cat = state.categories.find(c => c.id === sc.categoryId)
                 return (
                   <div key={sc.id} className="flex items-center gap-2">
-                    <GripVertical size={16} className="text-stone-300 dark:text-neutral-600 shrink-0" />
+                    <GripVertical size={16} className="text-mute shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-stone-700 dark:text-neutral-300 truncate">{sc.label}</p>
-                      <p className="text-xs text-stone-400 dark:text-neutral-500">{formatRupiah(sc.amount)} · {cat?.name}</p>
+                      <p className="text-sm text-ink truncate">{sc.label}</p>
+                      <p className="text-xs text-mute">{formatRupiah(sc.amount)} · {cat?.name}</p>
                     </div>
                     <button
                       onClick={() => dispatch({ type: 'DELETE_SHORTCUT', payload: sc.id })}
-                      className="p-1 text-stone-400 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 rounded shrink-0"
+                      className="p-1 text-mute hover:text-stamp hover:bg-stamp/10 rounded shrink-0"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -323,11 +323,11 @@ export function Settings() {
       <SectionCard title="Notifications" open={openSection === 'notifications'} onToggle={() => toggle('notifications')}>
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-stone-700 dark:text-neutral-300">Permission status</span>
+            <span className="text-ink">Permission status</span>
             <span className={`font-medium ${
-              notifPermission === 'granted' ? 'text-green-600 dark:text-green-400'
-              : notifPermission === 'denied' ? 'text-red-600 dark:text-red-400'
-              : 'text-stone-500 dark:text-neutral-400'
+              notifPermission === 'granted' ? 'text-pen'
+              : notifPermission === 'denied' ? 'text-stamp'
+              : 'text-ink'
             }`}>
               {notifPermission === 'granted' ? 'Granted' : notifPermission === 'denied' ? 'Denied' : 'Not asked'}
             </span>
@@ -335,7 +335,7 @@ export function Settings() {
           {notifPermission !== 'granted' && (
             <Button onClick={handleRequestPermission} variant="secondary" size="sm">Request permission</Button>
           )}
-          <p className="text-xs text-stone-400 dark:text-neutral-500">Budget alert notifications are sent when you reach 75%, 100%, or exceed your budget.</p>
+          <p className="text-xs text-mute">Budget alert notifications are sent when you reach 75%, 100%, or exceed your budget.</p>
         </div>
       </SectionCard>
 
@@ -343,55 +343,55 @@ export function Settings() {
       <SectionCard title="Data" open={openSection === 'data'} onToggle={() => toggle('data')}>
         <div className="space-y-4">
           <div>
-            <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Export data</p>
-            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Download all your data as a JSON file.</p>
+            <p className="text-sm font-medium text-ink mb-1">Export data</p>
+            <p className="text-xs text-mute mb-2">Download all your data as a JSON file.</p>
             <Button onClick={handleExport} variant="secondary" size="sm">Export .json</Button>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Import data</p>
-            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Upload a previously exported JSON file.</p>
+            <p className="text-sm font-medium text-ink mb-1">Import data</p>
+            <p className="text-xs text-mute mb-2">Upload a previously exported JSON file.</p>
             <input ref={fileRef} type="file" accept=".json" onChange={handleFileChange} className="hidden" />
             <Button onClick={() => fileRef.current?.click()} variant="secondary" size="sm">Select file</Button>
 
-            {importError && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{importError}</p>}
+            {importError && <p className="mt-2 text-xs text-stamp">{importError}</p>}
 
             {importPreview && (
-              <div className="mt-3 bg-stone-50 dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 rounded-xl p-3 space-y-3">
+              <div className="mt-3 bg-paper border border-ink/10 rounded-md p-3 space-y-3">
                 <div className="text-sm space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-stone-500 dark:text-neutral-400">Expenses</span>
-                    <span className="font-medium text-stone-900 dark:text-neutral-100">{importPreview.preview.count}</span>
+                    <span className="text-mute">Expenses</span>
+                    <span className="font-medium text-ink">{importPreview.preview.count}</span>
                   </div>
                   {importPreview.preview.dateRange && (
                     <div className="flex justify-between">
-                      <span className="text-stone-500 dark:text-neutral-400">Date range</span>
-                      <span className="font-medium text-stone-900 dark:text-neutral-100 text-xs">{importPreview.preview.dateRange.start} – {importPreview.preview.dateRange.end}</span>
+                      <span className="text-mute">Date range</span>
+                      <span className="font-medium text-ink text-xs">{importPreview.preview.dateRange.start} – {importPreview.preview.dateRange.end}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-stone-500 dark:text-neutral-400">Total</span>
-                    <span className="font-medium text-stone-900 dark:text-neutral-100">{formatRupiah(importPreview.preview.total)}</span>
+                    <span className="text-mute">Total</span>
+                    <span className="font-medium text-ink">{formatRupiah(importPreview.preview.total)}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Button onClick={doImportMerge}   size="sm" className="flex-1">Merge</Button>
                   <Button onClick={doImportReplace} variant="danger" size="sm" className="flex-1">Replace all</Button>
                 </div>
-                <button onClick={() => setImportPreview(null)} className="text-xs text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300">Cancel</button>
+                <button onClick={() => setImportPreview(null)} className="text-xs text-mute hover:text-ink">Cancel</button>
               </div>
             )}
           </div>
 
-          <div className="border-t border-stone-100 dark:border-neutral-800 pt-4">
-            <p className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Delete all data</p>
-            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">This will permanently delete all expenses. Type DELETE to confirm.</p>
+          <div className="border-t border-ink/10 pt-4">
+            <p className="text-sm font-medium text-stamp mb-1">Delete all data</p>
+            <p className="text-xs text-mute mb-2">This will permanently delete all expenses. Type DELETE to confirm.</p>
             <div className="flex gap-2">
               <input
                 value={deleteConfirm}
                 onChange={e => setDeleteConfirm(e.target.value)}
                 placeholder="DELETE"
-                className="flex-1 px-3 py-2 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
+                className="flex-1 px-3 py-2 text-sm border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-2 focus:ring-stamp"
               />
               <Button onClick={handleDeleteAll} variant="danger" size="sm" disabled={deleteConfirm !== 'DELETE'}>Delete</Button>
             </div>
@@ -401,16 +401,16 @@ export function Settings() {
 
       {/* About */}
       <SectionCard title="About" open={openSection === 'about'} onToggle={() => toggle('about')}>
-        <div className="space-y-2 text-sm text-stone-600 dark:text-neutral-400">
+        <div className="space-y-2 text-sm text-mute">
           <div className="flex justify-between">
             <span>App</span>
-            <span className="font-medium text-stone-900 dark:text-neutral-100">Kaluna</span>
+            <span className="font-medium text-ink">Kaluna</span>
           </div>
           <div className="flex justify-between">
             <span>Version</span>
-            <span className="font-medium text-stone-900 dark:text-neutral-100">1.0.0</span>
+            <span className="font-medium text-ink">1.0.0</span>
           </div>
-          <p className="text-xs text-stone-400 dark:text-neutral-500 pt-1 border-t border-stone-100 dark:border-neutral-800">
+          <p className="text-xs text-mute pt-1 border-t border-ink/10">
             Daily expense tracker. All data is stored on your device. Nothing is sent to any server.
           </p>
         </div>
@@ -426,16 +426,12 @@ function SectionCard({ title, open, onToggle, children }: {
   children: React.ReactNode
 }) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 overflow-hidden">
-      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-stone-50 dark:hover:bg-neutral-800">
-        <span className="text-sm font-semibold text-stone-800 dark:text-neutral-200">{title}</span>
-        {open ? <ChevronUp size={16} className="text-stone-400 dark:text-neutral-500" /> : <ChevronDown size={16} className="text-stone-400 dark:text-neutral-500" />}
+    <div className="border-b border-ink/10">
+      <button onClick={onToggle} className="w-full flex items-center justify-between py-3 text-left">
+        <span className="text-sm font-semibold text-ink">{title}</span>
+        {open ? <ChevronUp size={16} className="text-mute" /> : <ChevronDown size={16} className="text-mute" />}
       </button>
-      {open && (
-        <div className="px-4 pb-4 border-t border-stone-100 dark:border-neutral-800">
-          <div className="pt-3">{children}</div>
-        </div>
-      )}
+      {open && <div className="pb-4">{children}</div>}
     </div>
   )
 }
