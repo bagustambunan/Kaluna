@@ -71,10 +71,10 @@ export function ExpenseItem({ expense, category, onEdit, onDelete }: ExpenseItem
         <span className="text-xl shrink-0">{category?.emoji ?? '📦'}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-2">
-            <span className="text-sm font-medium text-stone-700 dark:text-neutral-300 truncate">{category?.name ?? 'Unknown'}</span>
-            <span className="text-base font-semibold tabular-nums text-stone-900 dark:text-neutral-100 shrink-0">{formatRupiah(expense.amount)}</span>
+            <span className="text-sm font-medium text-ink truncate">{category?.name ?? 'Unknown'}</span>
+            <span className="text-base font-semibold tabular-nums text-ink shrink-0">{formatRupiah(expense.amount)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-stone-400 dark:text-neutral-500 mt-0.5">
+          <div className="flex items-center gap-1.5 text-xs text-mute mt-0.5">
             <span>{formatDisplayDate(expense.date)}</span>
             {expense.note && <><span>·</span><span className="truncate">{expense.note}</span></>}
           </div>
@@ -83,14 +83,14 @@ export function ExpenseItem({ expense, category, onEdit, onDelete }: ExpenseItem
         <div className="hidden md:flex items-center gap-1 shrink-0">
           <button
             onClick={() => onEdit(expense)}
-            className="p-1.5 text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300 hover:bg-stone-100 dark:hover:bg-neutral-800 rounded"
+            className="p-1.5 text-mute hover:text-ink hover:bg-sheet rounded"
             aria-label="Edit"
           >
             <Pencil size={14} />
           </button>
           <button
             onClick={() => onDelete(expense)}
-            className="p-1.5 text-stone-400 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 rounded"
+            className="p-1.5 text-mute hover:text-stamp hover:bg-stamp/10 rounded"
             aria-label="Delete"
           >
             <Trash2 size={14} />
