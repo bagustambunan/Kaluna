@@ -24,7 +24,7 @@ export function Snackbar({ message, onDismiss, duration }: SnackbarProps) {
         {message.undoFn && (
           <button
             onClick={() => { message.undoFn!(); onDismiss() }}
-            className="font-semibold text-pen hover:text-white underline underline-offset-2"
+            className="font-semibold text-pen underline underline-offset-2"
           >
             Undo
           </button>
