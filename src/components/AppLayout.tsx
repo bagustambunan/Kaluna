@@ -114,7 +114,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className="min-h-screen bg-paper text-ink flex md:flex-row font-sans"
+      className="h-screen min-h-screen bg-paper text-ink flex md:flex-row font-sans"
       style={{ '--snack-offset': snackOffset } as React.CSSProperties}
     >
       {/* Desktop sidebar */}
@@ -145,7 +145,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 md:ml-52 pb-20 md:pb-6">
+      <main className={`flex-1 min-h-0 flex flex-col md:ml-52 ${composeFocused ? 'pb-0' : 'pb-20'} md:pb-6`}>
         {/* Mobile header */}
         <header className="md:hidden flex items-center gap-2 px-4 h-12 bg-sheet border-b border-ink/10 sticky top-0 z-20">
           <img src="/favicon.svg" alt="" aria-hidden="true" className="w-6 h-6 rounded-md" />
@@ -186,7 +186,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           />
         )}
 
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto w-full flex-1 min-h-0 flex flex-col">
           <AppHandlersContext.Provider value={{
             openEdit,
             handleDelete,

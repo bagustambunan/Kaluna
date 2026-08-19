@@ -65,8 +65,8 @@ export function Home() {
   const dayLabel   = formatDayDisplay(selectedDate, today)
 
   return (
-    <div className="flex flex-col gap-4 px-4 pt-5 pb-4 md:pb-4">
-      <div className="flex-1 space-y-4 md:order-2">
+    <div className="flex-1 min-h-0 flex flex-col gap-4 px-4 pt-5 pb-4 md:pb-4">
+      <div className="flex-1 min-h-0 overflow-y-auto space-y-4 md:order-2">
         <div className="flex items-center gap-2">
           <button
             onClick={goBack}
@@ -143,7 +143,7 @@ export function Home() {
           </div>
         )}
       </div>
-      <div className={`md:order-1 sticky bottom-0 z-20 -mx-4 md:static md:mx-0 md:bottom-auto ${composeFocused ? '' : 'pb-16 md:pb-0'}`}>
+      <div className="md:order-1 shrink-0 -mx-4 md:mx-0">
         <ComposeWell
           categories={state.categories}
           shortcuts={state.shortcuts}
