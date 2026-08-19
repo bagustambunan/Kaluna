@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { light } from '../../theme/tokens'
 
 interface SnackbarProps {
   message: { text: string; undoFn?: () => void } | null
@@ -19,7 +20,10 @@ export function Snackbar({ message, onDismiss, duration }: SnackbarProps) {
 
   return (
     <div className="fixed left-1/2 -translate-x-1/2 z-50 bottom-[var(--snack-offset,5.5rem)] md:bottom-6">
-      <div className="flex items-center gap-3 bg-ink text-sheet text-sm px-4 py-2.5 rounded-lg shadow-lg">
+      <div
+        className="flex items-center gap-3 text-sm px-4 py-2.5 rounded-lg shadow-lg"
+        style={{ backgroundColor: light.ink, color: light.sheet }}
+      >
         <span>{message.text}</span>
         {message.undoFn && (
           <button
