@@ -3,17 +3,22 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAppState } from '../context/AppContext'
 import { useAppHandlers } from '../components/AppLayout'
 import { ExpenseItem } from '../components/shared/ExpenseItem'
-import { ProgressBar } from '../components/ui/ProgressBar'
+import { ComposeWell } from '../components/shared/ComposeWell'
+import { BudgetWhisper } from '../components/shared/BudgetWhisper'
 import { getBudgetStatus } from '../lib/budget'
 import {
   filterByRange, getWeekRange, getMonthRange, sumExpenses,
   formatDateStr, shiftDays, formatDayDisplay,
 } from '../lib/date'
 import { formatRupiah } from '../lib/format'
+import { copy } from '../lib/copy'
 
 export function Home() {
   const state = useAppState()
-  const { openEdit, handleDelete, setFormDefaultDate } = useAppHandlers()
+  const {
+    openEdit, handleDelete, setFormDefaultDate, handleSave, cancelEdit,
+    editingExpense, composeFocused, setComposeFocused,
+  } = useAppHandlers()
 
   const today = useMemo(() => formatDateStr(new Date()), [])
   const [selectedDate, setSelectedDate] = useState(today)
@@ -26,6 +31,10 @@ export function Home() {
   useEffect(() => {
     return () => setFormDefaultDate(today)
   }, [setFormDefaultDate, today])
+
+  useEffect(() => {
+    if (editingExpense) setSelectedDate(editingExpense.date)
+  }, [editingExpense])
 
   const goBack    = useCallback(() => setSelectedDate(d => shiftDays(d, -1)), [])
   const goForward = useCallback(() => setSelectedDate(d => {
@@ -51,111 +60,100 @@ export function Home() {
   const monthlyStatus = getBudgetStatus(monthlySpent, state.budgets.monthly, state.budgets.alertThresholdPct)
 
   const pendingId  = state.pendingDelete?.expense.id
+  const visibleDayExpenses = dayExpenses.filter(e => e.id !== pendingId)
   const categoryMap = useMemo(() => new Map(state.categories.map(c => [c.id, c])), [state.categories])
   const dayLabel   = formatDayDisplay(selectedDate, today)
 
   return (
-    <div className="px-4 pt-5 pb-4 space-y-5">
-      {/* Date navigation */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={goBack}
-          aria-label="Previous day"
-          className="p-2 rounded-lg text-stone-600 dark:text-neutral-400 hover:bg-stone-200 dark:hover:bg-neutral-800 transition-colors"
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <div className="flex-1 text-center">
-          {/* Overlay approach: transparent input sits on top of the label.
-              Works on iOS Safari where showPicker() is unsupported. */}
-          <div className="relative inline-flex flex-col items-center">
-            <span
-              data-testid="day-label"
-              className="font-semibold text-stone-900 dark:text-neutral-100"
-            >
-              {dayLabel}
-            </span>
-            <input
-              type="date"
-              value={selectedDate}
-              max={today}
-              onChange={e => { if (e.target.value) setSelectedDate(e.target.value) }}
-              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-              aria-label="Pick date"
-            />
-          </div>
-          {!isToday && (
-            <div>
-              <button
-                onClick={goToday}
-                aria-label="Back to today"
-                className="text-xs text-stone-500 dark:text-neutral-400 hover:text-stone-700 dark:hover:text-neutral-200 mt-0.5"
+    <div className="flex flex-col gap-4 px-4 pt-5 pb-4 md:pb-4">
+      <div className="flex-1 space-y-4 md:order-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={goBack}
+            aria-label="Previous day"
+            className="p-2 rounded-lg text-mute hover:bg-sheet transition-colors"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex-1 text-center">
+            <div className="relative inline-flex flex-col items-center">
+              <span
+                data-testid="day-label"
+                className="font-semibold text-ink"
               >
-                Back to today
-              </button>
+                {dayLabel}
+              </span>
+              <input
+                type="date"
+                value={selectedDate}
+                max={today}
+                onChange={e => { if (e.target.value) setSelectedDate(e.target.value) }}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                aria-label="Pick date"
+              />
             </div>
-          )}
+            {!isToday && (
+              <div>
+                <button
+                  onClick={goToday}
+                  aria-label="Back to today"
+                  className="text-xs text-mute hover:text-ink mt-0.5"
+                >
+                  {copy.backToToday}
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={goForward}
+            aria-label="Next day"
+            disabled={isToday}
+            className="p-2 rounded-lg text-mute hover:bg-sheet transition-colors disabled:opacity-30 disabled:pointer-events-none"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
-        <button
-          onClick={goForward}
-          aria-label="Next day"
-          disabled={isToday}
-          className="p-2 rounded-lg text-stone-600 dark:text-neutral-400 hover:bg-stone-200 dark:hover:bg-neutral-800 transition-colors disabled:opacity-30 disabled:pointer-events-none"
-        >
-          <ChevronRight size={20} />
-        </button>
-      </div>
 
-      {/* Day total */}
-      <div>
-        <p className="text-xs text-stone-500 dark:text-neutral-400 uppercase tracking-wide font-medium">
-          {isToday ? "Today's spending" : 'Day total'}
-        </p>
-        <p className="text-3xl font-bold text-stone-900 dark:text-neutral-50 mt-1">{formatRupiah(dayTotal)}</p>
-      </div>
-
-      {/* Budget progress */}
-      {(weeklyStatus || monthlyStatus) && (
-        <div className="space-y-4 bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
-          {weeklyStatus  && <ProgressBar status={weeklyStatus}  label="Weekly Budget" />}
-          {monthlyStatus && <ProgressBar status={monthlyStatus} label="Monthly Budget" />}
+        <div>
+          <p className="text-xs text-mute font-medium">
+            {isToday ? "Today's spending" : 'Day total'}
+          </p>
+          <p className="text-3xl font-bold tabular-nums tracking-tight text-ink mt-1">{formatRupiah(dayTotal)}</p>
         </div>
-      )}
 
-      {/* Day expenses */}
-      <div>
-        <p className="text-xs text-stone-500 dark:text-neutral-400 uppercase tracking-wide font-medium mb-2">
-          {isToday ? "Today's Expenses" : 'Expenses'}
-        </p>
-        {dayExpenses.length === 0 ? (
-          <p className="text-sm text-stone-400 dark:text-neutral-500 py-4 text-center">Tap + to record your first expense</p>
+        {weeklyStatus && (
+          <BudgetWhisper period="weekly" status={weeklyStatus} thresholdPct={state.budgets.alertThresholdPct} />
+        )}
+        {monthlyStatus && (
+          <BudgetWhisper period="monthly" status={monthlyStatus} thresholdPct={state.budgets.alertThresholdPct} />
+        )}
+        {visibleDayExpenses.length === 0 ? (
+          <p className="text-sm text-mute py-4 text-center">{copy.whatDidYouSpend}</p>
         ) : (
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 divide-y divide-stone-100 dark:divide-neutral-800 overflow-hidden">
-            {dayExpenses
-              .filter(e => e.id !== pendingId)
-              .map(e => (
-                <ExpenseItem
-                  key={e.id}
-                  expense={e}
-                  category={categoryMap.get(e.categoryId)}
-                  onEdit={openEdit}
-                  onDelete={handleDelete}
-                />
-              ))}
+          <div className="divide-y divide-ink/10 bg-transparent">
+            {visibleDayExpenses.map(e => (
+              <ExpenseItem
+                key={e.id}
+                expense={e}
+                category={categoryMap.get(e.categoryId)}
+                onEdit={openEdit}
+                onDelete={handleDelete}
+              />
+            ))}
           </div>
         )}
       </div>
-
-      {/* Weekly / monthly totals */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-stone-500 dark:text-neutral-400">This week</span>
-          <span className="font-semibold text-stone-900 dark:text-neutral-100">{formatRupiah(weeklySpent)}</span>
-        </div>
-        <div className="flex justify-between text-sm mt-1">
-          <span className="text-stone-500 dark:text-neutral-400">This month</span>
-          <span className="font-semibold text-stone-900 dark:text-neutral-100">{formatRupiah(monthlySpent)}</span>
-        </div>
+      <div className={`md:order-1 sticky bottom-0 z-20 -mx-4 md:static md:mx-0 md:bottom-auto ${composeFocused ? '' : 'pb-16 md:pb-0'}`}>
+        <ComposeWell
+          categories={state.categories}
+          shortcuts={state.shortcuts}
+          selectedDate={selectedDate}
+          editingExpense={editingExpense}
+          autoFocusAmount={isToday && visibleDayExpenses.length === 0 && !editingExpense}
+          onSave={handleSave}
+          onCancelEdit={cancelEdit}
+          onComposeFocusChange={setComposeFocused}
+        />
       </div>
     </div>
   )
