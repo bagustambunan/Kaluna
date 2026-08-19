@@ -62,6 +62,38 @@ it('saves a shortcut in one tap', async () => {
   })
 })
 
+it('resets to add defaults when leaving edit mode', () => {
+  const { rerender } = render(
+    <ComposeWell
+      categories={categories}
+      shortcuts={shortcuts}
+      selectedDate="2026-08-19"
+      editingExpense={{
+        id: 'e1', amount: 1000, categoryId: 'cat-default-1',
+        note: 'x', date: '2026-08-01',
+      }}
+      autoFocusAmount={false}
+      onSave={vi.fn()}
+      onCancelEdit={vi.fn()}
+      onComposeFocusChange={vi.fn()}
+    />,
+  )
+
+  rerender(
+    <ComposeWell
+      categories={categories}
+      shortcuts={shortcuts}
+      selectedDate="2026-08-19"
+      autoFocusAmount={false}
+      onSave={vi.fn()}
+      onCancelEdit={vi.fn()}
+      onComposeFocusChange={vi.fn()}
+    />,
+  )
+  expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+  expect(screen.queryByLabelText('Date')).not.toBeInTheDocument()
+})
+
 it('shows a date field only while editing', () => {
   const { unmount } = render(
     <ComposeWell

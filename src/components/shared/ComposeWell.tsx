@@ -37,7 +37,13 @@ export function ComposeWell({
   }, [autoFocusAmount])
 
   useEffect(() => {
-    if (!editingExpense) return
+    if (!editingExpense) {
+      setAmountDisplay('')
+      setCategoryId('')
+      setNote('')
+      setDate(selectedDate)
+      return
+    }
     setAmountDisplay(formatRupiahInput(String(editingExpense.amount)))
     setCategoryId(editingExpense.categoryId)
     setNote(editingExpense.note)
@@ -50,6 +56,7 @@ export function ComposeWell({
     setAmountDisplay('')
     setCategoryId('')
     setNote('')
+    amountRef.current?.focus()
   }
 
   function handleSubmit(e: FormEvent) {
@@ -157,7 +164,6 @@ export function ComposeWell({
           <input
             id="compose-date"
             type="date"
-            aria-label="Date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="w-full px-3 py-2 text-sm text-ink bg-sheet border border-ink/15 rounded-md focus:outline-none focus:ring-2 focus:ring-pen"
