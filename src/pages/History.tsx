@@ -80,7 +80,7 @@ export function History() {
             onClick={() => setFilterOpen(v => !v)}
             className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
               filterOpen || hasFilters
-                ? 'bg-pen text-sheet border-pen'
+                ? 'bg-ink text-sheet border-ink'
                 : 'bg-sheet border-ink/15 text-mute hover:bg-sheet'
             }`}
           >
@@ -100,7 +100,7 @@ export function History() {
                     onClick={() => setSortKey(k)}
                     className={`px-3 py-1 text-xs rounded-lg capitalize border transition-colors ${
                       sortKey === k
-                        ? 'bg-pen text-sheet border-pen'
+                        ? 'bg-ink text-sheet border-ink'
                         : 'border-ink/10 text-mute hover:bg-sheet'
                     }`}
                   >
@@ -141,7 +141,7 @@ export function History() {
                   value={minAmount}
                   onChange={e => setMinAmount(e.target.value)}
                   placeholder="Min"
-                  className="flex-1 px-2.5 py-1.5 text-xs border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-1 focus:ring-pen"
+                  className="flex-1 px-2.5 py-1.5 text-xs tabular-nums border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-1 focus:ring-pen"
                 />
                 <span className="text-mute text-xs">–</span>
                 <input
@@ -150,7 +150,7 @@ export function History() {
                   value={maxAmount}
                   onChange={e => setMaxAmount(e.target.value)}
                   placeholder="Max"
-                  className="flex-1 px-2.5 py-1.5 text-xs border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-1 focus:ring-pen"
+                  className="flex-1 px-2.5 py-1.5 text-xs tabular-nums border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-1 focus:ring-pen"
                 />
               </div>
             </div>

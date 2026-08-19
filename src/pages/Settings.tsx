@@ -128,7 +128,7 @@ export function Settings() {
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { darkMode: v } })}
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.darkMode === v
-                      ? 'bg-pen text-sheet border-pen'
+                      ? 'bg-ink text-sheet border-ink'
                       : 'text-mute hover:bg-sheet'
                   }`}
                 >
@@ -150,7 +150,7 @@ export function Settings() {
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { weekStartDay: v } })}
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.weekStartDay === v
-                      ? 'bg-pen text-sheet border-pen'
+                      ? 'bg-ink text-sheet border-ink'
                       : 'text-mute hover:bg-sheet'
                   }`}
                 >
@@ -172,7 +172,7 @@ export function Settings() {
               <input type="text" inputMode="numeric" value={weeklyBudget}
                 onChange={e => setWeeklyBudget(formatRupiahInput(e.target.value))}
                 placeholder="Not set"
-                className={`${inputCls} pl-10`}
+                className={`${inputCls} pl-10 tabular-nums`}
               />
             </div>
           </div>
@@ -183,7 +183,7 @@ export function Settings() {
               <input type="text" inputMode="numeric" value={monthlyBudget}
                 onChange={e => setMonthlyBudget(formatRupiahInput(e.target.value))}
                 placeholder="Not set"
-                className={`${inputCls} pl-10`}
+                className={`${inputCls} pl-10 tabular-nums`}
               />
             </div>
           </div>
@@ -195,7 +195,7 @@ export function Settings() {
                   onClick={() => dispatch({ type: 'UPDATE_BUDGETS', payload: { alertThresholdPct: v } })}
                   className={`flex-1 py-1.5 text-sm rounded-lg border transition-colors ${
                     state.budgets.alertThresholdPct === v
-                      ? 'bg-pen text-sheet border-pen'
+                      ? 'bg-ink text-sheet border-ink'
                       : 'border-ink/10 text-mute hover:bg-sheet'
                   }`}
                 >
@@ -264,7 +264,7 @@ export function Settings() {
               <div className="flex flex-wrap gap-1.5">
                 {EMOJI_OPTIONS.map(e => (
                   <button key={e} onClick={() => setNewCatEmoji(e)}
-                    className={`text-lg p-1 rounded ${newCatEmoji === e ? 'ring-2 ring-pen' : ''}`}>
+                    className={`text-lg p-1 rounded ${newCatEmoji === e ? 'ring-2 ring-ink' : ''}`}>
                     {e}
                   </button>
                 ))}
@@ -304,7 +304,7 @@ export function Settings() {
                     <GripVertical size={16} className="text-mute shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-ink truncate">{sc.label}</p>
-                      <p className="text-xs text-mute">{formatRupiah(sc.amount)} · {cat?.name}</p>
+                      <p className="text-xs text-mute tabular-nums">{formatRupiah(sc.amount)} · {cat?.name}</p>
                     </div>
                     <button
                       onClick={() => dispatch({ type: 'DELETE_SHORTCUT', payload: sc.id })}
@@ -325,7 +325,7 @@ export function Settings() {
           <div className="flex items-center justify-between text-sm">
             <span className="text-ink">Permission status</span>
             <span className={`font-medium ${
-              notifPermission === 'granted' ? 'text-pen'
+              notifPermission === 'granted' ? 'text-ink'
               : notifPermission === 'denied' ? 'text-stamp'
               : 'text-ink'
             }`}>
@@ -333,7 +333,7 @@ export function Settings() {
             </span>
           </div>
           {notifPermission !== 'granted' && (
-            <Button onClick={handleRequestPermission} variant="secondary" size="sm">Request permission</Button>
+            <Button onClick={handleRequestPermission} variant="primary" size="sm">Request permission</Button>
           )}
           <p className="text-xs text-mute">Budget alert notifications are sent when you reach 75%, 100%, or exceed your budget.</p>
         </div>
@@ -345,14 +345,14 @@ export function Settings() {
           <div>
             <p className="text-sm font-medium text-ink mb-1">Export data</p>
             <p className="text-xs text-mute mb-2">Download all your data as a JSON file.</p>
-            <Button onClick={handleExport} variant="secondary" size="sm">Export .json</Button>
+            <Button onClick={handleExport} variant="primary" size="sm">Export .json</Button>
           </div>
 
           <div>
             <p className="text-sm font-medium text-ink mb-1">Import data</p>
             <p className="text-xs text-mute mb-2">Upload a previously exported JSON file.</p>
             <input ref={fileRef} type="file" accept=".json" onChange={handleFileChange} className="hidden" />
-            <Button onClick={() => fileRef.current?.click()} variant="secondary" size="sm">Select file</Button>
+            <Button onClick={() => fileRef.current?.click()} variant="primary" size="sm">Select file</Button>
 
             {importError && <p className="mt-2 text-xs text-stamp">{importError}</p>}
 
@@ -371,7 +371,7 @@ export function Settings() {
                   )}
                   <div className="flex justify-between">
                     <span className="text-mute">Total</span>
-                    <span className="font-medium text-ink">{formatRupiah(importPreview.preview.total)}</span>
+                    <span className="font-medium text-ink tabular-nums">{formatRupiah(importPreview.preview.total)}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">

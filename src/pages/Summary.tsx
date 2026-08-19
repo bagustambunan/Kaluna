@@ -237,7 +237,7 @@ export function Summary() {
             onClick={() => setFilterOpen(v => !v)}
             className={`p-2 rounded-lg border transition-colors ${
               filterOpen || hasFilter
-                ? 'bg-pen text-sheet border-pen'
+                ? 'bg-ink text-sheet border-ink'
                 : 'border-ink/10 text-mute hover:bg-sheet'
             }`}
           >
@@ -282,7 +282,7 @@ export function Summary() {
                           className="rounded"
                         />
                         <span className="text-xs text-mute flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
-                        <span className="text-xs text-mute shrink-0">{formatRupiah(exp.amount)}</span>
+                        <span className="text-xs text-mute shrink-0 tabular-nums">{formatRupiah(exp.amount)}</span>
                       </div>
                     ))}
                   </div>
@@ -333,7 +333,7 @@ export function Summary() {
               <div key={cat.id}>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-ink">{cat.emoji} {cat.name}</span>
-                  <span className="font-medium text-ink">
+                  <span className="font-medium text-ink tabular-nums">
                     {formatRupiah(catTotal)} <span className="text-mute text-xs">{formatPct(pct)}</span>
                   </span>
                 </div>
