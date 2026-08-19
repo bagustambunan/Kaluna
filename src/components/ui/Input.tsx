@@ -10,16 +10,16 @@ export function Input({ label, error, className = '', id, ...props }: InputProps
   return (
     <div className="space-y-1">
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-stone-700">
+        <label htmlFor={inputId} className="block text-sm font-medium text-ink">
           {label}
         </label>
       )}
       <input
         id={inputId}
         {...props}
-        className={`w-full px-3 py-2 text-stone-900 bg-white border rounded-lg text-sm placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent ${error ? 'border-red-400' : 'border-stone-300'} ${className}`}
+        className={`w-full px-3 py-2 text-ink bg-sheet border rounded-md text-sm placeholder:text-mute focus:outline-none focus:ring-2 focus:ring-pen focus:border-transparent ${error ? 'border-stamp' : 'border-ink/15'} ${className}`}
       />
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-stamp">{error}</p>}
     </div>
   )
 }

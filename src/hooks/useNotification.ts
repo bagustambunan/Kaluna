@@ -3,6 +3,7 @@ import type { Budgets } from '../types'
 import { getBudgetStatus } from '../lib/budget'
 import * as storage from '../lib/storage'
 import { getWeekNumber, getMonthKey } from '../lib/date'
+import { budgetWhisperText } from '../lib/copy'
 
 type NotifKey = string
 
@@ -60,11 +61,11 @@ export function useNotification() {
 
     if (status.status === 'over') {
       const key = `${period}_over_${periodKey}`
-      sendNotif('Over Budget', `You're over your ${label} budget`, key, onInApp)
+      sendNotif('Over Budget', budgetWhisperText(period, status, budgets.alertThresholdPct), key, onInApp)
     } else if (status.status === 'warning') {
       const threshold = Math.round(budgets.alertThresholdPct)
       const key = `${period}_${threshold}_${periodKey}`
-      sendNotif('Budget Warning', `You've used ${threshold}% of your ${label} budget`, key, onInApp)
+      sendNotif('Budget Warning', budgetWhisperText(period, status, budgets.alertThresholdPct), key, onInApp)
     } else if (status.pct >= 100) {
       const key = `${period}_100_${periodKey}`
       sendNotif('Budget Reached', `${label.charAt(0).toUpperCase() + label.slice(1)} budget reached`, key, onInApp)

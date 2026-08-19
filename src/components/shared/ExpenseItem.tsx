@@ -45,14 +45,14 @@ export function ExpenseItem({ expense, category, onEdit, onDelete }: ExpenseItem
       <div className="absolute right-0 top-0 h-full w-[120px] flex">
         <button
           onClick={() => { close(); onEdit(expense) }}
-          className="flex-1 flex items-center justify-center bg-stone-100 dark:bg-neutral-700 hover:bg-stone-200 dark:hover:bg-neutral-600 text-stone-700 dark:text-neutral-300"
+          className="flex-1 flex items-center justify-center bg-sheet text-ink"
           aria-label="Edit"
         >
           <Pencil size={16} />
         </button>
         <button
           onClick={() => { close(); onDelete(expense) }}
-          className="flex-1 flex items-center justify-center bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800 text-red-700 dark:text-red-300"
+          className="flex-1 flex items-center justify-center bg-stamp/15 text-stamp"
           aria-label="Delete"
         >
           <Trash2 size={16} />
@@ -61,7 +61,7 @@ export function ExpenseItem({ expense, category, onEdit, onDelete }: ExpenseItem
 
       {/* Main row */}
       <div
-        className="relative bg-white dark:bg-neutral-900 flex items-center gap-3 px-4 py-3 transition-transform"
+        className="relative bg-paper md:hover:bg-sheet flex items-center gap-3 px-4 py-3 transition-transform"
         style={{ transform: `translateX(${offset}px)` }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -71,10 +71,10 @@ export function ExpenseItem({ expense, category, onEdit, onDelete }: ExpenseItem
         <span className="text-xl shrink-0">{category?.emoji ?? '📦'}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-2">
-            <span className="text-sm font-medium text-stone-700 dark:text-neutral-300 truncate">{category?.name ?? 'Unknown'}</span>
-            <span className="text-base font-semibold text-stone-900 dark:text-neutral-100 shrink-0">{formatRupiah(expense.amount)}</span>
+            <span className="text-sm font-medium text-ink truncate">{category?.name ?? 'Unknown'}</span>
+            <span className="text-base font-semibold tabular-nums text-ink shrink-0">{formatRupiah(expense.amount)}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-stone-400 dark:text-neutral-500 mt-0.5">
+          <div className="flex items-center gap-1.5 text-xs text-mute mt-0.5">
             <span>{formatDisplayDate(expense.date)}</span>
             {expense.note && <><span>·</span><span className="truncate">{expense.note}</span></>}
           </div>
@@ -83,14 +83,14 @@ export function ExpenseItem({ expense, category, onEdit, onDelete }: ExpenseItem
         <div className="hidden md:flex items-center gap-1 shrink-0">
           <button
             onClick={() => onEdit(expense)}
-            className="p-1.5 text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300 hover:bg-stone-100 dark:hover:bg-neutral-800 rounded"
+            className="p-1.5 text-mute hover:text-ink hover:bg-sheet rounded"
             aria-label="Edit"
           >
             <Pencil size={14} />
           </button>
           <button
             onClick={() => onDelete(expense)}
-            className="p-1.5 text-stone-400 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 rounded"
+            className="p-1.5 text-mute hover:text-stamp hover:bg-stamp/10 rounded"
             aria-label="Delete"
           >
             <Trash2 size={14} />

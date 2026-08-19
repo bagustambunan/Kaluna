@@ -13,6 +13,7 @@ import {
 import { formatRupiah, formatPct } from '../lib/format'
 import type { SummaryFilterState, DateRange } from '../types'
 import { getBudgetStatus } from '../lib/budget'
+import { copy } from '../lib/copy'
 
 type Tab = 'weekly' | 'monthly' | 'category' | 'custom'
 
@@ -146,15 +147,15 @@ export function Summary() {
   return (
     <div className="px-4 pt-5 pb-4 space-y-4">
       {/* Tabs */}
-      <div className="flex gap-1 bg-stone-100 dark:bg-neutral-800 p-1 rounded-xl">
+      <div className="flex gap-4 border-b border-ink/10">
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => { setTab(t.key); setFilter({ excludedCategoryIds: new Set(), excludedExpenseIds: new Set() }) }}
-            className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+            className={`text-xs font-medium transition-colors ${
               tab === t.key
-                ? 'bg-white dark:bg-neutral-700 text-stone-900 dark:text-neutral-100 shadow-sm'
-                : 'text-stone-500 dark:text-neutral-400 hover:text-stone-700 dark:hover:text-neutral-300'
+                ? 'text-ink border-b-2 border-pen -mb-px pb-2'
+                : 'text-mute pb-2'
             }`}
           >
             {t.label}
@@ -167,16 +168,16 @@ export function Summary() {
         <div className="flex items-center justify-between">
           <button
             onClick={() => tab === 'weekly' ? setWeekOffset(v => v - 1) : setMonthOffset(v => v - 1)}
-            className="p-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-neutral-800 text-stone-600 dark:text-neutral-400"
+            className="p-1.5 rounded-lg hover:bg-sheet text-mute"
           >
             <ChevronLeft size={18} />
           </button>
-          <p className="text-sm font-medium text-stone-700 dark:text-neutral-300">
+          <p className="text-sm font-medium text-ink">
             {tab === 'weekly' ? formatWeekRange(weekRange) : formatMonthYear(subMonths(now, -monthOffset))}
           </p>
           <button
             onClick={() => tab === 'weekly' ? setWeekOffset(v => v + 1) : setMonthOffset(v => v + 1)}
-            className="p-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-neutral-800 text-stone-600 dark:text-neutral-400"
+            className="p-1.5 rounded-lg hover:bg-sheet text-mute"
           >
             <ChevronRight size={18} />
           </button>
@@ -188,17 +189,17 @@ export function Summary() {
         <div className="space-y-3">
           <div className="flex gap-2">
             <div className="flex-1">
-              <label className="block text-xs font-medium text-stone-500 dark:text-neutral-400 mb-1">Start</label>
+              <label className="block text-xs font-medium text-mute mb-1">Start</label>
               <input type="date" value={customRange.start}
                 onChange={e => setCustomRange(v => ({ ...v, start: e.target.value }))}
-                className="w-full px-2.5 py-1.5 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-stone-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
+                className="w-full px-2.5 py-1.5 text-sm border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-2 focus:ring-pen"
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-medium text-stone-500 dark:text-neutral-400 mb-1">End</label>
+              <label className="block text-xs font-medium text-mute mb-1">End</label>
               <input type="date" value={customRange.end}
                 onChange={e => setCustomRange(v => ({ ...v, end: e.target.value }))}
-                className="w-full px-2.5 py-1.5 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 text-stone-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
+                className="w-full px-2.5 py-1.5 text-sm border border-ink/15 bg-sheet text-ink rounded-lg focus:outline-none focus:ring-2 focus:ring-pen"
               />
             </div>
           </div>
@@ -211,7 +212,7 @@ export function Summary() {
                   const start = new Date(); start.setDate(start.getDate() - p.days + 1)
                   setCustomRange({ start: formatDateStr(start), end: formatDateStr(end) })
                 }}
-                className="px-3 py-1.5 text-xs bg-stone-100 dark:bg-neutral-800 hover:bg-stone-200 dark:hover:bg-neutral-700 text-stone-700 dark:text-neutral-300 rounded-lg"
+                className="px-3 py-1.5 text-xs bg-sheet hover:bg-sheet text-ink rounded-lg"
               >
                 {p.label}
               </button>
@@ -223,12 +224,12 @@ export function Summary() {
       {/* Total header */}
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-stone-500 dark:text-neutral-400 uppercase tracking-wide font-medium">Total</p>
-          <p className="text-3xl font-bold text-stone-900 dark:text-neutral-50">{formatRupiah(total)}</p>
+          <p className="text-xs text-mute uppercase tracking-wide font-medium">Total</p>
+          <p className="text-3xl font-bold tabular-nums tracking-tight text-ink">{formatRupiah(total)}</p>
         </div>
         <div className="flex items-center gap-2">
           {hasFilter && (
-            <button onClick={resetFilter} className="flex items-center gap-1 text-xs text-stone-500 dark:text-neutral-400 hover:text-stone-800 dark:hover:text-neutral-200 px-2 py-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-neutral-800">
+            <button onClick={resetFilter} className="flex items-center gap-1 text-xs text-mute hover:text-ink px-2 py-1.5 rounded-lg hover:bg-sheet">
               <RotateCcw size={12} /> Reset
             </button>
           )}
@@ -236,8 +237,8 @@ export function Summary() {
             onClick={() => setFilterOpen(v => !v)}
             className={`p-2 rounded-lg border transition-colors ${
               filterOpen || hasFilter
-                ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 border-stone-900 dark:border-neutral-100'
-                : 'border-stone-200 dark:border-neutral-700 text-stone-600 dark:text-neutral-400 hover:bg-stone-100 dark:hover:bg-neutral-800'
+                ? 'bg-ink text-sheet border-ink'
+                : 'border-ink/10 text-mute hover:bg-sheet'
             }`}
           >
             <Filter size={15} />
@@ -247,8 +248,8 @@ export function Summary() {
 
       {/* Filter panel */}
       {filterOpen && (
-        <div className="bg-white dark:bg-neutral-900 border border-stone-200 dark:border-neutral-700 rounded-xl p-3 space-y-3">
-          <p className="text-xs font-medium text-stone-500 dark:text-neutral-400">Filter categories</p>
+        <div className="bg-sheet border border-ink/10 rounded-md p-3 space-y-3">
+          <p className="text-xs font-medium text-mute">Filter categories</p>
           {catBreakdown.map(({ cat, items }) => {
             const allExcluded  = filter.excludedCategoryIds.has(cat.id)
             const someExcluded = !allExcluded && items.some(e => filter.excludedExpenseIds.has(e.id))
@@ -264,10 +265,10 @@ export function Summary() {
                     onChange={() => toggleCatFilter(cat.id)}
                     className="rounded"
                   />
-                  <button onClick={() => toggleExpandCat(cat.id)} className="flex-1 flex items-center gap-1.5 text-sm text-left text-stone-700 dark:text-neutral-300">
+                  <button onClick={() => toggleExpandCat(cat.id)} className="flex-1 flex items-center gap-1.5 text-sm text-left text-ink">
                     <span>{cat.emoji}</span>
                     <span>{cat.name}</span>
-                    <ChevronRight size={12} className={`ml-auto text-stone-400 dark:text-neutral-500 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                    <ChevronRight size={12} className={`ml-auto text-mute transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                   </button>
                 </div>
                 {isExpanded && (
@@ -280,8 +281,8 @@ export function Summary() {
                           onChange={() => toggleExpenseFilter(exp.id)}
                           className="rounded"
                         />
-                        <span className="text-xs text-stone-600 dark:text-neutral-400 flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
-                        <span className="text-xs text-stone-500 dark:text-neutral-400 shrink-0">{formatRupiah(exp.amount)}</span>
+                        <span className="text-xs text-mute flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
+                        <span className="text-xs text-mute shrink-0 tabular-nums">{formatRupiah(exp.amount)}</span>
                       </div>
                     ))}
                   </div>
@@ -293,21 +294,21 @@ export function Summary() {
       )}
 
       {periodExpenses.length === 0 ? (
-        <p className="text-sm text-stone-400 dark:text-neutral-500 text-center py-10">No expenses in this period</p>
+        <p className="text-sm text-mute text-center py-10">{copy.noExpensesInPeriod}</p>
       ) : (
         <>
           {/* Weekly bar chart */}
           {tab === 'weekly' && dailyData.length > 0 && (
-            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
-              <p className="text-xs font-medium text-stone-500 dark:text-neutral-400 mb-3">Daily breakdown</p>
+            <div className="bg-sheet border border-ink/10 rounded-md p-4">
+              <p className="text-xs font-medium text-mute mb-3">Daily breakdown</p>
               <div className="flex items-end gap-1.5 h-24">
                 {dailyData.map(d => (
                   <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
                     <div
-                      className="w-full bg-stone-800 dark:bg-neutral-300 rounded-t-sm min-h-[2px]"
+                      className="w-full bg-ink rounded-t-sm min-h-[2px]"
                       style={{ height: `${(d.total / maxDaily) * 80}px` }}
                     />
-                    <span className="text-xs text-stone-400 dark:text-neutral-500">{d.label}</span>
+                    <span className="text-xs text-mute">{d.label}</span>
                   </div>
                 ))}
               </div>
@@ -315,28 +316,28 @@ export function Summary() {
           )}
 
           {tab === 'weekly'  && weeklyStatus  && (
-            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
+            <div className="bg-sheet border border-ink/10 rounded-md p-4">
               <ProgressBar status={weeklyStatus} label="Weekly Budget" />
             </div>
           )}
           {tab === 'monthly' && monthlyStatus && (
-            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
+            <div className="bg-sheet border border-ink/10 rounded-md p-4">
               <ProgressBar status={monthlyStatus} label="Monthly Budget" />
             </div>
           )}
 
           {/* Category breakdown */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4 space-y-3">
-            <p className="text-xs font-medium text-stone-500 dark:text-neutral-400">By category</p>
+          <div className="bg-sheet border border-ink/10 rounded-md p-4 space-y-3">
+            <p className="text-xs font-medium text-mute">By category</p>
             {catBreakdown.map(({ cat, total: catTotal, pct }) => (
               <div key={cat.id}>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-stone-700 dark:text-neutral-300">{cat.emoji} {cat.name}</span>
-                  <span className="font-medium text-stone-900 dark:text-neutral-100">
-                    {formatRupiah(catTotal)} <span className="text-stone-400 dark:text-neutral-500 text-xs">{formatPct(pct)}</span>
+                  <span className="text-ink">{cat.emoji} {cat.name}</span>
+                  <span className="font-medium text-ink tabular-nums">
+                    {formatRupiah(catTotal)} <span className="text-mute text-xs">{formatPct(pct)}</span>
                   </span>
                 </div>
-                <div className="h-1.5 bg-stone-100 dark:bg-neutral-700 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-ink/10 rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: cat.color }} />
                 </div>
               </div>
@@ -344,7 +345,7 @@ export function Summary() {
           </div>
 
           {/* Expense list */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 divide-y divide-stone-100 dark:divide-neutral-800 overflow-hidden">
+          <div className="divide-y divide-ink/10">
             {periodExpenses
               .filter(e => e.id !== pendingId)
               .sort((a, b) => b.date.localeCompare(a.date))
