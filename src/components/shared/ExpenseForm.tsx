@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useRef } from 'react'
-import { X } from 'lucide-react'
+import { X, Sparkles } from 'lucide-react'
 import type { Expense, Shortcut } from '../../types'
 import { useAppState } from '../../context/AppContext'
 import { Button } from '../ui/Button'
@@ -45,24 +45,31 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
   return (
     <div className="fixed inset-0 z-40 flex items-end md:items-center justify-center">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full md:max-w-md bg-white dark:bg-neutral-900 rounded-t-2xl md:rounded-2xl md:mx-4 shadow-xl max-h-[90vh] flex flex-col">
+      <div className="absolute inset-0 bg-[#17345e]/35 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="relative w-full md:max-w-md bg-white dark:bg-[#121f33] rounded-t-[30px] md:rounded-[30px] md:mx-4 shadow-[0_-20px_55px_rgba(23,52,94,.2)] max-h-[92vh] flex flex-col border border-white/70 dark:border-blue-900/70">
+        <div className="md:hidden w-10 h-1 rounded-full bg-blue-100 dark:bg-blue-900 mx-auto mt-2.5" />
         {/* Header */}
-        <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-stone-100 dark:border-neutral-800">
-          <h2 className="font-semibold text-stone-900 dark:text-neutral-100">
-            {isEditing ? 'Edit Expense' : 'Add Expense'}
-          </h2>
-          <button onClick={onClose} className="p-1.5 text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300 rounded-lg hover:bg-stone-100 dark:hover:bg-neutral-800">
+        <div className="flex items-center justify-between px-5 pt-4 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-[15px] bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-300 grid place-items-center"><Sparkles size={18} /></div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[.14em] font-bold text-blue-600 dark:text-blue-300">Catatan Kaluna</p>
+              <h2 className="font-display text-xl font-bold text-[#17345e] dark:text-blue-50">
+                {isEditing ? 'Ubah pengeluaran' : 'Ada pengeluaran apa?'}
+              </h2>
+            </div>
+          </div>
+          <button onClick={onClose} aria-label="Tutup" className="soft-button w-9 h-9">
             <X size={18} />
           </button>
         </div>
 
         <div className="overflow-y-auto flex-1">
-          <form data-testid="expense-form" onSubmit={handleSubmit} className="p-4 space-y-4">
+          <form data-testid="expense-form" onSubmit={handleSubmit} className="px-5 pt-2 pb-[calc(1.25rem+env(safe-area-inset-bottom))] space-y-5">
             {/* Shortcuts */}
             {shortcuts.length > 0 && (
               <div>
-                <p className="text-xs font-medium text-stone-500 dark:text-neutral-400 mb-2">Shortcuts</p>
+                <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Pilihan cepat</p>
                 <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
                   {shortcuts
                     .slice()
@@ -72,7 +79,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                         key={sc.id}
                         type="button"
                         onClick={() => applyShortcut(sc)}
-                        className="shrink-0 px-3 py-1.5 text-sm bg-stone-100 dark:bg-neutral-800 hover:bg-stone-200 dark:hover:bg-neutral-700 text-stone-700 dark:text-neutral-300 rounded-lg whitespace-nowrap"
+                        className="shrink-0 px-3 py-2 text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 text-blue-700 dark:text-blue-200 rounded-xl whitespace-nowrap"
                       >
                         {sc.label}
                       </button>
@@ -83,9 +90,9 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Amount */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Amount</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Nominal</label>
+              <div className="relative rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 p-1">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600 dark:text-blue-300 text-sm font-bold">Rp</span>
                 <input
                   ref={amountRef}
                   type="text"
@@ -93,28 +100,28 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                   value={amountDisplay}
                   onChange={handleAmountChange}
                   placeholder="0"
-                  className="w-full pl-10 pr-3 py-3 text-lg font-semibold text-stone-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
+                  className="field-control font-data pl-11 pr-3 py-3.5 text-xl font-bold bg-white dark:bg-[#0e1a2c]"
                 />
               </div>
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-2">Category</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Kategori</label>
               <div className="grid grid-cols-4 gap-2">
                 {categories.map(cat => (
                   <button
                     key={cat.id}
                     type="button"
                     onClick={() => setCategoryId(cat.id)}
-                    className={`flex flex-col items-center gap-1 p-2 rounded-lg border text-xs transition-colors ${
+                    className={`flex flex-col items-center gap-1.5 p-2.5 rounded-2xl border text-xs transition-all ${
                       categoryId === cat.id
-                        ? 'border-stone-900 dark:border-neutral-100 bg-stone-50 dark:bg-neutral-800'
-                        : 'border-stone-200 dark:border-neutral-700 hover:border-stone-400 dark:hover:border-neutral-500'
+                        ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/60 shadow-[0_6px_16px_rgba(47,111,228,.10)]'
+                        : 'border-blue-100 dark:border-blue-900/70 hover:border-blue-300'
                     }`}
                   >
                     <span className="text-xl">{cat.emoji}</span>
-                    <span className="text-stone-700 dark:text-neutral-300 truncate w-full text-center">{cat.name}</span>
+                    <span className="text-[#48698f] dark:text-blue-200 font-semibold truncate w-full text-center">{cat.name}</span>
                   </button>
                 ))}
               </div>
@@ -122,29 +129,29 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Note */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Note</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Catatan kecil</label>
               <input
                 type="text"
                 value={note}
                 onChange={e => setNote(e.target.value)}
-                placeholder="Add a note (optional)"
-                className="w-full px-3 py-2 text-sm text-stone-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
+                placeholder="Misalnya: makan siang bareng teman"
+                className="field-control px-3.5 py-3 text-sm"
               />
             </div>
 
             {/* Date */}
             <div>
-              <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Date</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Tanggal</label>
               <input
                 type="date"
                 value={date}
                 onChange={e => setDate(e.target.value)}
                 max={today}
-                className="w-full px-3 py-2 text-sm text-stone-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 border border-stone-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100"
+                className="field-control px-3.5 py-3 text-sm"
               />
             </div>
 
-            <Button type="submit" className="w-full py-3">Save</Button>
+            <Button type="submit" className="w-full py-3.5 rounded-2xl">{isEditing ? 'Simpan perubahan' : 'Simpan catatan'}</Button>
           </form>
         </div>
       </div>

@@ -7,15 +7,15 @@ interface ProgressBarProps {
 }
 
 const barColors = {
-  safe:    'bg-stone-800 dark:bg-neutral-300',
-  warning: 'bg-orange-500',
-  over:    'bg-red-600',
+  safe:    'bg-[#39ad8a]',
+  warning: 'bg-[#f2aa48]',
+  over:    'bg-[#ec6b62]',
 }
 
 const textColors = {
-  safe:    'text-stone-600 dark:text-neutral-400',
-  warning: 'text-orange-600 dark:text-orange-400',
-  over:    'text-red-600 dark:text-red-400',
+  safe:    'text-[#47866f] dark:text-emerald-300',
+  warning: 'text-amber-700 dark:text-amber-300',
+  over:    'text-[#c65049] dark:text-red-300',
 }
 
 export function ProgressBar({ status, label }: ProgressBarProps) {
@@ -26,19 +26,19 @@ export function ProgressBar({ status, label }: ProgressBarProps) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-sm">
-        <span className="font-medium text-stone-700 dark:text-neutral-300">{label}</span>
-        <span className="text-stone-500 dark:text-neutral-400">{formatRupiah(status.spent)} / {formatRupiah(status.budget)}</span>
+        <span className="font-bold text-[#48698f] dark:text-blue-200">{label}</span>
+        <span className="font-data text-[12px] text-[#7890ae] dark:text-slate-400">{formatRupiah(status.spent)} / {formatRupiah(status.budget)}</span>
       </div>
-      <div className="h-2 bg-stone-100 dark:bg-neutral-700 rounded-full overflow-hidden">
+      <div className="h-2.5 bg-blue-50 dark:bg-blue-950/70 rounded-full overflow-hidden p-[2px]">
         <div
-          className={`h-full rounded-full transition-all ${barColors[status.status]}`}
+          className={`h-full rounded-full transition-all duration-500 ${barColors[status.status]}`}
           style={{ width: `${barWidth}%` }}
         />
       </div>
       <p className={`text-xs ${textColors[status.status]}`}>
         {status.status === 'over'
-          ? `Over by ${formatRupiah(overage)}`
-          : `${formatPct(status.pct)} used · ${formatRupiah(remaining)} left`
+          ? `Lewat ${formatRupiah(overage)}`
+          : `${formatPct(status.pct)} terpakai · sisa ${formatRupiah(remaining)}`
         }
       </p>
     </div>

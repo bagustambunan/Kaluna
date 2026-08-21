@@ -107,19 +107,23 @@ export function Settings() {
     }})
   }
 
-  const inputCls = 'w-full px-3 py-2 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-900 dark:focus:ring-neutral-100'
+  const inputCls = 'field-control px-3 py-2.5 text-sm'
 
   return (
-    <div className="px-4 pt-5 pb-4 space-y-2">
-      <h1 className="text-xl font-bold text-stone-900 dark:text-neutral-100 mb-4">Settings</h1>
+    <div className="page-shell space-y-3">
+      <div className="mb-5">
+        <p className="page-kicker">Sesuai caramu</p>
+        <h1 className="page-title mt-1">Atur Kaluna.</h1>
+        <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Biar pencatatan terasa makin nyaman.</p>
+      </div>
 
       {/* Preferences */}
-      <SectionCard title="Preferences" open={openSection === 'preferences'} onToggle={() => toggle('preferences')}>
+      <SectionCard title="Preferensi" open={openSection === 'preferences'} onToggle={() => toggle('preferences')}>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-stone-700 dark:text-neutral-300">Theme</p>
-              <p className="text-xs text-stone-400 dark:text-neutral-500">Matches device by default</p>
+              <p className="text-sm font-bold text-[#48698f] dark:text-blue-200">Tampilan</p>
+              <p className="text-xs text-[#8ba0bb] dark:text-slate-500">Mengikuti perangkat secara bawaan</p>
             </div>
             <div className="flex rounded-lg border border-stone-200 dark:border-neutral-700 overflow-hidden">
               {(['system', 'light', 'dark'] as const).map(v => (
@@ -128,11 +132,11 @@ export function Settings() {
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { darkMode: v } })}
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.darkMode === v
-                      ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
-                      : 'text-stone-600 dark:text-neutral-400 hover:bg-stone-50 dark:hover:bg-neutral-800'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-[#6680a4] dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950'
                   }`}
                 >
-                  {v}
+                  {{ system: 'Auto', light: 'Terang', dark: 'Gelap' }[v]}
                 </button>
               ))}
             </div>
@@ -140,8 +144,8 @@ export function Settings() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-stone-700 dark:text-neutral-300">Start of week</p>
-              <p className="text-xs text-stone-400 dark:text-neutral-500">Affects weekly summaries and budget calculations</p>
+              <p className="text-sm font-bold text-[#48698f] dark:text-blue-200">Awal minggu</p>
+              <p className="text-xs text-[#8ba0bb] dark:text-slate-500">Untuk ringkasan dan anggaran mingguan</p>
             </div>
             <div className="flex rounded-lg border border-stone-200 dark:border-neutral-700 overflow-hidden">
               {(['monday','sunday'] as const).map(v => (
@@ -150,11 +154,11 @@ export function Settings() {
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { weekStartDay: v } })}
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.weekStartDay === v
-                      ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
-                      : 'text-stone-600 dark:text-neutral-400 hover:bg-stone-50 dark:hover:bg-neutral-800'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-[#6680a4] dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950'
                   }`}
                 >
-                  {v}
+                  {v === 'monday' ? 'Senin' : 'Minggu'}
                 </button>
               ))}
             </div>
@@ -163,40 +167,40 @@ export function Settings() {
       </SectionCard>
 
       {/* Budget */}
-      <SectionCard title="Budget" open={openSection === 'budget'} onToggle={() => toggle('budget')}>
+      <SectionCard title="Anggaran" open={openSection === 'budget'} onToggle={() => toggle('budget')}>
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Weekly budget</label>
+            <label className="block text-sm font-bold text-[#48698f] dark:text-blue-200 mb-1">Anggaran mingguan</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
               <input type="text" inputMode="numeric" value={weeklyBudget}
                 onChange={e => setWeeklyBudget(formatRupiahInput(e.target.value))}
-                placeholder="Not set"
+                placeholder="Belum diatur"
                 className={`${inputCls} pl-10`}
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Monthly budget</label>
+            <label className="block text-sm font-bold text-[#48698f] dark:text-blue-200 mb-1">Anggaran bulanan</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
               <input type="text" inputMode="numeric" value={monthlyBudget}
                 onChange={e => setMonthlyBudget(formatRupiahInput(e.target.value))}
-                placeholder="Not set"
+                placeholder="Belum diatur"
                 className={`${inputCls} pl-10`}
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Alert threshold</label>
+            <label className="block text-sm font-bold text-[#48698f] dark:text-blue-200 mb-1">Mulai ingatkan saat</label>
             <div className="flex gap-2">
               {[50, 75, 90].map(v => (
                 <button key={v}
                   onClick={() => dispatch({ type: 'UPDATE_BUDGETS', payload: { alertThresholdPct: v } })}
                   className={`flex-1 py-1.5 text-sm rounded-lg border transition-colors ${
                     state.budgets.alertThresholdPct === v
-                      ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 border-stone-900 dark:border-neutral-100'
-                      : 'border-stone-200 dark:border-neutral-700 text-stone-600 dark:text-neutral-400 hover:bg-stone-50 dark:hover:bg-neutral-800'
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'border-blue-100 dark:border-blue-900 text-[#6680a4] dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950'
                   }`}
                 >
                   {v}%
@@ -204,12 +208,12 @@ export function Settings() {
               ))}
             </div>
           </div>
-          <Button onClick={saveBudgets} className="w-full">Save Budget</Button>
+          <Button onClick={saveBudgets} className="w-full">Simpan anggaran</Button>
         </div>
       </SectionCard>
 
       {/* Categories */}
-      <SectionCard title="Categories" open={openSection === 'categories'} onToggle={() => toggle('categories')}>
+      <SectionCard title="Kategori" open={openSection === 'categories'} onToggle={() => toggle('categories')}>
         <div className="space-y-3">
           {state.categories.map(cat => (
             <div key={cat.id} className="flex items-center gap-2">
@@ -289,7 +293,7 @@ export function Settings() {
       </SectionCard>
 
       {/* Shortcuts */}
-      <SectionCard title="Shortcuts" open={openSection === 'shortcuts'} onToggle={() => toggle('shortcuts')}>
+      <SectionCard title="Pilihan cepat" open={openSection === 'shortcuts'} onToggle={() => toggle('shortcuts')}>
         {state.shortcuts.length === 0 ? (
           <p className="text-sm text-stone-400 dark:text-neutral-500">No shortcuts yet. Save a transaction as a shortcut from the expense form.</p>
         ) : (
@@ -320,7 +324,7 @@ export function Settings() {
       </SectionCard>
 
       {/* Notifications */}
-      <SectionCard title="Notifications" open={openSection === 'notifications'} onToggle={() => toggle('notifications')}>
+      <SectionCard title="Pengingat" open={openSection === 'notifications'} onToggle={() => toggle('notifications')}>
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-stone-700 dark:text-neutral-300">Permission status</span>
@@ -340,7 +344,7 @@ export function Settings() {
       </SectionCard>
 
       {/* Data */}
-      <SectionCard title="Data" open={openSection === 'data'} onToggle={() => toggle('data')}>
+      <SectionCard title="Data & privasi" open={openSection === 'data'} onToggle={() => toggle('data')}>
         <div className="space-y-4">
           <div>
             <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Export data</p>
@@ -400,7 +404,7 @@ export function Settings() {
       </SectionCard>
 
       {/* About */}
-      <SectionCard title="About" open={openSection === 'about'} onToggle={() => toggle('about')}>
+      <SectionCard title="Tentang Kaluna" open={openSection === 'about'} onToggle={() => toggle('about')}>
         <div className="space-y-2 text-sm text-stone-600 dark:text-neutral-400">
           <div className="flex justify-between">
             <span>App</span>
@@ -426,13 +430,13 @@ function SectionCard({ title, open, onToggle, children }: {
   children: React.ReactNode
 }) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 overflow-hidden">
-      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-stone-50 dark:hover:bg-neutral-800">
-        <span className="text-sm font-semibold text-stone-800 dark:text-neutral-200">{title}</span>
-        {open ? <ChevronUp size={16} className="text-stone-400 dark:text-neutral-500" /> : <ChevronDown size={16} className="text-stone-400 dark:text-neutral-500" />}
+    <div className="surface-card overflow-hidden">
+      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-4 text-left hover:bg-blue-50/60 dark:hover:bg-blue-950/40 transition-colors">
+        <span className="text-sm font-bold text-[#365b84] dark:text-blue-100">{title}</span>
+        {open ? <ChevronUp size={16} className="text-blue-500" /> : <ChevronDown size={16} className="text-[#8ba0bb] dark:text-slate-500" />}
       </button>
       {open && (
-        <div className="px-4 pb-4 border-t border-stone-100 dark:border-neutral-800">
+        <div className="px-4 pb-4 border-t border-blue-50 dark:border-blue-950/70">
           <div className="pt-3">{children}</div>
         </div>
       )}
