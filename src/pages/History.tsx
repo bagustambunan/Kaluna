@@ -62,11 +62,7 @@ export function History() {
 
   return (
     <div className="page-shell flex flex-col min-h-full">
-      <div className="mb-5">
-        <p className="page-kicker">Jejak pengeluaran</p>
-        <h1 className="page-title mt-1">Semua catatanmu.</h1>
-        <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Cari lagi kapan pun kamu butuh.</p>
-      </div>
+      <h1 className="page-title mb-5">Riwayat</h1>
 
       {/* Search + filter bar */}
       <div className="space-y-2 sticky top-[62px] md:top-0 z-10 py-2 bg-[#f4f8ff]/90 dark:bg-[#0d1727]/90 backdrop-blur-xl">
@@ -179,8 +175,8 @@ export function History() {
         {filtered.length === 0 ? (
           <div className="surface-card text-center py-12 px-6">
             <div className="w-12 h-12 mx-auto grid place-items-center rounded-[18px] bg-blue-50 dark:bg-blue-950 text-blue-500"><Search size={20} /></div>
-            <p className="text-sm font-bold text-[#294b76] dark:text-blue-100 mt-3">{hasFilters ? 'Belum ketemu' : 'Belum ada catatan'}</p>
-            <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">{hasFilters ? 'Coba kata kunci atau filter yang lebih luas.' : 'Catatan pertamamu akan muncul di sini.'}</p>
+            <p className="text-sm font-bold text-[#294b76] dark:text-blue-100 mt-3">{hasFilters ? 'Tidak ada hasil' : 'Belum ada pengeluaran'}</p>
+            {hasFilters && <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Ubah kata kunci atau filter.</p>}
           </div>
         ) : (
           <div className="surface-card divide-y divide-blue-50 dark:divide-blue-950/70 overflow-hidden">

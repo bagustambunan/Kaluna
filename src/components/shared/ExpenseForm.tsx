@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useRef } from 'react'
-import { X, Sparkles } from 'lucide-react'
+import { X, ReceiptText } from 'lucide-react'
 import type { Expense, Shortcut } from '../../types'
 import { useAppState } from '../../context/AppContext'
 import { Button } from '../ui/Button'
@@ -51,11 +51,10 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-4 pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-[15px] bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-300 grid place-items-center"><Sparkles size={18} /></div>
+            <div className="w-10 h-10 rounded-[15px] bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-300 grid place-items-center"><ReceiptText size={18} /></div>
             <div>
-              <p className="text-[10px] uppercase tracking-[.14em] font-bold text-blue-600 dark:text-blue-300">Catatan Kaluna</p>
               <h2 className="font-display text-xl font-bold text-[#17345e] dark:text-blue-50">
-                {isEditing ? 'Ubah pengeluaran' : 'Ada pengeluaran apa?'}
+                {isEditing ? 'Ubah pengeluaran' : 'Tambah pengeluaran'}
               </h2>
             </div>
           </div>
@@ -129,12 +128,12 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Note */}
             <div>
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Catatan kecil</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Catatan</label>
               <input
                 type="text"
                 value={note}
                 onChange={e => setNote(e.target.value)}
-                placeholder="Misalnya: makan siang bareng teman"
+                placeholder="Contoh: makan siang"
                 className="field-control px-3.5 py-3 text-sm"
               />
             </div>

@@ -53,7 +53,7 @@ export function Settings() {
       setImportPreview(result)
       setImportError(null)
     } catch (err) {
-      setImportError(err instanceof Error ? err.message : 'Invalid file format')
+      setImportError(err instanceof Error ? err.message : 'Format file tidak valid')
       setImportPreview(null)
     }
     e.target.value = ''
@@ -111,11 +111,7 @@ export function Settings() {
 
   return (
     <div className="page-shell space-y-3">
-      <div className="mb-5">
-        <p className="page-kicker">Sesuai caramu</p>
-        <h1 className="page-title mt-1">Atur Kaluna.</h1>
-        <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Biar pencatatan terasa makin nyaman.</p>
-      </div>
+      <h1 className="page-title mb-5">Pengaturan</h1>
 
       {/* Preferences */}
       <SectionCard title="Preferensi" open={openSection === 'preferences'} onToggle={() => toggle('preferences')}>
@@ -241,9 +237,9 @@ export function Settings() {
                 </button>
               )}
               {cat.isDefault ? (
-                <span className="text-xs text-stone-400 dark:text-neutral-500">Default</span>
+                <span className="text-xs text-stone-400 dark:text-neutral-500">Bawaan</span>
               ) : usedCategoryIds.has(cat.id) ? (
-                <span className="text-xs text-stone-400 dark:text-neutral-500">In use</span>
+                <span className="text-xs text-stone-400 dark:text-neutral-500">Digunakan</span>
               ) : (
                 <button
                   onClick={() => dispatch({ type: 'DELETE_CATEGORY', payload: cat.id })}
@@ -256,11 +252,11 @@ export function Settings() {
           ))}
 
           <div className="border-t border-stone-100 dark:border-neutral-800 pt-3 space-y-2">
-            <p className="text-xs font-medium text-stone-500 dark:text-neutral-400">Add category</p>
+            <p className="text-xs font-medium text-stone-500 dark:text-neutral-400">Tambah kategori</p>
             <input
               value={newCatName}
               onChange={e => setNewCatName(e.target.value)}
-              placeholder="Category name"
+              placeholder="Nama kategori"
               className={inputCls}
             />
             <div>
@@ -275,7 +271,7 @@ export function Settings() {
               </div>
             </div>
             <div>
-              <p className="text-xs text-stone-500 dark:text-neutral-400 mb-1">Color</p>
+              <p className="text-xs text-stone-500 dark:text-neutral-400 mb-1">Warna</p>
               <div className="flex flex-wrap gap-1.5">
                 {COLOR_OPTIONS.map(c => (
                   <button key={c} onClick={() => setNewCatColor(c)}
@@ -286,7 +282,7 @@ export function Settings() {
               </div>
             </div>
             <Button onClick={addCategory} size="sm">
-              <Plus size={14} /> Add
+              <Plus size={14} /> Tambah
             </Button>
           </div>
         </div>
@@ -295,7 +291,7 @@ export function Settings() {
       {/* Shortcuts */}
       <SectionCard title="Pilihan cepat" open={openSection === 'shortcuts'} onToggle={() => toggle('shortcuts')}>
         {state.shortcuts.length === 0 ? (
-          <p className="text-sm text-stone-400 dark:text-neutral-500">No shortcuts yet. Save a transaction as a shortcut from the expense form.</p>
+          <p className="text-sm text-stone-400 dark:text-neutral-500">Belum ada pilihan cepat.</p>
         ) : (
           <div className="space-y-2">
             {state.shortcuts
@@ -327,19 +323,19 @@ export function Settings() {
       <SectionCard title="Pengingat" open={openSection === 'notifications'} onToggle={() => toggle('notifications')}>
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-stone-700 dark:text-neutral-300">Permission status</span>
+            <span className="text-stone-700 dark:text-neutral-300">Izin notifikasi</span>
             <span className={`font-medium ${
               notifPermission === 'granted' ? 'text-green-600 dark:text-green-400'
               : notifPermission === 'denied' ? 'text-red-600 dark:text-red-400'
               : 'text-stone-500 dark:text-neutral-400'
             }`}>
-              {notifPermission === 'granted' ? 'Granted' : notifPermission === 'denied' ? 'Denied' : 'Not asked'}
+              {notifPermission === 'granted' ? 'Diizinkan' : notifPermission === 'denied' ? 'Ditolak' : 'Belum diminta'}
             </span>
           </div>
           {notifPermission !== 'granted' && (
-            <Button onClick={handleRequestPermission} variant="secondary" size="sm">Request permission</Button>
+            <Button onClick={handleRequestPermission} variant="secondary" size="sm">Aktifkan notifikasi</Button>
           )}
-          <p className="text-xs text-stone-400 dark:text-neutral-500">Budget alert notifications are sent when you reach 75%, 100%, or exceed your budget.</p>
+          <p className="text-xs text-stone-400 dark:text-neutral-500">Notifikasi dikirim saat penggunaan anggaran mencapai batas yang dipilih.</p>
         </div>
       </SectionCard>
 
@@ -347,16 +343,16 @@ export function Settings() {
       <SectionCard title="Data & privasi" open={openSection === 'data'} onToggle={() => toggle('data')}>
         <div className="space-y-4">
           <div>
-            <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Export data</p>
-            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Download all your data as a JSON file.</p>
-            <Button onClick={handleExport} variant="secondary" size="sm">Export .json</Button>
+            <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Ekspor data</p>
+            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Unduh data dalam format JSON.</p>
+            <Button onClick={handleExport} variant="secondary" size="sm">Ekspor .json</Button>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Import data</p>
-            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Upload a previously exported JSON file.</p>
+            <p className="text-sm font-medium text-stone-700 dark:text-neutral-300 mb-1">Impor data</p>
+            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Pilih file JSON hasil ekspor Kaluna.</p>
             <input ref={fileRef} type="file" accept=".json" onChange={handleFileChange} className="hidden" />
-            <Button onClick={() => fileRef.current?.click()} variant="secondary" size="sm">Select file</Button>
+            <Button onClick={() => fileRef.current?.click()} variant="secondary" size="sm">Pilih file</Button>
 
             {importError && <p className="mt-2 text-xs text-red-600 dark:text-red-400">{importError}</p>}
 
@@ -364,12 +360,12 @@ export function Settings() {
               <div className="mt-3 bg-stone-50 dark:bg-neutral-800 border border-stone-200 dark:border-neutral-700 rounded-xl p-3 space-y-3">
                 <div className="text-sm space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-stone-500 dark:text-neutral-400">Expenses</span>
+                    <span className="text-stone-500 dark:text-neutral-400">Pengeluaran</span>
                     <span className="font-medium text-stone-900 dark:text-neutral-100">{importPreview.preview.count}</span>
                   </div>
                   {importPreview.preview.dateRange && (
                     <div className="flex justify-between">
-                      <span className="text-stone-500 dark:text-neutral-400">Date range</span>
+                      <span className="text-stone-500 dark:text-neutral-400">Rentang tanggal</span>
                       <span className="font-medium text-stone-900 dark:text-neutral-100 text-xs">{importPreview.preview.dateRange.start} – {importPreview.preview.dateRange.end}</span>
                     </div>
                   )}
@@ -379,17 +375,17 @@ export function Settings() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button onClick={doImportMerge}   size="sm" className="flex-1">Merge</Button>
-                  <Button onClick={doImportReplace} variant="danger" size="sm" className="flex-1">Replace all</Button>
+                  <Button onClick={doImportMerge}   size="sm" className="flex-1">Gabungkan</Button>
+                  <Button onClick={doImportReplace} variant="danger" size="sm" className="flex-1">Ganti semua</Button>
                 </div>
-                <button onClick={() => setImportPreview(null)} className="text-xs text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300">Cancel</button>
+                <button onClick={() => setImportPreview(null)} className="text-xs text-stone-400 dark:text-neutral-500 hover:text-stone-600 dark:hover:text-neutral-300">Batal</button>
               </div>
             )}
           </div>
 
           <div className="border-t border-stone-100 dark:border-neutral-800 pt-4">
-            <p className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Delete all data</p>
-            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">This will permanently delete all expenses. Type DELETE to confirm.</p>
+            <p className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Hapus semua data</p>
+            <p className="text-xs text-stone-400 dark:text-neutral-500 mb-2">Tindakan ini permanen. Ketik DELETE untuk melanjutkan.</p>
             <div className="flex gap-2">
               <input
                 value={deleteConfirm}
@@ -397,7 +393,7 @@ export function Settings() {
                 placeholder="DELETE"
                 className="flex-1 px-3 py-2 text-sm border border-stone-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600"
               />
-              <Button onClick={handleDeleteAll} variant="danger" size="sm" disabled={deleteConfirm !== 'DELETE'}>Delete</Button>
+              <Button onClick={handleDeleteAll} variant="danger" size="sm" disabled={deleteConfirm !== 'DELETE'}>Hapus</Button>
             </div>
           </div>
         </div>
@@ -407,15 +403,15 @@ export function Settings() {
       <SectionCard title="Tentang Kaluna" open={openSection === 'about'} onToggle={() => toggle('about')}>
         <div className="space-y-2 text-sm text-stone-600 dark:text-neutral-400">
           <div className="flex justify-between">
-            <span>App</span>
+            <span>Aplikasi</span>
             <span className="font-medium text-stone-900 dark:text-neutral-100">Kaluna</span>
           </div>
           <div className="flex justify-between">
-            <span>Version</span>
+            <span>Versi</span>
             <span className="font-medium text-stone-900 dark:text-neutral-100">1.0.0</span>
           </div>
           <p className="text-xs text-stone-400 dark:text-neutral-500 pt-1 border-t border-stone-100 dark:border-neutral-800">
-            Daily expense tracker. All data is stored on your device. Nothing is sent to any server.
+            Data disimpan di perangkat ini.
           </p>
         </div>
       </SectionCard>

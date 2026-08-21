@@ -97,10 +97,6 @@ select:focus-visible {
     @apply px-4 pt-5 pb-5 sm:px-6 md:pt-8;
   }
 
-  .page-kicker {
-    @apply text-[11px] font-bold uppercase tracking-[0.16em] text-blue-600 dark:text-blue-300;
-  }
-
   .page-title {
     @apply font-display text-[28px] font-bold leading-tight text-[#17345e] dark:text-blue-50;
   }

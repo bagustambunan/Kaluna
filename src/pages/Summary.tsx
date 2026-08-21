@@ -145,11 +145,7 @@ export function Summary() {
 
   return (
     <div className="page-shell space-y-4">
-      <div className="mb-5">
-        <p className="page-kicker">Baca polanya</p>
-        <h1 className="page-title mt-1">Cerita dari angkamu.</h1>
-        <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Ringkas, jujur, dan mudah dimengerti.</p>
-      </div>
+      <h1 className="page-title mb-5">Ringkasan</h1>
       {/* Tabs */}
       <div className="flex gap-1 bg-blue-100/60 dark:bg-blue-950/50 p-1.5 rounded-2xl overflow-x-auto scrollbar-none">
         {tabs.map(t => (
@@ -301,15 +297,15 @@ export function Summary() {
 
       {periodExpenses.length === 0 ? (
         <div className="surface-card text-center py-12 px-6">
-          <p className="text-sm font-bold text-[#294b76] dark:text-blue-100">Belum ada angka untuk dibaca</p>
-          <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Coba pilih periode lain atau mulai buat catatan.</p>
+          <p className="text-sm font-bold text-[#294b76] dark:text-blue-100">Tidak ada pengeluaran</p>
+          <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Pilih periode lain.</p>
         </div>
       ) : (
         <>
           {/* Weekly bar chart */}
           {tab === 'weekly' && dailyData.length > 0 && (
             <div className="surface-card p-4">
-              <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-3">Ritme harian</p>
+              <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-3">Pengeluaran harian</p>
               <div className="flex items-end gap-1.5 h-24">
                 {dailyData.map(d => (
                   <div key={d.date} className="flex-1 flex flex-col items-center gap-1">

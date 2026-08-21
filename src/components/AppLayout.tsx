@@ -1,6 +1,6 @@
 ﻿import { useState, useCallback, createContext, useContext, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, History, ChartNoAxesColumnIncreasing, Settings, Plus, Share, Sparkles, X } from 'lucide-react'
+import { Home, History, ChartNoAxesColumnIncreasing, Settings, Plus, Share, NotebookTabs, X } from 'lucide-react'
 import { useAppState, useAppDispatch } from '../context/AppContext'
 import { ExpenseForm } from './shared/ExpenseForm'
 import { Snackbar } from './ui/Snackbar'
@@ -112,12 +112,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <aside className="hidden md:flex flex-col w-60 shrink-0 bg-white/90 dark:bg-[#101d30]/95 border-r border-blue-100 dark:border-blue-950 fixed top-0 left-0 h-full backdrop-blur-xl">
         <div className="px-5 py-6 flex items-center gap-3">
           <div className="w-10 h-10 rounded-[15px] bg-blue-600 text-white flex items-center justify-center shadow-[0_8px_20px_rgba(47,111,228,.25)]">
-            <Sparkles size={19} />
+            <NotebookTabs size={19} />
           </div>
-          <div>
-            <span className="font-display text-xl font-bold text-[#17345e] dark:text-blue-50">Kaluna</span>
-            <p className="text-[11px] text-[#7890ae] dark:text-slate-400">teman keuanganmu</p>
-          </div>
+          <span className="font-display text-xl font-bold text-[#17345e] dark:text-blue-50">Kaluna</span>
         </div>
         <nav className="flex-1 px-4 py-3 space-y-1.5">
           {navItems.map(({ to, icon: Icon, label }) => (
@@ -152,18 +149,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className="flex-1 md:ml-60 pb-28 md:pb-8 min-w-0">
         {/* Mobile header */}
-        <header className="md:hidden flex items-center justify-between px-4 h-[62px] bg-[#f4f8ff]/90 dark:bg-[#0d1727]/90 sticky top-0 z-20 backdrop-blur-xl">
+        <header className="md:hidden flex items-center px-4 h-[62px] bg-[#f4f8ff]/90 dark:bg-[#0d1727]/90 sticky top-0 z-20 backdrop-blur-xl">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-[14px] bg-blue-600 text-white flex items-center justify-center shadow-[0_6px_16px_rgba(47,111,228,.22)]">
-              <Sparkles size={17} />
+              <NotebookTabs size={17} />
             </div>
-            <div className="leading-tight">
-              <span className="font-display text-[17px] font-bold text-[#17345e] dark:text-blue-50">Kaluna</span>
-              <p className="text-[10px] text-[#7890ae] dark:text-slate-400">teman keuanganmu</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1.5 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> tersimpan lokal
+            <span className="font-display text-[17px] font-bold text-[#17345e] dark:text-blue-50">Kaluna</span>
           </div>
         </header>
 

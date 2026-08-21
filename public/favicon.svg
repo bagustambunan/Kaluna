@@ -3,5 +3,4 @@
   <path d="M9 9.5h11.5A2.5 2.5 0 0 1 23 12v9.5a2 2 0 0 1-2 2H11a2 2 0 0 1-2-2v-12Z" fill="white" fill-opacity=".95"/>
   <path d="M13 9V7.75C13 6.78 13.78 6 14.75 6h2.5C18.22 6 19 6.78 19 7.75V9" stroke="#BBD2FF" stroke-width="1.5"/>
   <path d="M12.5 14h7M12.5 17h5M12.5 20h3" stroke="#2F6FE4" stroke-width="1.5" stroke-linecap="round"/>
-  <path d="m23.5 7 .55 1.45L25.5 9l-1.45.55L23.5 11l-.55-1.45L21.5 9l1.45-.55L23.5 7Z" fill="#8EE1C8"/>
 </svg>
