@@ -1,6 +1,7 @@
 ﻿import { useState, useMemo } from 'react'
 import { ChevronLeft, ChevronRight, Filter, RotateCcw } from 'lucide-react'
 import { addWeeks, subWeeks, addMonths, subMonths } from 'date-fns'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { useAppState } from '../context/AppContext'
 import { useAppHandlers } from '../components/AppLayout'
 import { ExpenseItem } from '../components/shared/ExpenseItem'
@@ -15,6 +16,14 @@ import type { SummaryFilterState, DateRange } from '../types'
 import { getBudgetStatus } from '../lib/budget'
 
 type Tab = 'weekly' | 'monthly' | 'custom'
+
+interface MonthlyCategoryDatum {
+  id: string
+  name: string
+  color: string
+  value: number
+  pct: number
+}
 
 const PRESETS = [
   { label: '7 hari terakhir',  days: 7 },
@@ -32,6 +41,7 @@ export function Summary() {
     excludedExpenseIds:  new Set(),
   })
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set())
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
 
   const state = useAppState()
   const { openEdit, handleDelete } = useAppHandlers()
@@ -100,6 +110,30 @@ export function Summary() {
   }
 
   const pendingId = state.pendingDelete?.expense.id
+
+  const monthlyCategoryData = useMemo(() => {
+    if (tab !== 'monthly') return []
+
+    const expenses = filteredExpenses.filter(e => e.id !== pendingId)
+    const grouped = groupByCategory(expenses)
+    const chartTotal = sumExpenses(expenses)
+
+    return state.categories
+      .map(cat => {
+        const categoryTotal = sumExpenses(grouped[cat.id] ?? [])
+        return {
+          id: cat.id,
+          name: cat.name,
+          color: cat.color,
+          value: categoryTotal,
+          pct: chartTotal > 0 ? (categoryTotal / chartTotal) * 100 : 0,
+        } satisfies MonthlyCategoryDatum
+      })
+      .filter(item => item.value > 0)
+      .sort((a, b) => b.value - a.value)
+  }, [tab, filteredExpenses, pendingId, state.categories])
+
+  const selectedCategory = monthlyCategoryData.find(item => item.id === selectedCategoryId)
 
   const catBreakdown = useMemo(() => {
     const grouped    = groupByCategory(periodExpenses.filter(e => e.id !== pendingId))
@@ -329,8 +363,99 @@ export function Summary() {
             </div>
           )}
 
+          {/* Monthly category pie chart */}
+          {tab === 'monthly' && monthlyCategoryData.length > 0 && (
+            <section className="surface-card p-4" aria-labelledby="monthly-category-chart-title">
+              <p id="monthly-category-chart-title" className="text-xs font-bold text-[#6680a4] dark:text-neutral-400">
+                Pengeluaran per kategori
+              </p>
+              <div className="mx-auto mt-3 h-64 w-full max-w-sm">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                  <PieChart accessibilityLayer>
+                    <Pie
+                      data={monthlyCategoryData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      stroke="none"
+                      isAnimationActive={false}
+                      onClick={(_, index) => {
+                        const id = monthlyCategoryData[index]?.id
+                        if (id) setSelectedCategoryId(current => current === id ? null : id)
+                      }}
+                    >
+                      {monthlyCategoryData.map(item => (
+                        <Cell
+                          key={item.id}
+                          fill={item.color}
+                          opacity={selectedCategoryId && selectedCategoryId !== item.id ? 0.42 : 1}
+                          className="cursor-pointer outline-none transition-opacity"
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      cursor={false}
+                      isAnimationActive={false}
+                      content={({ active, payload }) => {
+                        const item = payload?.[0]?.payload as MonthlyCategoryDatum | undefined
+                        if (!active || !item) return null
+                        return (
+                          <div className="rounded-xl border border-blue-100 bg-white px-3 py-2 dark:border-[#303030] dark:bg-[#171717]">
+                            <p className="text-xs font-bold text-[#365b84] dark:text-neutral-200">{item.name}</p>
+                            <p className="font-data mt-0.5 text-[11px] text-[#6680a4] dark:text-neutral-400">
+                              {formatPct(item.pct)} · {formatRupiah(item.value)}
+                            </p>
+                          </div>
+                        )
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              {selectedCategory && (
+                <div className="mx-auto mb-4 flex max-w-sm items-center justify-between gap-3 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 dark:border-[#303030] dark:bg-[#1a1a1a]">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: selectedCategory.color }} />
+                    <span className="truncate text-xs font-bold text-[#365b84] dark:text-neutral-200">{selectedCategory.name}</span>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="font-data text-xs font-bold text-[#17345e] dark:text-neutral-100">{formatRupiah(selectedCategory.value)}</p>
+                    <p className="font-data text-[10px] text-[#8ba0bb] dark:text-neutral-500">{formatPct(selectedCategory.pct)}</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="mx-auto grid max-w-sm grid-cols-2 gap-x-4 gap-y-2.5 border-t border-blue-50 pt-4 dark:border-[#242424]">
+                  {monthlyCategoryData.map(item => (
+                    <button
+                      type="button"
+                      key={item.id}
+                      onClick={() => setSelectedCategoryId(current => current === item.id ? null : item.id)}
+                      className="flex min-w-0 items-start gap-2 text-left"
+                    >
+                      <span
+                        className="w-2.5 h-2.5 mt-1 rounded-full shrink-0"
+                        style={{ backgroundColor: item.color }}
+                        aria-hidden="true"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <span className="text-xs font-semibold text-[#48698f] dark:text-neutral-300 truncate">{item.name}</span>
+                          <span className="font-data text-[10px] text-[#8ba0bb] dark:text-neutral-500 shrink-0">{formatPct(item.pct)}</span>
+                        </div>
+                        <p className="font-data text-[11px] text-[#6680a4] dark:text-neutral-400 truncate">{formatRupiah(item.value)}</p>
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            </section>
+          )}
+
           {/* Category breakdown */}
-          <div className="surface-card p-4 space-y-4">
+          {tab !== 'monthly' && <div className="surface-card p-4 space-y-4">
             <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400">Menurut kategori</p>
             {catBreakdown.map(({ cat, total: catTotal, pct }) => (
               <div key={cat.id}>
@@ -345,7 +470,7 @@ export function Summary() {
                 </div>
               </div>
             ))}
-          </div>
+          </div>}
 
           {/* Expense list */}
           <div className="surface-card divide-y divide-blue-50 dark:divide-[#242424] overflow-hidden">

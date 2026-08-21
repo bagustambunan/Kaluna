@@ -80,7 +80,7 @@ export function History() {
           <button
             onClick={() => setFilterOpen(v => !v)}
             aria-label="Buka filter"
-            className={`w-11 rounded-xl border text-sm font-medium transition-colors ${
+            className={`inline-flex w-11 shrink-0 items-center justify-center rounded-xl border text-sm font-medium transition-colors ${
               filterOpen || hasFilters
                 ? 'bg-blue-600 text-white border-blue-600'
                 : 'bg-white dark:bg-[#111111] border-blue-100 dark:border-[#303030] text-[#6680a4] dark:text-neutral-300'
