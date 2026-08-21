@@ -1,5 +1,5 @@
 ﻿import { useState, useMemo, useEffect, useCallback } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, CalendarDays, ReceiptText } from 'lucide-react'
 import { useAppState } from '../context/AppContext'
 import { useAppHandlers } from '../components/AppLayout'
 import { ExpenseItem } from '../components/shared/ExpenseItem'
@@ -54,24 +54,27 @@ export function Home() {
   const categoryMap = useMemo(() => new Map(state.categories.map(c => [c.id, c])), [state.categories])
   const dayLabel   = formatDayDisplay(selectedDate, today)
 
+  const monthlyPct = monthlyStatus ? Math.min(monthlyStatus.pct, 100) : 0
+
   return (
-    <div className="px-4 pt-5 pb-4 space-y-5">
-      {/* Date navigation */}
-      <div className="flex items-center gap-2">
+    <div className="page-shell space-y-5">
+      <h1 className="page-title">Beranda</h1>
+
+      {/* Date notebook tab */}
+      <div className="flex items-center gap-2 bg-blue-100/60 dark:bg-[#151515] dark:border dark:border-[#292929] rounded-2xl p-1.5">
         <button
           onClick={goBack}
-          aria-label="Previous day"
-          className="p-2 rounded-lg text-stone-600 dark:text-neutral-400 hover:bg-stone-200 dark:hover:bg-neutral-800 transition-colors"
+          aria-label="Hari sebelumnya"
+          className="soft-button w-9 h-9 border-transparent"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={18} />
         </button>
-        <div className="flex-1 text-center">
-          {/* Overlay approach: transparent input sits on top of the label.
-              Works on iOS Safari where showPicker() is unsupported. */}
-          <div className="relative inline-flex flex-col items-center">
+        <div className="flex-1 text-center leading-tight">
+          <div className="relative inline-flex items-center gap-2">
+            <CalendarDays size={15} className="text-blue-600 dark:text-neutral-400" />
             <span
               data-testid="day-label"
-              className="font-semibold text-stone-900 dark:text-neutral-100"
+              className="text-sm font-bold text-[#294b76] dark:text-neutral-200"
             >
               {dayLabel}
             </span>
@@ -81,56 +84,93 @@ export function Home() {
               max={today}
               onChange={e => { if (e.target.value) setSelectedDate(e.target.value) }}
               className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-              aria-label="Pick date"
+              aria-label="Pilih tanggal"
             />
           </div>
           {!isToday && (
             <div>
               <button
                 onClick={goToday}
-                aria-label="Back to today"
-                className="text-xs text-stone-500 dark:text-neutral-400 hover:text-stone-700 dark:hover:text-neutral-200 mt-0.5"
+                aria-label="Kembali ke hari ini"
+                className="text-[10px] font-semibold text-blue-600 dark:text-neutral-400 mt-0.5"
               >
-                Back to today
+                Kembali ke hari ini
               </button>
             </div>
           )}
         </div>
         <button
           onClick={goForward}
-          aria-label="Next day"
+          aria-label="Hari berikutnya"
           disabled={isToday}
-          className="p-2 rounded-lg text-stone-600 dark:text-neutral-400 hover:bg-stone-200 dark:hover:bg-neutral-800 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+          className="soft-button w-9 h-9 border-transparent disabled:opacity-30 disabled:pointer-events-none"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={18} />
         </button>
       </div>
 
-      {/* Day total */}
-      <div>
-        <p className="text-xs text-stone-500 dark:text-neutral-400 uppercase tracking-wide font-medium">
-          {isToday ? "Today's spending" : 'Day total'}
-        </p>
-        <p className="text-3xl font-bold text-stone-900 dark:text-neutral-50 mt-1">{formatRupiah(dayTotal)}</p>
+      {/* Daily total */}
+      <section className="relative overflow-hidden rounded-[28px] bg-[#2f6fe4] dark:bg-[#111111] dark:border dark:border-[#303030] text-white px-5 pt-5 pb-6">
+        <div className="absolute inset-0 opacity-[.14]" aria-hidden="true" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent 0, transparent 29px, white 30px)' }} />
+        <div className="relative flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-[.13em] text-blue-100">{isToday ? 'Pengeluaran hari ini' : 'Total pengeluaran'}</p>
+            <p className="font-display font-data text-[32px] sm:text-4xl font-bold leading-none mt-4 truncate">{formatRupiah(dayTotal)}</p>
+            <p className="text-[12px] text-blue-100 mt-2">{dayExpenses.length} transaksi</p>
+          </div>
+          {monthlyStatus ? (
+            <div
+              className="relative w-[72px] h-[72px] rounded-full shrink-0 grid place-items-center"
+              style={{ background: `conic-gradient(#8ee1c8 ${monthlyPct * 3.6}deg, rgba(255,255,255,.17) 0)` }}
+              aria-label={`${Math.round(monthlyPct)} persen anggaran bulanan terpakai`}
+            >
+              <div className="w-[58px] h-[58px] rounded-full bg-[#2f6fe4] dark:bg-[#111111] grid place-items-center text-center">
+                <span className="font-data text-sm font-bold leading-none">{Math.round(monthlyPct)}%</span>
+                <span className="text-[8px] text-blue-100">bulan ini</span>
+              </div>
+            </div>
+          ) : (
+            <div className="w-[58px] h-[58px] rounded-[20px] bg-white/14 grid place-items-center shrink-0"><ReceiptText size={24} /></div>
+          )}
+        </div>
+      </section>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="surface-card px-4 py-3.5">
+          <p className="text-[11px] font-semibold text-[#7890ae] dark:text-neutral-500">Minggu ini</p>
+          <p className="font-data mt-1 text-base font-bold text-[#17345e] dark:text-neutral-100 truncate">{formatRupiah(weeklySpent)}</p>
+        </div>
+        <div className="surface-card px-4 py-3.5">
+          <p className="text-[11px] font-semibold text-[#7890ae] dark:text-neutral-500">Bulan ini</p>
+          <p className="font-data mt-1 text-base font-bold text-[#17345e] dark:text-neutral-100 truncate">{formatRupiah(monthlySpent)}</p>
+        </div>
       </div>
 
       {/* Budget progress */}
       {(weeklyStatus || monthlyStatus) && (
-        <div className="space-y-4 bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
-          {weeklyStatus  && <ProgressBar status={weeklyStatus}  label="Weekly Budget" />}
-          {monthlyStatus && <ProgressBar status={monthlyStatus} label="Monthly Budget" />}
+        <div className="surface-card space-y-5 p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-bold text-[#294b76] dark:text-neutral-200">Anggaran</p>
+          </div>
+          {weeklyStatus  && <ProgressBar status={weeklyStatus}  label="Mingguan" />}
+          {monthlyStatus && <ProgressBar status={monthlyStatus} label="Bulanan" />}
         </div>
       )}
 
       {/* Day expenses */}
-      <div>
-        <p className="text-xs text-stone-500 dark:text-neutral-400 uppercase tracking-wide font-medium mb-2">
-          {isToday ? "Today's Expenses" : 'Expenses'}
-        </p>
+      <section>
+        <div className="flex items-center justify-between mb-2.5 px-1">
+          <p className="text-sm font-bold text-[#294b76] dark:text-neutral-200">{isToday ? 'Pengeluaran hari ini' : 'Pengeluaran'}</p>
+          <span className="grid place-items-center min-w-7 h-7 px-2 rounded-full bg-blue-100 dark:bg-[#1c1c1c] text-xs font-bold text-blue-700 dark:text-neutral-300">{dayExpenses.filter(e => e.id !== pendingId).length}</span>
+        </div>
         {dayExpenses.length === 0 ? (
-          <p className="text-sm text-stone-400 dark:text-neutral-500 py-4 text-center">Tap + to record your first expense</p>
+          <div className="surface-card py-10 px-6 text-center">
+            <div className="mx-auto w-12 h-12 rounded-[18px] bg-blue-50 dark:bg-[#1c1c1c] grid place-items-center text-blue-500 dark:text-neutral-400"><ReceiptText size={21} /></div>
+            <p className="font-bold text-sm text-[#294b76] dark:text-neutral-200 mt-3">Belum ada catatan</p>
+            <p className="text-xs text-[#7890ae] dark:text-neutral-500 mt-1">Ketuk tombol + saat kamu mengeluarkan uang.</p>
+          </div>
         ) : (
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 divide-y divide-stone-100 dark:divide-neutral-800 overflow-hidden">
+          <div className="surface-card divide-y divide-blue-50 dark:divide-[#242424] overflow-hidden">
             {dayExpenses
               .filter(e => e.id !== pendingId)
               .map(e => (
@@ -144,19 +184,7 @@ export function Home() {
               ))}
           </div>
         )}
-      </div>
-
-      {/* Weekly / monthly totals */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-stone-200 dark:border-neutral-700 p-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-stone-500 dark:text-neutral-400">This week</span>
-          <span className="font-semibold text-stone-900 dark:text-neutral-100">{formatRupiah(weeklySpent)}</span>
-        </div>
-        <div className="flex justify-between text-sm mt-1">
-          <span className="text-stone-500 dark:text-neutral-400">This month</span>
-          <span className="font-semibold text-stone-900 dark:text-neutral-100">{formatRupiah(monthlySpent)}</span>
-        </div>
-      </div>
+      </section>
     </div>
   )
 }

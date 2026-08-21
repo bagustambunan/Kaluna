@@ -2,23 +2,121 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  color: #17345e;
+  background: #f4f8ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --sky-50: #f4f8ff;
+  --sky-100: #e7f0ff;
+  --sky-200: #cfe0ff;
+  --sky-500: #2f6fe4;
+  --sky-600: #245cc0;
+  --ink: #17345e;
+  --muted: #6680a4;
+  --mint: #39ad8a;
+  --coral: #ec6b62;
+  --paper: #ffffff;
+}
+
 * {
+  box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
 html {
   height: -webkit-fill-available;
+  background: var(--sky-50);
 }
 
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  margin: 0;
   overscroll-behavior: none;
+  background: var(--sky-50);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(47, 111, 228, 0.24);
+  outline-offset: 2px;
+}
+
+::selection {
+  color: #fff;
+  background: var(--sky-500);
+}
+
+.dark {
+  color-scheme: dark;
+  --sky-50: #080808;
+  --sky-100: #111111;
+  --sky-200: #1c1c1c;
+  --ink: #f5f5f5;
+  --muted: #a3a3a3;
+  --paper: #111111;
+}
+
+.dark body {
+  background: #080808;
+}
+
+.font-display {
+  font-family: "Trebuchet MS", "Segoe UI Variable Display", sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.font-data {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
 }
 
 .scrollbar-none {
   scrollbar-width: none;
 }
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
+}
+
+@layer components {
+  .page-shell {
+    @apply px-4 pt-5 pb-5 sm:px-6 md:pt-8;
+  }
+
+  .page-title {
+    @apply font-display text-[28px] font-bold leading-tight text-[#17345e] dark:text-neutral-100;
+  }
+
+  .surface-card {
+    @apply rounded-[22px] border border-blue-100/80 bg-white dark:border-[#292929] dark:bg-[#111111];
+  }
+
+  .soft-button {
+    @apply inline-flex items-center justify-center rounded-xl border border-blue-100 bg-white text-[#48698f] transition hover:border-blue-200 hover:bg-blue-50 active:scale-[0.98] dark:border-[#303030] dark:bg-[#141414] dark:text-neutral-300 dark:hover:bg-[#1c1c1c];
+  }
+
+  .field-control {
+    @apply w-full rounded-xl border border-blue-100 bg-[#f8fbff] text-[#17345e] placeholder:text-[#9bafca] transition focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:border-[#303030] dark:bg-[#111111] dark:text-neutral-100 dark:placeholder:text-neutral-600 dark:focus:border-neutral-500 dark:focus:ring-white/10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

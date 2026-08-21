@@ -1,6 +1,6 @@
 ﻿import { useState, useCallback, createContext, useContext, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, History, BarChart2, Settings, Plus, Share } from 'lucide-react'
+import { Home, History, ChartNoAxesColumnIncreasing, Settings, Plus, Share, NotebookTabs, X } from 'lucide-react'
 import { useAppState, useAppDispatch } from '../context/AppContext'
 import { ExpenseForm } from './shared/ExpenseForm'
 import { Snackbar } from './ui/Snackbar'
@@ -28,10 +28,10 @@ export function useAppHandlers() {
 }
 
 const navItems = [
-  { to: '/',         icon: Home,      label: 'Home' },
-  { to: '/history',  icon: History,   label: 'History' },
-  { to: '/summary',  icon: BarChart2, label: 'Summary' },
-  { to: '/settings', icon: Settings,  label: 'Settings' },
+  { to: '/',         icon: Home,                          label: 'Beranda' },
+  { to: '/history',  icon: History,                       label: 'Riwayat' },
+  { to: '/summary',  icon: ChartNoAxesColumnIncreasing,   label: 'Ringkasan' },
+  { to: '/settings', icon: Settings,                      label: 'Atur' },
 ]
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -64,11 +64,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const handleSave = (values: Omit<Expense, 'id'>) => {
     if (editingExpense) {
       dispatch({ type: 'UPDATE_EXPENSE', payload: { ...values, id: editingExpense.id } })
-      showSnack('Saved')
+      showSnack('Catatan diperbarui')
     } else {
       const expense: Expense = { ...values, id: crypto.randomUUID() }
       dispatch({ type: 'ADD_EXPENSE', payload: expense })
-      showSnack('Saved')
+      showSnack('Pengeluaran dicatat')
 
       const now = new Date()
       const weekRange  = getWeekRange(now, state.settings.weekStartDay)
@@ -97,7 +97,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       dispatch({ type: 'CONFIRM_DELETE' })
     }, 5000)
     dispatch({ type: 'SOFT_DELETE_EXPENSE', payload: { expense, timeoutId } })
-    showSnack('Deleted', () => dispatch({ type: 'UNDO_DELETE' }))
+    showSnack('Catatan dihapus', () => dispatch({ type: 'UNDO_DELETE' }))
   }, [dispatch, showSnack])
 
   const showBanner = (!state.settings.installBannerDismissed) && (canInstall || isIOS)
@@ -107,24 +107,26 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     : { amount: 0, categoryId: '', note: '', date: formDefaultDate }
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-neutral-950 flex md:flex-row">
+    <div className="min-h-screen bg-transparent flex md:flex-row text-[#17345e] dark:text-neutral-100">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-52 shrink-0 bg-white dark:bg-neutral-900 border-r border-stone-200 dark:border-neutral-800 fixed top-0 left-0 h-full">
-        <div className="px-4 py-5 border-b border-stone-100 dark:border-neutral-800 flex items-center gap-2">
-          <img src="/favicon.svg" alt="" aria-hidden="true" className="w-6 h-6 rounded-md" />
-          <span className="text-lg font-bold text-stone-900 dark:text-neutral-100">Kaluna</span>
+      <aside className="hidden md:flex flex-col w-60 shrink-0 bg-white dark:bg-[#0d0d0d] border-r border-blue-100 dark:border-[#262626] fixed top-0 left-0 h-full">
+        <div className="px-5 py-6 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-[15px] bg-blue-600 text-white flex items-center justify-center">
+            <NotebookTabs size={19} />
+          </div>
+          <span className="font-display text-xl font-bold text-[#17345e] dark:text-neutral-100">Kaluna</span>
         </div>
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-4 py-3 space-y-1.5">
           {navItems.map(({ to, icon: Icon, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold transition-all ${
                   isActive
-                    ? 'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
-                    : 'text-stone-600 dark:text-neutral-400 hover:bg-stone-100 dark:hover:bg-neutral-800'
+                    ? 'bg-blue-50 dark:bg-[#1c1c1c] text-blue-700 dark:text-neutral-100'
+                    : 'text-[#7187a4] dark:text-neutral-500 hover:bg-blue-50/70 dark:hover:bg-[#171717]'
                 }`
               }
             >
@@ -133,46 +135,50 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </NavLink>
           ))}
         </nav>
-        <div className="px-3 py-4 border-t border-stone-100 dark:border-neutral-800">
+        <div className="px-4 pb-5">
           <button
             onClick={openAdd}
-            className="w-full flex items-center justify-center gap-2 bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-sm font-medium py-2.5 rounded-lg hover:bg-stone-700 dark:hover:bg-neutral-200"
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-bold py-3 rounded-2xl hover:bg-blue-700 active:scale-[.98] transition"
           >
             <Plus size={16} />
-            Add Expense
+            Catat pengeluaran
           </button>
         </div>
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 md:ml-52 pb-20 md:pb-6">
+      <main className="flex-1 md:ml-60 pb-28 md:pb-8 min-w-0">
         {/* Mobile header */}
-        <header className="md:hidden flex items-center gap-2 px-4 h-12 bg-white dark:bg-neutral-900 border-b border-stone-200 dark:border-neutral-800 sticky top-0 z-20">
-          <img src="/favicon.svg" alt="" aria-hidden="true" className="w-6 h-6 rounded-md" />
-          <span className="text-base font-bold text-stone-900 dark:text-neutral-100">Kaluna</span>
+        <header className="md:hidden flex items-center px-4 h-[62px] bg-[#f4f8ff] dark:bg-[#080808] border-b border-transparent dark:border-[#1c1c1c] sticky top-0 z-20">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-[14px] bg-blue-600 text-white flex items-center justify-center">
+              <NotebookTabs size={17} />
+            </div>
+            <span className="font-display text-[17px] font-bold text-[#17345e] dark:text-neutral-100">Kaluna</span>
+          </div>
         </header>
 
         {inAppAlert && (
-          <div className="bg-orange-50 dark:bg-orange-950 border-b border-orange-200 dark:border-orange-900 px-4 py-2.5 flex items-center justify-between text-sm text-orange-800 dark:text-orange-300">
+          <div className="mx-4 mt-2 rounded-2xl bg-orange-50 dark:bg-orange-950/60 border border-orange-100 dark:border-orange-900 px-4 py-3 flex items-center justify-between text-sm text-orange-800 dark:text-orange-300">
             <span>{inAppAlert}</span>
-            <button onClick={() => setInAppAlert(null)} className="text-orange-600 dark:text-orange-400 hover:text-orange-800 dark:hover:text-orange-200 font-medium">Dismiss</button>
+            <button onClick={() => setInAppAlert(null)} aria-label="Tutup pengingat" className="p-1 text-orange-600 dark:text-orange-400"><X size={16} /></button>
           </div>
         )}
 
         {showBanner && (
-          <div className="bg-stone-100 dark:bg-neutral-800 border-b border-stone-200 dark:border-neutral-700 px-4 py-2.5 flex items-center justify-between text-sm text-stone-700 dark:text-neutral-300">
+          <div className="mx-4 mt-2 rounded-2xl bg-blue-50 dark:bg-[#151515] border border-blue-100 dark:border-[#303030] px-4 py-3 flex items-center justify-between text-xs text-blue-800 dark:text-neutral-300">
             <span className="flex items-center gap-2">
-              {isIOS ? <><Share size={14} /> Tap Share then "Add to Home Screen"</> : 'Add to home screen for quick access'}
+              {isIOS ? <><Share size={14} /> Bagikan lalu pilih “Add to Home Screen”</> : 'Pasang Kaluna agar lebih cepat dibuka'}
             </span>
             <div className="flex items-center gap-3">
               {canInstall && (
-                <button onClick={triggerInstall} className="font-medium text-stone-900 dark:text-neutral-100 hover:underline">Add</button>
+                <button onClick={triggerInstall} className="font-bold text-blue-700 dark:text-neutral-100 hover:underline">Pasang</button>
               )}
               <button
                 onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { installBannerDismissed: true } })}
-                className="text-stone-500 dark:text-neutral-400 hover:text-stone-700 dark:hover:text-neutral-200"
+                className="text-[#7187a4] dark:text-neutral-500 hover:text-blue-700 dark:hover:text-neutral-200"
               >
-                Dismiss
+                Nanti
               </button>
             </div>
           </div>
@@ -186,7 +192,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           />
         )}
 
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-[720px] mx-auto">
           <AppHandlersContext.Provider value={{ openEdit, handleDelete, setFormDefaultDate }}>
             {children}
           </AppHandlersContext.Provider>
@@ -194,15 +200,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-stone-200 dark:border-neutral-800 z-30">
-        <div className="flex items-center justify-around h-16 px-2">
+      <nav className="md:hidden fixed bottom-3 left-3 right-3 z-30 pb-[env(safe-area-inset-bottom)]">
+        <div className="flex items-center justify-around h-[68px] px-1 rounded-[24px] bg-white dark:bg-[#111111] border border-blue-100 dark:border-[#292929]">
           {navItems.slice(0, 2).map(({ to, icon: Icon, label }) => (
             <NavItem key={to} to={to} icon={Icon} label={label} exact={to === '/'} />
           ))}
           <button
             onClick={openAdd}
-            className="w-14 h-14 -mt-6 bg-stone-900 dark:bg-neutral-100 rounded-full flex items-center justify-center text-white dark:text-neutral-900 shadow-lg hover:bg-stone-700 dark:hover:bg-neutral-200 active:bg-stone-800"
-            aria-label="Add expense"
+            className="w-[58px] h-[58px] -mt-8 bg-blue-600 rounded-[20px] flex items-center justify-center text-white ring-[5px] ring-[#f4f8ff] dark:ring-[#080808] hover:bg-blue-700 active:scale-95 transition"
+            aria-label="Catat pengeluaran"
           >
             <Plus size={24} />
           </button>
@@ -232,8 +238,8 @@ function NavItem({ to, icon: Icon, label, exact }: { to: string; icon: React.Ele
       to={to}
       end={exact}
       className={({ isActive }) =>
-        `flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-          isActive ? 'text-stone-900 dark:text-neutral-100' : 'text-stone-400 dark:text-neutral-500'
+        `relative flex flex-col items-center gap-1 min-w-[54px] px-2 py-1 rounded-xl text-[10px] font-semibold transition-colors ${
+          isActive ? 'text-blue-600 dark:text-neutral-100' : 'text-[#91a4bd] dark:text-neutral-600'
         }`
       }
     >

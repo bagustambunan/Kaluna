@@ -6,10 +6,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants = {
-  primary:   'bg-stone-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:bg-stone-700 dark:hover:bg-neutral-200 active:bg-stone-800',
-  secondary: 'bg-stone-100 dark:bg-neutral-800 text-stone-900 dark:text-neutral-100 hover:bg-stone-200 dark:hover:bg-neutral-700 active:bg-stone-300',
-  ghost:     'text-stone-600 dark:text-neutral-400 hover:bg-stone-100 dark:hover:bg-neutral-800 active:bg-stone-200',
-  danger:    'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
+  primary:   'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
+  secondary: 'bg-blue-50 dark:bg-[#1c1c1c] text-blue-700 dark:text-neutral-200 hover:bg-blue-100 dark:hover:bg-[#242424] active:bg-blue-200',
+  ghost:     'text-[#6680a4] dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-[#1c1c1c] active:bg-blue-100',
+  danger:    'bg-[#ec6b62] text-white hover:bg-[#d95a53] active:bg-red-700',
 }
 
 const sizes = {
@@ -21,7 +21,7 @@ export function Button({ variant = 'primary', size = 'md', className = '', child
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center gap-1.5 font-medium rounded-lg transition-colors disabled:opacity-40 disabled:pointer-events-none ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 font-bold rounded-xl transition-all active:scale-[.98] disabled:opacity-40 disabled:pointer-events-none ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {children}
     </button>
