@@ -45,15 +45,15 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
   return (
     <div className="fixed inset-0 z-40 flex items-end md:items-center justify-center">
-      <div className="absolute inset-0 bg-[#17345e]/35 backdrop-blur-[2px]" onClick={onClose} />
-      <div className="relative w-full md:max-w-md bg-white dark:bg-[#121f33] rounded-t-[30px] md:rounded-[30px] md:mx-4 shadow-[0_-20px_55px_rgba(23,52,94,.2)] max-h-[92vh] flex flex-col border border-white/70 dark:border-blue-900/70">
-        <div className="md:hidden w-10 h-1 rounded-full bg-blue-100 dark:bg-blue-900 mx-auto mt-2.5" />
+      <div className="absolute inset-0 bg-black/55" onClick={onClose} />
+      <div className="relative w-full md:max-w-md bg-white dark:bg-[#111111] rounded-t-[30px] md:rounded-[30px] md:mx-4 max-h-[92vh] flex flex-col border border-blue-100 dark:border-[#303030]">
+        <div className="md:hidden w-10 h-1 rounded-full bg-blue-100 dark:bg-[#3a3a3a] mx-auto mt-2.5" />
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-4 pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-[15px] bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-300 grid place-items-center"><ReceiptText size={18} /></div>
+            <div className="w-10 h-10 rounded-[15px] bg-blue-50 dark:bg-[#1c1c1c] text-blue-600 dark:text-neutral-300 grid place-items-center"><ReceiptText size={18} /></div>
             <div>
-              <h2 className="font-display text-xl font-bold text-[#17345e] dark:text-blue-50">
+              <h2 className="font-display text-xl font-bold text-[#17345e] dark:text-neutral-100">
                 {isEditing ? 'Ubah pengeluaran' : 'Tambah pengeluaran'}
               </h2>
             </div>
@@ -68,7 +68,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
             {/* Shortcuts */}
             {shortcuts.length > 0 && (
               <div>
-                <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Pilihan cepat</p>
+                <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Pilihan cepat</p>
                 <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
                   {shortcuts
                     .slice()
@@ -78,7 +78,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                         key={sc.id}
                         type="button"
                         onClick={() => applyShortcut(sc)}
-                        className="shrink-0 px-3 py-2 text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 text-blue-700 dark:text-blue-200 rounded-xl whitespace-nowrap"
+                        className="shrink-0 px-3 py-2 text-xs font-semibold bg-blue-50 dark:bg-[#1c1c1c] hover:bg-blue-100 dark:hover:bg-[#242424] text-blue-700 dark:text-neutral-300 rounded-xl whitespace-nowrap"
                       >
                         {sc.label}
                       </button>
@@ -89,9 +89,9 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Amount */}
             <div>
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Nominal</label>
-              <div className="relative rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 p-1">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600 dark:text-blue-300 text-sm font-bold">Rp</span>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Nominal</label>
+              <div className="relative rounded-2xl bg-blue-50/70 dark:bg-[#181818] p-1">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600 dark:text-neutral-400 text-sm font-bold">Rp</span>
                 <input
                   ref={amountRef}
                   type="text"
@@ -99,14 +99,14 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                   value={amountDisplay}
                   onChange={handleAmountChange}
                   placeholder="0"
-                  className="field-control font-data pl-11 pr-3 py-3.5 text-xl font-bold bg-white dark:bg-[#0e1a2c]"
+                  className="field-control font-data pl-11 pr-3 py-3.5 text-xl font-bold bg-white dark:bg-[#111111]"
                 />
               </div>
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Kategori</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Kategori</label>
               <div className="grid grid-cols-4 gap-2">
                 {categories.map(cat => (
                   <button
@@ -115,12 +115,12 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
                     onClick={() => setCategoryId(cat.id)}
                     className={`flex flex-col items-center gap-1.5 p-2.5 rounded-2xl border text-xs transition-all ${
                       categoryId === cat.id
-                        ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/60 shadow-[0_6px_16px_rgba(47,111,228,.10)]'
-                        : 'border-blue-100 dark:border-blue-900/70 hover:border-blue-300'
+                        ? 'border-blue-500 bg-blue-50 dark:border-neutral-400 dark:bg-[#242424]'
+                        : 'border-blue-100 dark:border-[#303030] hover:border-blue-300 dark:hover:border-neutral-500'
                     }`}
                   >
                     <span className="text-xl">{cat.emoji}</span>
-                    <span className="text-[#48698f] dark:text-blue-200 font-semibold truncate w-full text-center">{cat.name}</span>
+                    <span className="text-[#48698f] dark:text-neutral-300 font-semibold truncate w-full text-center">{cat.name}</span>
                   </button>
                 ))}
               </div>
@@ -128,7 +128,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Note */}
             <div>
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Catatan</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Catatan</label>
               <input
                 type="text"
                 value={note}
@@ -140,7 +140,7 @@ export function ExpenseForm({ initialValues, isEditing = false, onSave, onClose 
 
             {/* Date */}
             <div>
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Tanggal</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Tanggal</label>
               <input
                 type="date"
                 value={date}

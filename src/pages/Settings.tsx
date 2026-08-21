@@ -118,8 +118,8 @@ export function Settings() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-[#48698f] dark:text-blue-200">Tampilan</p>
-              <p className="text-xs text-[#8ba0bb] dark:text-slate-500">Mengikuti perangkat secara bawaan</p>
+              <p className="text-sm font-bold text-[#48698f] dark:text-neutral-200">Tampilan</p>
+              <p className="text-xs text-[#8ba0bb] dark:text-neutral-500">Mengikuti perangkat secara bawaan</p>
             </div>
             <div className="flex rounded-lg border border-stone-200 dark:border-neutral-700 overflow-hidden">
               {(['system', 'light', 'dark'] as const).map(v => (
@@ -129,7 +129,7 @@ export function Settings() {
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.darkMode === v
                       ? 'bg-blue-600 text-white'
-                      : 'text-[#6680a4] dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950'
+                      : 'text-[#6680a4] dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-[#1c1c1c]'
                   }`}
                 >
                   {{ system: 'Auto', light: 'Terang', dark: 'Gelap' }[v]}
@@ -140,8 +140,8 @@ export function Settings() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-bold text-[#48698f] dark:text-blue-200">Awal minggu</p>
-              <p className="text-xs text-[#8ba0bb] dark:text-slate-500">Untuk ringkasan dan anggaran mingguan</p>
+              <p className="text-sm font-bold text-[#48698f] dark:text-neutral-200">Awal minggu</p>
+              <p className="text-xs text-[#8ba0bb] dark:text-neutral-500">Untuk ringkasan dan anggaran mingguan</p>
             </div>
             <div className="flex rounded-lg border border-stone-200 dark:border-neutral-700 overflow-hidden">
               {(['monday','sunday'] as const).map(v => (
@@ -151,7 +151,7 @@ export function Settings() {
                   className={`px-3 py-1.5 text-sm capitalize transition-colors ${
                     state.settings.weekStartDay === v
                       ? 'bg-blue-600 text-white'
-                      : 'text-[#6680a4] dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950'
+                      : 'text-[#6680a4] dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-[#1c1c1c]'
                   }`}
                 >
                   {v === 'monday' ? 'Senin' : 'Minggu'}
@@ -166,7 +166,7 @@ export function Settings() {
       <SectionCard title="Anggaran" open={openSection === 'budget'} onToggle={() => toggle('budget')}>
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-bold text-[#48698f] dark:text-blue-200 mb-1">Anggaran mingguan</label>
+            <label className="block text-sm font-bold text-[#48698f] dark:text-neutral-200 mb-1">Anggaran mingguan</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
               <input type="text" inputMode="numeric" value={weeklyBudget}
@@ -177,7 +177,7 @@ export function Settings() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-bold text-[#48698f] dark:text-blue-200 mb-1">Anggaran bulanan</label>
+            <label className="block text-sm font-bold text-[#48698f] dark:text-neutral-200 mb-1">Anggaran bulanan</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-neutral-400 text-sm">Rp</span>
               <input type="text" inputMode="numeric" value={monthlyBudget}
@@ -188,7 +188,7 @@ export function Settings() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-bold text-[#48698f] dark:text-blue-200 mb-1">Mulai ingatkan saat</label>
+            <label className="block text-sm font-bold text-[#48698f] dark:text-neutral-200 mb-1">Mulai ingatkan saat</label>
             <div className="flex gap-2">
               {[50, 75, 90].map(v => (
                 <button key={v}
@@ -196,7 +196,7 @@ export function Settings() {
                   className={`flex-1 py-1.5 text-sm rounded-lg border transition-colors ${
                     state.budgets.alertThresholdPct === v
                       ? 'bg-blue-600 text-white border-blue-600'
-                      : 'border-blue-100 dark:border-blue-900 text-[#6680a4] dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-950'
+                      : 'border-blue-100 dark:border-[#303030] text-[#6680a4] dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-[#1c1c1c]'
                   }`}
                 >
                   {v}%
@@ -427,12 +427,12 @@ function SectionCard({ title, open, onToggle, children }: {
 }) {
   return (
     <div className="surface-card overflow-hidden">
-      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-4 text-left hover:bg-blue-50/60 dark:hover:bg-blue-950/40 transition-colors">
-        <span className="text-sm font-bold text-[#365b84] dark:text-blue-100">{title}</span>
-        {open ? <ChevronUp size={16} className="text-blue-500" /> : <ChevronDown size={16} className="text-[#8ba0bb] dark:text-slate-500" />}
+      <button onClick={onToggle} className="w-full flex items-center justify-between px-4 py-4 text-left hover:bg-blue-50/60 dark:hover:bg-[#1c1c1c] transition-colors">
+        <span className="text-sm font-bold text-[#365b84] dark:text-neutral-200">{title}</span>
+        {open ? <ChevronUp size={16} className="text-blue-500 dark:text-neutral-400" /> : <ChevronDown size={16} className="text-[#8ba0bb] dark:text-neutral-600" />}
       </button>
       {open && (
-        <div className="px-4 pb-4 border-t border-blue-50 dark:border-blue-950/70">
+        <div className="px-4 pb-4 border-t border-blue-50 dark:border-[#242424]">
           <div className="pt-3">{children}</div>
         </div>
       )}

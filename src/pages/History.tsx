@@ -65,7 +65,7 @@ export function History() {
       <h1 className="page-title mb-5">Riwayat</h1>
 
       {/* Search + filter bar */}
-      <div className="space-y-2 sticky top-[62px] md:top-0 z-10 py-2 bg-[#f4f8ff]/90 dark:bg-[#0d1727]/90 backdrop-blur-xl">
+      <div className="space-y-2 sticky top-[62px] md:top-0 z-10 py-2 bg-[#f4f8ff] dark:bg-[#080808]">
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8ba0bb]" />
@@ -74,7 +74,7 @@ export function History() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Cari dari catatan..."
-              className="field-control pl-10 pr-3 py-3 text-sm shadow-[0_8px_24px_rgba(56,98,160,.06)]"
+              className="field-control pl-10 pr-3 py-3 text-sm"
             />
           </div>
           <button
@@ -82,8 +82,8 @@ export function History() {
             aria-label="Buka filter"
             className={`w-11 rounded-xl border text-sm font-medium transition-colors ${
               filterOpen || hasFilters
-                ? 'bg-blue-600 text-white border-blue-600 shadow-[0_8px_20px_rgba(47,111,228,.2)]'
-                : 'bg-white dark:bg-[#121f33] border-blue-100 dark:border-blue-900 text-[#6680a4] dark:text-blue-200'
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white dark:bg-[#111111] border-blue-100 dark:border-[#303030] text-[#6680a4] dark:text-neutral-300'
             }`}
           >
             <SlidersHorizontal size={16} />
@@ -94,7 +94,7 @@ export function History() {
           <div className="surface-card p-4 space-y-4">
             {/* Sort */}
             <div>
-              <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Urutkan</p>
+              <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Urutkan</p>
               <div className="flex flex-wrap gap-1.5">
                 {(['newest','oldest','highest','lowest'] as SortKey[]).map(k => (
                   <button
@@ -103,7 +103,7 @@ export function History() {
                     className={`px-3 py-1.5 text-xs rounded-xl border transition-colors ${
                       sortKey === k
                         ? 'bg-blue-600 text-white border-blue-600'
-                        : 'border-blue-100 dark:border-blue-900 text-[#6680a4] dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-950/50'
+                        : 'border-blue-100 dark:border-[#303030] text-[#6680a4] dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-[#1c1c1c]'
                     }`}
                   >
                     {{ newest: 'Terbaru', oldest: 'Terlama', highest: 'Terbesar', lowest: 'Terkecil' }[k]}
@@ -114,7 +114,7 @@ export function History() {
 
             {/* Categories */}
             <div>
-              <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Kategori</p>
+              <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Kategori</p>
               <div className="flex flex-wrap gap-1.5">
                 {state.categories.map(c => (
                   <button
@@ -123,7 +123,7 @@ export function History() {
                     className={`px-2.5 py-1.5 text-xs rounded-xl border transition-colors ${
                       selectedCats.has(c.id)
                         ? 'text-white border-transparent'
-                        : 'border-blue-100 dark:border-blue-900 text-[#6680a4] dark:text-slate-300 hover:bg-blue-50'
+                        : 'border-blue-100 dark:border-[#303030] text-[#6680a4] dark:text-neutral-400 hover:bg-blue-50 dark:hover:bg-[#1c1c1c]'
                     }`}
                     style={selectedCats.has(c.id) ? { backgroundColor: c.color } : {}}
                   >
@@ -135,7 +135,7 @@ export function History() {
 
             {/* Amount range */}
             <div>
-              <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-2">Rentang nominal</p>
+              <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-2">Rentang nominal</p>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
@@ -158,7 +158,7 @@ export function History() {
             </div>
 
             {hasFilters && (
-              <button onClick={clearFilters} className="flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-300 hover:text-blue-800">
+              <button onClick={clearFilters} className="flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-neutral-300 hover:text-blue-800 dark:hover:text-white">
                 <X size={12} /> Hapus semua filter
               </button>
             )}
@@ -169,17 +169,17 @@ export function History() {
       {/* Expense list */}
       <div className="flex-1 pt-3 pb-2">
         <div className="flex items-center justify-between mb-2.5 px-1">
-          <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400">{filtered.length} catatan ditemukan</p>
-          {hasFilters && <span className="text-[10px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950 px-2 py-1 rounded-full">Filter aktif</span>}
+          <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400">{filtered.length} catatan ditemukan</p>
+          {hasFilters && <span className="text-[10px] font-bold text-blue-600 bg-blue-50 dark:bg-[#1c1c1c] dark:text-neutral-300 px-2 py-1 rounded-full">Filter aktif</span>}
         </div>
         {filtered.length === 0 ? (
           <div className="surface-card text-center py-12 px-6">
-            <div className="w-12 h-12 mx-auto grid place-items-center rounded-[18px] bg-blue-50 dark:bg-blue-950 text-blue-500"><Search size={20} /></div>
-            <p className="text-sm font-bold text-[#294b76] dark:text-blue-100 mt-3">{hasFilters ? 'Tidak ada hasil' : 'Belum ada pengeluaran'}</p>
-            {hasFilters && <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Ubah kata kunci atau filter.</p>}
+            <div className="w-12 h-12 mx-auto grid place-items-center rounded-[18px] bg-blue-50 dark:bg-[#1c1c1c] text-blue-500 dark:text-neutral-400"><Search size={20} /></div>
+            <p className="text-sm font-bold text-[#294b76] dark:text-neutral-200 mt-3">{hasFilters ? 'Tidak ada hasil' : 'Belum ada pengeluaran'}</p>
+            {hasFilters && <p className="text-xs text-[#7890ae] dark:text-neutral-500 mt-1">Ubah kata kunci atau filter.</p>}
           </div>
         ) : (
-          <div className="surface-card divide-y divide-blue-50 dark:divide-blue-950/70 overflow-hidden">
+          <div className="surface-card divide-y divide-blue-50 dark:divide-[#242424] overflow-hidden">
             {filtered.map(e => (
               <ExpenseItem
                 key={e.id}

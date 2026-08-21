@@ -26,10 +26,10 @@ export function ProgressBar({ status, label }: ProgressBarProps) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-sm">
-        <span className="font-bold text-[#48698f] dark:text-blue-200">{label}</span>
-        <span className="font-data text-[12px] text-[#7890ae] dark:text-slate-400">{formatRupiah(status.spent)} / {formatRupiah(status.budget)}</span>
+        <span className="font-bold text-[#48698f] dark:text-neutral-200">{label}</span>
+        <span className="font-data text-[12px] text-[#7890ae] dark:text-neutral-400">{formatRupiah(status.spent)} / {formatRupiah(status.budget)}</span>
       </div>
-      <div className="h-2.5 bg-blue-50 dark:bg-blue-950/70 rounded-full overflow-hidden p-[2px]">
+      <div className="h-2.5 bg-blue-50 dark:bg-[#242424] rounded-full overflow-hidden p-[2px]">
         <div
           className={`h-full rounded-full transition-all duration-500 ${barColors[status.status]}`}
           style={{ width: `${barWidth}%` }}

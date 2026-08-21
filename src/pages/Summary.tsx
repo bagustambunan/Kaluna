@@ -147,15 +147,15 @@ export function Summary() {
     <div className="page-shell space-y-4">
       <h1 className="page-title mb-5">Ringkasan</h1>
       {/* Tabs */}
-      <div className="flex gap-1 bg-blue-100/60 dark:bg-blue-950/50 p-1.5 rounded-2xl overflow-x-auto scrollbar-none">
+      <div className="flex gap-1 bg-blue-100/60 dark:bg-[#151515] dark:border dark:border-[#292929] p-1.5 rounded-2xl overflow-x-auto scrollbar-none">
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => { setTab(t.key); setFilter({ excludedCategoryIds: new Set(), excludedExpenseIds: new Set() }) }}
             className={`flex-1 min-w-fit px-2.5 py-2 text-[11px] font-bold rounded-xl transition-colors ${
               tab === t.key
-                ? 'bg-white dark:bg-[#1a2c48] text-blue-700 dark:text-blue-200 shadow-[0_4px_12px_rgba(56,98,160,.10)]'
-                : 'text-[#7890ae] dark:text-slate-400 hover:text-blue-700'
+                ? 'bg-white dark:bg-[#282828] text-blue-700 dark:text-neutral-100'
+                : 'text-[#7890ae] dark:text-neutral-500 hover:text-blue-700 dark:hover:text-neutral-200'
             }`}
           >
             {t.label}
@@ -172,7 +172,7 @@ export function Summary() {
           >
             <ChevronLeft size={18} />
           </button>
-          <p className="text-sm font-bold text-[#48698f] dark:text-blue-200">
+          <p className="text-sm font-bold text-[#48698f] dark:text-neutral-300">
             {tab === 'weekly' ? formatWeekRange(weekRange) : formatMonthYear(subMonths(now, -monthOffset))}
           </p>
           <button
@@ -189,14 +189,14 @@ export function Summary() {
         <div className="space-y-3">
           <div className="flex gap-2">
             <div className="flex-1">
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-1">Mulai</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-1">Mulai</label>
               <input type="date" value={customRange.start}
                 onChange={e => setCustomRange(v => ({ ...v, start: e.target.value }))}
                 className="field-control px-3 py-2.5 text-sm"
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-1">Selesai</label>
+              <label className="block text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-1">Selesai</label>
               <input type="date" value={customRange.end}
                 onChange={e => setCustomRange(v => ({ ...v, end: e.target.value }))}
                 className="field-control px-3 py-2.5 text-sm"
@@ -212,7 +212,7 @@ export function Summary() {
                   const start = new Date(); start.setDate(start.getDate() - p.days + 1)
                   setCustomRange({ start: formatDateStr(start), end: formatDateStr(end) })
                 }}
-                className="px-3 py-2 text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 text-blue-700 dark:text-blue-200 rounded-xl"
+                className="px-3 py-2 text-xs font-semibold bg-blue-50 dark:bg-[#1c1c1c] hover:bg-blue-100 dark:hover:bg-[#242424] text-blue-700 dark:text-neutral-300 rounded-xl"
               >
                 {p.label}
               </button>
@@ -224,13 +224,13 @@ export function Summary() {
       {/* Total header */}
       <div className="surface-card flex items-start justify-between p-5">
         <div>
-          <p className="text-[10px] text-blue-600 dark:text-blue-300 uppercase tracking-[.15em] font-bold">Total tercatat</p>
-          <p className="font-display font-data text-[30px] font-bold text-[#17345e] dark:text-blue-50 mt-1">{formatRupiah(total)}</p>
-          <p className="text-[11px] text-[#7890ae] dark:text-slate-400 mt-1">{filteredExpenses.length} pengeluaran dalam periode ini</p>
+          <p className="text-[10px] text-blue-600 dark:text-neutral-500 uppercase tracking-[.15em] font-bold">Total tercatat</p>
+          <p className="font-display font-data text-[30px] font-bold text-[#17345e] dark:text-neutral-100 mt-1">{formatRupiah(total)}</p>
+          <p className="text-[11px] text-[#7890ae] dark:text-neutral-500 mt-1">{filteredExpenses.length} pengeluaran dalam periode ini</p>
         </div>
         <div className="flex items-center gap-2">
           {hasFilter && (
-            <button onClick={resetFilter} className="flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-300 px-2 py-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950">
+            <button onClick={resetFilter} className="flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-neutral-300 px-2 py-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-[#1c1c1c]">
               <RotateCcw size={12} /> Atur ulang
             </button>
           )}
@@ -240,7 +240,7 @@ export function Summary() {
             className={`p-2.5 rounded-xl border transition-colors ${
               filterOpen || hasFilter
                 ? 'bg-blue-600 text-white border-blue-600'
-                : 'border-blue-100 dark:border-blue-900 text-[#6680a4] dark:text-blue-200 hover:bg-blue-50 dark:hover:bg-blue-950'
+                : 'border-blue-100 dark:border-[#303030] text-[#6680a4] dark:text-neutral-300 hover:bg-blue-50 dark:hover:bg-[#1c1c1c]'
             }`}
           >
             <Filter size={15} />
@@ -251,7 +251,7 @@ export function Summary() {
       {/* Filter panel */}
       {filterOpen && (
         <div className="surface-card p-4 space-y-3">
-          <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400">Kategori yang ditampilkan</p>
+          <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400">Kategori yang ditampilkan</p>
           {catBreakdown.map(({ cat, items }) => {
             const allExcluded  = filter.excludedCategoryIds.has(cat.id)
             const someExcluded = !allExcluded && items.some(e => filter.excludedExpenseIds.has(e.id))
@@ -267,7 +267,7 @@ export function Summary() {
                     onChange={() => toggleCatFilter(cat.id)}
                     className="rounded"
                   />
-                  <button onClick={() => toggleExpandCat(cat.id)} className="flex-1 flex items-center gap-1.5 text-sm text-left text-[#48698f] dark:text-blue-200">
+                  <button onClick={() => toggleExpandCat(cat.id)} className="flex-1 flex items-center gap-1.5 text-sm text-left text-[#48698f] dark:text-neutral-300">
                     <span>{cat.emoji}</span>
                     <span>{cat.name}</span>
                     <ChevronRight size={12} className={`ml-auto text-[#8ba0bb] transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
@@ -283,8 +283,8 @@ export function Summary() {
                           onChange={() => toggleExpenseFilter(exp.id)}
                           className="rounded"
                         />
-                        <span className="text-xs text-[#6680a4] dark:text-slate-400 flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
-                        <span className="font-data text-xs text-[#6680a4] dark:text-slate-400 shrink-0">{formatRupiah(exp.amount)}</span>
+                        <span className="text-xs text-[#6680a4] dark:text-neutral-400 flex-1 truncate">{exp.note || formatRupiah(exp.amount)}</span>
+                        <span className="font-data text-xs text-[#6680a4] dark:text-neutral-400 shrink-0">{formatRupiah(exp.amount)}</span>
                       </div>
                     ))}
                   </div>
@@ -297,15 +297,15 @@ export function Summary() {
 
       {periodExpenses.length === 0 ? (
         <div className="surface-card text-center py-12 px-6">
-          <p className="text-sm font-bold text-[#294b76] dark:text-blue-100">Tidak ada pengeluaran</p>
-          <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Pilih periode lain.</p>
+          <p className="text-sm font-bold text-[#294b76] dark:text-neutral-200">Tidak ada pengeluaran</p>
+          <p className="text-xs text-[#7890ae] dark:text-neutral-500 mt-1">Pilih periode lain.</p>
         </div>
       ) : (
         <>
           {/* Weekly bar chart */}
           {tab === 'weekly' && dailyData.length > 0 && (
             <div className="surface-card p-4">
-              <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400 mb-3">Pengeluaran harian</p>
+              <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400 mb-3">Pengeluaran harian</p>
               <div className="flex items-end gap-1.5 h-24">
                 {dailyData.map(d => (
                   <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
@@ -313,7 +313,7 @@ export function Summary() {
                       className="w-full bg-blue-500 dark:bg-blue-400 rounded-t-md min-h-[3px]"
                       style={{ height: `${(d.total / maxDaily) * 80}px` }}
                     />
-                    <span className="text-[10px] text-[#8ba0bb] dark:text-slate-500">{d.label}</span>
+                    <span className="text-[10px] text-[#8ba0bb] dark:text-neutral-600">{d.label}</span>
                   </div>
                 ))}
               </div>
@@ -333,16 +333,16 @@ export function Summary() {
 
           {/* Category breakdown */}
           <div className="surface-card p-4 space-y-4">
-            <p className="text-xs font-bold text-[#6680a4] dark:text-slate-400">Menurut kategori</p>
+            <p className="text-xs font-bold text-[#6680a4] dark:text-neutral-400">Menurut kategori</p>
             {catBreakdown.map(({ cat, total: catTotal, pct }) => (
               <div key={cat.id}>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="font-semibold text-[#48698f] dark:text-blue-200">{cat.emoji} {cat.name}</span>
-                  <span className="font-data font-bold text-[#17345e] dark:text-blue-50">
-                    {formatRupiah(catTotal)} <span className="text-[#8ba0bb] dark:text-slate-500 text-xs">{formatPct(pct)}</span>
+                  <span className="font-semibold text-[#48698f] dark:text-neutral-300">{cat.emoji} {cat.name}</span>
+                  <span className="font-data font-bold text-[#17345e] dark:text-neutral-100">
+                    {formatRupiah(catTotal)} <span className="text-[#8ba0bb] dark:text-neutral-600 text-xs">{formatPct(pct)}</span>
                   </span>
                 </div>
-                <div className="h-1.5 bg-blue-50 dark:bg-blue-950 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-blue-50 dark:bg-[#242424] rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: cat.color }} />
                 </div>
               </div>
@@ -350,7 +350,7 @@ export function Summary() {
           </div>
 
           {/* Expense list */}
-          <div className="surface-card divide-y divide-blue-50 dark:divide-blue-950/70 overflow-hidden">
+          <div className="surface-card divide-y divide-blue-50 dark:divide-[#242424] overflow-hidden">
             {periodExpenses
               .filter(e => e.id !== pendingId)
               .sort((a, b) => b.date.localeCompare(a.date))

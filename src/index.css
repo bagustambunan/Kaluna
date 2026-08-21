@@ -35,9 +35,7 @@ body {
   min-height: -webkit-fill-available;
   margin: 0;
   overscroll-behavior: none;
-  background:
-    radial-gradient(circle at 8% 0%, rgba(100, 159, 255, 0.16), transparent 30rem),
-    var(--sky-50);
+  background: var(--sky-50);
 }
 
 button,
@@ -60,18 +58,16 @@ select:focus-visible {
 
 .dark {
   color-scheme: dark;
-  --sky-50: #0d1727;
-  --sky-100: #14223a;
-  --sky-200: #223857;
-  --ink: #eaf2ff;
-  --muted: #92a7c6;
-  --paper: #121f33;
+  --sky-50: #080808;
+  --sky-100: #111111;
+  --sky-200: #1c1c1c;
+  --ink: #f5f5f5;
+  --muted: #a3a3a3;
+  --paper: #111111;
 }
 
 .dark body {
-  background:
-    radial-gradient(circle at 8% 0%, rgba(47, 111, 228, 0.16), transparent 30rem),
-    #0d1727;
+  background: #080808;
 }
 
 .font-display {
@@ -98,19 +94,19 @@ select:focus-visible {
   }
 
   .page-title {
-    @apply font-display text-[28px] font-bold leading-tight text-[#17345e] dark:text-blue-50;
+    @apply font-display text-[28px] font-bold leading-tight text-[#17345e] dark:text-neutral-100;
   }
 
   .surface-card {
-    @apply rounded-[22px] border border-blue-100/80 bg-white shadow-[0_10px_30px_rgba(56,98,160,0.08)] dark:border-blue-900/60 dark:bg-[#121f33];
+    @apply rounded-[22px] border border-blue-100/80 bg-white dark:border-[#292929] dark:bg-[#111111];
   }
 
   .soft-button {
-    @apply inline-flex items-center justify-center rounded-xl border border-blue-100 bg-white text-[#48698f] transition hover:border-blue-200 hover:bg-blue-50 active:scale-[0.98] dark:border-blue-900/70 dark:bg-[#14223a] dark:text-blue-200 dark:hover:bg-[#1a2c48];
+    @apply inline-flex items-center justify-center rounded-xl border border-blue-100 bg-white text-[#48698f] transition hover:border-blue-200 hover:bg-blue-50 active:scale-[0.98] dark:border-[#303030] dark:bg-[#141414] dark:text-neutral-300 dark:hover:bg-[#1c1c1c];
   }
 
   .field-control {
-    @apply w-full rounded-xl border border-blue-100 bg-[#f8fbff] text-[#17345e] placeholder:text-[#9bafca] transition focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:border-blue-900/70 dark:bg-[#0e1a2c] dark:text-blue-50 dark:placeholder:text-slate-600 dark:focus:ring-blue-950;
+    @apply w-full rounded-xl border border-blue-100 bg-[#f8fbff] text-[#17345e] placeholder:text-[#9bafca] transition focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:border-[#303030] dark:bg-[#111111] dark:text-neutral-100 dark:placeholder:text-neutral-600 dark:focus:border-neutral-500 dark:focus:ring-white/10;
   }
 }
 

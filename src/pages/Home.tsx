@@ -61,20 +61,20 @@ export function Home() {
       <h1 className="page-title">Beranda</h1>
 
       {/* Date notebook tab */}
-      <div className="flex items-center gap-2 bg-blue-100/60 dark:bg-blue-950/40 rounded-2xl p-1.5">
+      <div className="flex items-center gap-2 bg-blue-100/60 dark:bg-[#151515] dark:border dark:border-[#292929] rounded-2xl p-1.5">
         <button
           onClick={goBack}
           aria-label="Hari sebelumnya"
-          className="soft-button w-9 h-9 border-transparent shadow-none"
+          className="soft-button w-9 h-9 border-transparent"
         >
           <ChevronLeft size={18} />
         </button>
         <div className="flex-1 text-center leading-tight">
           <div className="relative inline-flex items-center gap-2">
-            <CalendarDays size={15} className="text-blue-600 dark:text-blue-300" />
+            <CalendarDays size={15} className="text-blue-600 dark:text-neutral-400" />
             <span
               data-testid="day-label"
-              className="text-sm font-bold text-[#294b76] dark:text-blue-100"
+              className="text-sm font-bold text-[#294b76] dark:text-neutral-200"
             >
               {dayLabel}
             </span>
@@ -92,7 +92,7 @@ export function Home() {
               <button
                 onClick={goToday}
                 aria-label="Kembali ke hari ini"
-                className="text-[10px] font-semibold text-blue-600 dark:text-blue-300 mt-0.5"
+                className="text-[10px] font-semibold text-blue-600 dark:text-neutral-400 mt-0.5"
               >
                 Kembali ke hari ini
               </button>
@@ -103,16 +103,15 @@ export function Home() {
           onClick={goForward}
           aria-label="Hari berikutnya"
           disabled={isToday}
-          className="soft-button w-9 h-9 border-transparent shadow-none disabled:opacity-30 disabled:pointer-events-none"
+          className="soft-button w-9 h-9 border-transparent disabled:opacity-30 disabled:pointer-events-none"
         >
           <ChevronRight size={18} />
         </button>
       </div>
 
       {/* Daily total */}
-      <section className="relative overflow-hidden rounded-[28px] bg-[#2f6fe4] text-white px-5 pt-5 pb-6 shadow-[0_18px_42px_rgba(47,111,228,.24)]">
+      <section className="relative overflow-hidden rounded-[28px] bg-[#2f6fe4] dark:bg-[#111111] dark:border dark:border-[#303030] text-white px-5 pt-5 pb-6">
         <div className="absolute inset-0 opacity-[.14]" aria-hidden="true" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent 0, transparent 29px, white 30px)' }} />
-        <div className="absolute -right-10 -top-12 w-36 h-36 rounded-full border-[22px] border-white/10" aria-hidden="true" />
         <div className="relative flex items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[.13em] text-blue-100">{isToday ? 'Pengeluaran hari ini' : 'Total pengeluaran'}</p>
@@ -125,7 +124,7 @@ export function Home() {
               style={{ background: `conic-gradient(#8ee1c8 ${monthlyPct * 3.6}deg, rgba(255,255,255,.17) 0)` }}
               aria-label={`${Math.round(monthlyPct)} persen anggaran bulanan terpakai`}
             >
-              <div className="w-[58px] h-[58px] rounded-full bg-[#2f6fe4] grid place-items-center text-center">
+              <div className="w-[58px] h-[58px] rounded-full bg-[#2f6fe4] dark:bg-[#111111] grid place-items-center text-center">
                 <span className="font-data text-sm font-bold leading-none">{Math.round(monthlyPct)}%</span>
                 <span className="text-[8px] text-blue-100">bulan ini</span>
               </div>
@@ -138,12 +137,12 @@ export function Home() {
 
       <div className="grid grid-cols-2 gap-3">
         <div className="surface-card px-4 py-3.5">
-          <p className="text-[11px] font-semibold text-[#7890ae] dark:text-slate-400">Minggu ini</p>
-          <p className="font-data mt-1 text-base font-bold text-[#17345e] dark:text-blue-50 truncate">{formatRupiah(weeklySpent)}</p>
+          <p className="text-[11px] font-semibold text-[#7890ae] dark:text-neutral-500">Minggu ini</p>
+          <p className="font-data mt-1 text-base font-bold text-[#17345e] dark:text-neutral-100 truncate">{formatRupiah(weeklySpent)}</p>
         </div>
         <div className="surface-card px-4 py-3.5">
-          <p className="text-[11px] font-semibold text-[#7890ae] dark:text-slate-400">Bulan ini</p>
-          <p className="font-data mt-1 text-base font-bold text-[#17345e] dark:text-blue-50 truncate">{formatRupiah(monthlySpent)}</p>
+          <p className="text-[11px] font-semibold text-[#7890ae] dark:text-neutral-500">Bulan ini</p>
+          <p className="font-data mt-1 text-base font-bold text-[#17345e] dark:text-neutral-100 truncate">{formatRupiah(monthlySpent)}</p>
         </div>
       </div>
 
@@ -151,7 +150,7 @@ export function Home() {
       {(weeklyStatus || monthlyStatus) && (
         <div className="surface-card space-y-5 p-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-bold text-[#294b76] dark:text-blue-100">Anggaran</p>
+            <p className="text-sm font-bold text-[#294b76] dark:text-neutral-200">Anggaran</p>
           </div>
           {weeklyStatus  && <ProgressBar status={weeklyStatus}  label="Mingguan" />}
           {monthlyStatus && <ProgressBar status={monthlyStatus} label="Bulanan" />}
@@ -161,17 +160,17 @@ export function Home() {
       {/* Day expenses */}
       <section>
         <div className="flex items-center justify-between mb-2.5 px-1">
-          <p className="text-sm font-bold text-[#294b76] dark:text-blue-100">{isToday ? 'Pengeluaran hari ini' : 'Pengeluaran'}</p>
-          <span className="grid place-items-center min-w-7 h-7 px-2 rounded-full bg-blue-100 dark:bg-blue-950 text-xs font-bold text-blue-700 dark:text-blue-300">{dayExpenses.filter(e => e.id !== pendingId).length}</span>
+          <p className="text-sm font-bold text-[#294b76] dark:text-neutral-200">{isToday ? 'Pengeluaran hari ini' : 'Pengeluaran'}</p>
+          <span className="grid place-items-center min-w-7 h-7 px-2 rounded-full bg-blue-100 dark:bg-[#1c1c1c] text-xs font-bold text-blue-700 dark:text-neutral-300">{dayExpenses.filter(e => e.id !== pendingId).length}</span>
         </div>
         {dayExpenses.length === 0 ? (
           <div className="surface-card py-10 px-6 text-center">
-            <div className="mx-auto w-12 h-12 rounded-[18px] bg-blue-50 dark:bg-blue-950/60 grid place-items-center text-blue-500"><ReceiptText size={21} /></div>
-            <p className="font-bold text-sm text-[#294b76] dark:text-blue-100 mt-3">Belum ada catatan</p>
-            <p className="text-xs text-[#7890ae] dark:text-slate-400 mt-1">Ketuk tombol + saat kamu mengeluarkan uang.</p>
+            <div className="mx-auto w-12 h-12 rounded-[18px] bg-blue-50 dark:bg-[#1c1c1c] grid place-items-center text-blue-500 dark:text-neutral-400"><ReceiptText size={21} /></div>
+            <p className="font-bold text-sm text-[#294b76] dark:text-neutral-200 mt-3">Belum ada catatan</p>
+            <p className="text-xs text-[#7890ae] dark:text-neutral-500 mt-1">Ketuk tombol + saat kamu mengeluarkan uang.</p>
           </div>
         ) : (
-          <div className="surface-card divide-y divide-blue-50 dark:divide-blue-950/70 overflow-hidden">
+          <div className="surface-card divide-y divide-blue-50 dark:divide-[#242424] overflow-hidden">
             {dayExpenses
               .filter(e => e.id !== pendingId)
               .map(e => (

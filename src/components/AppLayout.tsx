@@ -107,14 +107,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     : { amount: 0, categoryId: '', note: '', date: formDefaultDate }
 
   return (
-    <div className="min-h-screen bg-transparent flex md:flex-row text-[#17345e] dark:text-blue-50">
+    <div className="min-h-screen bg-transparent flex md:flex-row text-[#17345e] dark:text-neutral-100">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-60 shrink-0 bg-white/90 dark:bg-[#101d30]/95 border-r border-blue-100 dark:border-blue-950 fixed top-0 left-0 h-full backdrop-blur-xl">
+      <aside className="hidden md:flex flex-col w-60 shrink-0 bg-white dark:bg-[#0d0d0d] border-r border-blue-100 dark:border-[#262626] fixed top-0 left-0 h-full">
         <div className="px-5 py-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[15px] bg-blue-600 text-white flex items-center justify-center shadow-[0_8px_20px_rgba(47,111,228,.25)]">
+          <div className="w-10 h-10 rounded-[15px] bg-blue-600 text-white flex items-center justify-center">
             <NotebookTabs size={19} />
           </div>
-          <span className="font-display text-xl font-bold text-[#17345e] dark:text-blue-50">Kaluna</span>
+          <span className="font-display text-xl font-bold text-[#17345e] dark:text-neutral-100">Kaluna</span>
         </div>
         <nav className="flex-1 px-4 py-3 space-y-1.5">
           {navItems.map(({ to, icon: Icon, label }) => (
@@ -125,8 +125,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold transition-all ${
                   isActive
-                    ? 'bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-200 shadow-[inset_0_0_0_1px_rgba(47,111,228,.08)]'
-                    : 'text-[#7187a4] dark:text-slate-400 hover:bg-blue-50/70 dark:hover:bg-blue-950/40'
+                    ? 'bg-blue-50 dark:bg-[#1c1c1c] text-blue-700 dark:text-neutral-100'
+                    : 'text-[#7187a4] dark:text-neutral-500 hover:bg-blue-50/70 dark:hover:bg-[#171717]'
                 }`
               }
             >
@@ -138,7 +138,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="px-4 pb-5">
           <button
             onClick={openAdd}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-bold py-3 rounded-2xl hover:bg-blue-700 active:scale-[.98] shadow-[0_10px_24px_rgba(47,111,228,.24)] transition"
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-bold py-3 rounded-2xl hover:bg-blue-700 active:scale-[.98] transition"
           >
             <Plus size={16} />
             Catat pengeluaran
@@ -149,12 +149,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className="flex-1 md:ml-60 pb-28 md:pb-8 min-w-0">
         {/* Mobile header */}
-        <header className="md:hidden flex items-center px-4 h-[62px] bg-[#f4f8ff]/90 dark:bg-[#0d1727]/90 sticky top-0 z-20 backdrop-blur-xl">
+        <header className="md:hidden flex items-center px-4 h-[62px] bg-[#f4f8ff] dark:bg-[#080808] border-b border-transparent dark:border-[#1c1c1c] sticky top-0 z-20">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-[14px] bg-blue-600 text-white flex items-center justify-center shadow-[0_6px_16px_rgba(47,111,228,.22)]">
+            <div className="w-9 h-9 rounded-[14px] bg-blue-600 text-white flex items-center justify-center">
               <NotebookTabs size={17} />
             </div>
-            <span className="font-display text-[17px] font-bold text-[#17345e] dark:text-blue-50">Kaluna</span>
+            <span className="font-display text-[17px] font-bold text-[#17345e] dark:text-neutral-100">Kaluna</span>
           </div>
         </header>
 
@@ -166,17 +166,17 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         )}
 
         {showBanner && (
-          <div className="mx-4 mt-2 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900 px-4 py-3 flex items-center justify-between text-xs text-blue-800 dark:text-blue-200">
+          <div className="mx-4 mt-2 rounded-2xl bg-blue-50 dark:bg-[#151515] border border-blue-100 dark:border-[#303030] px-4 py-3 flex items-center justify-between text-xs text-blue-800 dark:text-neutral-300">
             <span className="flex items-center gap-2">
               {isIOS ? <><Share size={14} /> Bagikan lalu pilih “Add to Home Screen”</> : 'Pasang Kaluna agar lebih cepat dibuka'}
             </span>
             <div className="flex items-center gap-3">
               {canInstall && (
-                <button onClick={triggerInstall} className="font-bold text-blue-700 dark:text-blue-200 hover:underline">Pasang</button>
+                <button onClick={triggerInstall} className="font-bold text-blue-700 dark:text-neutral-100 hover:underline">Pasang</button>
               )}
               <button
                 onClick={() => dispatch({ type: 'UPDATE_SETTINGS', payload: { installBannerDismissed: true } })}
-                className="text-[#7187a4] dark:text-slate-400 hover:text-blue-700"
+                className="text-[#7187a4] dark:text-neutral-500 hover:text-blue-700 dark:hover:text-neutral-200"
               >
                 Nanti
               </button>
@@ -201,13 +201,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-3 left-3 right-3 z-30 pb-[env(safe-area-inset-bottom)]">
-        <div className="flex items-center justify-around h-[68px] px-1 rounded-[24px] bg-white/95 dark:bg-[#14223a]/95 border border-white dark:border-blue-900/60 shadow-[0_16px_44px_rgba(23,52,94,.18)] backdrop-blur-xl">
+        <div className="flex items-center justify-around h-[68px] px-1 rounded-[24px] bg-white dark:bg-[#111111] border border-blue-100 dark:border-[#292929]">
           {navItems.slice(0, 2).map(({ to, icon: Icon, label }) => (
             <NavItem key={to} to={to} icon={Icon} label={label} exact={to === '/'} />
           ))}
           <button
             onClick={openAdd}
-            className="w-[58px] h-[58px] -mt-8 bg-blue-600 rounded-[20px] flex items-center justify-center text-white ring-[5px] ring-[#f4f8ff] dark:ring-[#0d1727] shadow-[0_12px_26px_rgba(47,111,228,.34)] hover:bg-blue-700 active:scale-95 transition"
+            className="w-[58px] h-[58px] -mt-8 bg-blue-600 rounded-[20px] flex items-center justify-center text-white ring-[5px] ring-[#f4f8ff] dark:ring-[#080808] hover:bg-blue-700 active:scale-95 transition"
             aria-label="Catat pengeluaran"
           >
             <Plus size={24} />
@@ -239,7 +239,7 @@ function NavItem({ to, icon: Icon, label, exact }: { to: string; icon: React.Ele
       end={exact}
       className={({ isActive }) =>
         `relative flex flex-col items-center gap-1 min-w-[54px] px-2 py-1 rounded-xl text-[10px] font-semibold transition-colors ${
-          isActive ? 'text-blue-600 dark:text-blue-300' : 'text-[#91a4bd] dark:text-slate-500'
+          isActive ? 'text-blue-600 dark:text-neutral-100' : 'text-[#91a4bd] dark:text-neutral-600'
         }`
       }
     >
