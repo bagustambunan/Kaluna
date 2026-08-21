@@ -14,7 +14,7 @@ import { formatRupiah, formatPct } from '../lib/format'
 import type { SummaryFilterState, DateRange } from '../types'
 import { getBudgetStatus } from '../lib/budget'
 
-type Tab = 'weekly' | 'monthly' | 'category' | 'custom'
+type Tab = 'weekly' | 'monthly' | 'custom'
 
 const PRESETS = [
   { label: '7 hari terakhir',  days: 7 },
@@ -53,7 +53,6 @@ export function Summary() {
     if (tab === 'weekly') return weekRange
     if (tab === 'monthly') return monthRange
     if (tab === 'custom' && customRange.start && customRange.end) return customRange
-    if (tab === 'category') return monthRange
     return null
   }, [tab, weekRange, monthRange, customRange])
 
@@ -130,7 +129,6 @@ export function Summary() {
   const tabs: { key: Tab; label: string }[] = [
     { key: 'weekly',   label: 'Minggu'   },
     { key: 'monthly',  label: 'Bulan'    },
-    { key: 'category', label: 'Kategori' },
     { key: 'custom',   label: 'Rentang'  },
   ]
 
